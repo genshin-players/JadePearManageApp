@@ -69,14 +69,16 @@ public class DisplayController {
     @RequestMapping("/editor")
     public String toEditor(
             @RequestParam(required = false) String type,
+            @RequestParam(required = false) String id,
             @RequestParam(required = false) String signupNum,
             @RequestParam(required = false) String startTime,
             @RequestParam(required = false) String endTime,
-            Model model){
-        model.addAttribute("type", "".equals(type.trim())?"Display":type);
-        model.addAttribute("signupNum",signupNum==null?"":signupNum);
-        model.addAttribute("startTime",startTime==null?"":startTime);
-        model.addAttribute("endTime",endTime==null?"":endTime);
+            Model model) {
+        model.addAttribute("type", type.trim().equals("") ? "Display" : type);
+        model.addAttribute("id", id.trim().equals("") ? "-1" : id);
+        model.addAttribute("signupNum", signupNum == null ? "" : signupNum);
+        model.addAttribute("startTime", startTime == null ? "" : startTime);
+        model.addAttribute("endTime", endTime == null ? "" : endTime);
         return "display/editor";
     }
 

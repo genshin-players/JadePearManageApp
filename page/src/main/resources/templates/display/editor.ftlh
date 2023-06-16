@@ -54,6 +54,7 @@
 <script src="/js/deznav-init.js"></script>
 <script src="/js/demo.js"></script>
 <script src="/js/styleSwitcher.js"></script>
+<script src="/js/sweetalert2.min.js"></script>
 <script>
     let editor;
     let str;
@@ -215,12 +216,16 @@
         console.log(error)
     });
 
+    function zalert(str){
+        sweetAlert("Oops...", str, "error")
+    }
+
     document.querySelector("#submit").addEventListener("click", ()=>{
         // getting data from editor
         const editorData = editor.getData();
         console.log(editorData);
         if (editorData.trim()===""){
-            alert("内容不得为空")
+            zalert("内容不得为空")
         } else if (editorData.trim() !== str) {
             const date = new Date();
             const year = date.getFullYear(); // 获取年份，例如：2022
@@ -262,34 +267,53 @@
                                 window.location.href = "/display/inner_activities"
                             },
                             error: function () {
-                                alert("insert activities error")
+                                zalert("insert activities error")
                             }
                         });
                     }
                 },
                 error: function () {
-                    alert("failed")
+                    zalert("failed")
                 }
             })
         } else {
-            alert("请添加内容描述")
+            zalert("请添加内容描述")
         }
     })
 
     /**
      * fill in the data which transporting from edit Activities page once this page is load
      */
+
     $(document).ready(function (){
-        if ("${type}" === '学社活动'){
-            console.log(signupNum,startTime,endTime)
-            str = "<p>本次活动每班报名人数为：<span style='font-size:18px;'>" +
-                signupNum +
-                "</span>！</p><p>活动报名时间为：<span style='font-size:18px;'><i><strong>" +
-                startTime +
-                "</strong></i></span>至<span style='font-size:18px;'><i><strong>" +
-                endTime +
-                "</strong></i></span></p>";
-            editor.setData(str);
+        $("#warningBtn").click();
+        if (${id} > 0){
+            $.ajax({
+                async:true,
+                dataType:"json",
+                data:{
+                    id:"${id}"
+                },
+                method:"GET",
+                success:function (data) {
+
+                },
+                error:function () {
+
+                }
+            })
+        } else {
+            if ("${type}" === '学社活动'){
+                console.log(signupNum,startTime,endTime)
+                str = "<p>本次活动每班报名人数为：<span style='font-size:18px;'>" +
+                    signupNum +
+                    "</span>！</p><p>活动报名时间为：<span style='font-size:18px;'><i><strong>" +
+                    startTime +
+                    "</strong></i></span>至<span style='font-size:18px;'><i><strong>" +
+                    endTime +
+                    "</strong></i></span></p>";
+                editor.setData(str);
+            }
         }
     })
 </script>
@@ -309,3 +333,4 @@
         margin: 20px auto;
     }
 </style>
+<link href="/css/sweetalert2.min.css" rel="stylesheet">
