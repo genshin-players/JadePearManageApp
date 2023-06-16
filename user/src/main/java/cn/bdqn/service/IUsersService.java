@@ -1,5 +1,6 @@
 package cn.bdqn.service;
 
+import cn.bdqn.dto.User_ClassDTO;
 import cn.bdqn.entity.Users;
 import cn.bdqn.entity.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,9 +19,9 @@ import java.util.List;
  */
 public interface IUsersService extends IService<Users> {
 
+
+
     Users showUserById(Integer id);
-
-
 
     boolean updateUSers(Integer id, Users users);
 

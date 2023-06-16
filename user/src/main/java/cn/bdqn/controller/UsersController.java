@@ -2,7 +2,9 @@ package cn.bdqn.controller;
 
 
 
+import cn.bdqn.dto.User_ClassDTO;
 import cn.bdqn.entity.Classes;
+import cn.bdqn.entity.StudentClass;
 import cn.bdqn.entity.Users;
 import cn.bdqn.service.IClassesService;
 import cn.bdqn.service.IStudentClassService;
@@ -13,10 +15,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
 import org.apache.catalina.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +51,50 @@ public class UsersController {
     @ResponseBody
     @RequestMapping("showTeacher")
     private  List<Users> showTeacher(){
+
+        //展示数据的集合
+        List<User_ClassDTO> ShowAll=new ArrayList<>();
+
         QueryWrapper<Users> wrapper=new QueryWrapper<>();
         wrapper.eq("role_id",3);
         //Map<String,Object> map = new HashMap<>();
         List<Users> list = usersService.list(wrapper);
 
 
-        return list;
+        return  list;
+       /* //班级名称
+        List<Classes> list1 = classesService.list();
+
+        //学生对应班级
+        List<StudentClass> list2 = studentClassService.list();
+
+        User_ClassDTO userClassDTO=new User_ClassDTO();
+        for (Users users : list) {
+            userClassDTO.setId(users.getId());
+            userClassDTO.setUsername(users.getUsername());
+            userClassDTO.setPassword(users.getPassword());
+            userClassDTO.setRoleId(userClassDTO.getRoleId());
+            userClassDTO.setAccountInfo(users.getAccountInfo());
+            userClassDTO.setIdentityInfo(users.getIdentityInfo());
+            userClassDTO.setCreateTime(users.getCreateTime());
+            userClassDTO.setUpdateTime(users.getUpdateTime());
+            for (StudentClass studentClass : list2) {
+                if (users.getId()==studentClass.getStudentId()){
+                    userClassDTO.setClassId(studentClass.getClassId());
+                }
+
+            }
+
+        }
+        for (Classes classes : list1) {
+            if (userClassDTO.getClassId()== classes.getId()){
+                userClassDTO.setName(classes.getName());
+                System.out.println(userClassDTO.getName());
+                ShowAll.add(userClassDTO);
+
+            }
+        }
+        return ShowAll;*/
     }
 
     @RequestMapping("showStudent")
@@ -62,6 +103,40 @@ public class UsersController {
         wrapper.eq("role_id",6);
         List<Users> list = usersService.list(wrapper);
         return list;
+       /* //展示数据的集合
+        List<User_ClassDTO> ShowAll=new ArrayList<>();
+
+        QueryWrapper<Users> wrapper=new QueryWrapper<>();
+        wrapper.eq("role_id",6);
+        //Map<String,Object> map = new HashMap<>();
+        List<Users> list = usersService.list(wrapper);
+
+        for (Users users : list) {
+            User_ClassDTO userClassDTO=new User_ClassDTO();
+            BeanUtils.copyProperties(users,userClassDTO);
+
+
+            LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
+
+            //学生对应班级
+            StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
+
+
+            if (users.getId()==studentClass.getStudentId()){
+                    userClassDTO.setClassId(studentClass.getClassId());
+                }
+            //班级名称
+            Classes classes = classesService.selectClassById(studentClass.getClassId());
+            if (userClassDTO.getClassId()== classes.getId()){
+                        userClassDTO.setName(classes.getName());
+                }
+            System.out.println(userClassDTO.getName());
+            ShowAll.add(userClassDTO);
+
+        }
+
+        return ShowAll;*/
     }
 
 

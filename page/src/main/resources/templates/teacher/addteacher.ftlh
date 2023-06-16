@@ -60,7 +60,7 @@
                                             <span class="text-danger">*</span>
                                         </label>
                                         <div class="col-lg-6">
-                                            <select class="default-select wide form-control" id="validationCustom05" name="gender"  value="${json.gender}">
+                                            <select class="default -select wide form-control" id="validationCustom05" name="gender"  value="${json.gender}">
                                                 <option data-display="男" value="男">男</option>
                                                 <option value="女" >女</option>
                                             </select>

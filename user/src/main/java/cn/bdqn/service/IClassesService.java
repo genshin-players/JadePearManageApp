@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IClassesService extends IService<Classes> {
 
+    Classes selectClassById(Integer id);
+
 }
