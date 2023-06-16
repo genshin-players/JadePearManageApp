@@ -26,20 +26,16 @@ public class UserController {
 
     @RequestMapping("show_teacher")
     public String showTeacher(Model model) {
-        System.out.println("进来了");
         List<Users> users = userClient.showTeacher();
         model.addAttribute("users",users);
-        System.out.println(users);
         return "teacher/show_teacher";
     }
 
 
     @RequestMapping("/show_student")
     public String  showStudent(Model model){
-        System.out.println("进来了");
         List<Users> users = userClient.showStudent();
         model.addAttribute("users",users);
-        System.out.println(users);
         return "student/show_student";
     }
 //=============================================================================================
@@ -117,10 +113,41 @@ public class UserController {
     private String showUserById(@RequestParam(value = "id") Integer id,Model model){
         Users users = userClient.showUserById(id);
         model.addAttribute("users",users);
+        return "teacher/addteacher";
+    }
+
+   /* @ResponseBody*/
+    @RequestMapping("/update_User")
+    public String updateUser(@RequestParam(value = "id")Integer id,
+                             @RequestParam(value = "username")String username,
+                             @RequestParam(value = "realname") String  realname,
+                             @RequestParam(value = "age") String age,
+                             @RequestParam(value = "gender")String gender,
+                             @RequestParam(value = "phone") String phone,
+                             @RequestParam(value = "identity") String identity,
+                             Model model){
+        Users users=new Users();
+        users.setId(id);
+        users.setUsername(username);
+        users.setIdentityInfo("{"+
+                '"'+"realname"+'"'+":"+'"'+realname+'"'+","+
+                '"'+"age"+'"'+":"+'"'+age+'"'+","+
+                '"'+"gender"+'"'+":"+'"'+gender+'"'+","+
+                '"'+"phone"+'"'+":"+'"'+phone+'"'+","+
+                '"'+"identity"+'"'+":"+'"'+identity+'"'
+                +"}");
+        System.out.println(id);
+        System.out.println(realname);
+        System.out.println(users);
+         userClient.updateUser(users/*, users.getId()*/);
+
         return "teacher/update_addteacher";
 
-
     }
+
+
+
+
 
 
     //查询所有的班级
@@ -137,12 +164,17 @@ public class UserController {
 
 
 
-    @RequestMapping("getUsersById")
+
+    /*ly所需接口*/
+    @RequestMapping("/user/selectUsersById")
     public String selectUsersById(Integer id,Model model){
+        System.out.println("sb ");
         Users users = userClient.selectUsersById(id);
-//        model.addAttribute("usersById",users);
+        System.out.println(users.getId()+"今天天气真好");
         model.addAttribute("usersById",users);
+        System.out.println(users.getUsername()+"hhhhhhhhhhhhhhhhhhhh");
         return "messages/update_Select";
     }
+
 
 }

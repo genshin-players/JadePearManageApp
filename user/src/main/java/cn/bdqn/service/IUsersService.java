@@ -3,6 +3,7 @@ package cn.bdqn.service;
 import cn.bdqn.entity.Users;
 import cn.bdqn.entity.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -18,6 +19,10 @@ import java.util.List;
 public interface IUsersService extends IService<Users> {
 
     Users showUserById(Integer id);
+
+
+
+    boolean updateUSers(Integer id, Users users);
 
 
 

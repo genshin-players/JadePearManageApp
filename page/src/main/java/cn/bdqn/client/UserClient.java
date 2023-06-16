@@ -37,9 +37,10 @@ public interface UserClient {
     List<Classes> showClass();
 */
 
-    @ResponseBody
+
+
     @RequestMapping("/user/updateUser")
-    Map<String,Object> updateUser(@RequestBody  Users users);
+    Map<String,Object> updateUser(@RequestBody Users users/*,@RequestParam(value = "id") Integer id*/);
 
 
 

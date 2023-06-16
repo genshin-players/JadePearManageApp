@@ -111,10 +111,12 @@ public class UsersController {
     }
 
 
-    @ResponseBody
     @RequestMapping("updateUser")
-    private Map<String,Object> updateUser(@RequestBody  Users users){
+    private Map<String,Object> updateUser(@RequestBody Users users/*, @RequestParam(value = "id") Integer id*/){
         Map<String,Object>map=new HashMap<>();
+      /*  //更新的条件
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.eq("id",id);*/
         boolean b = usersService.updateById(users);
         if (b){
             map.put("data",b);

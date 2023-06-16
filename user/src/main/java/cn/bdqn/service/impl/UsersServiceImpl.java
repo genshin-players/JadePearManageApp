@@ -32,4 +32,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         Users users = usersMapper.selectById(id);
         return users;
     }
+
+    @Override
+    public boolean updateUSers(Integer id, Users users) {
+        if (usersMapper.updateById(users)>0){
+            return true;
+        }
+        return  false;
+    }
+
+
 }
