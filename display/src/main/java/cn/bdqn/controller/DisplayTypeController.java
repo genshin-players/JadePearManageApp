@@ -30,7 +30,7 @@ import java.util.Map;
 @RequestMapping("/displayType")
 public class DisplayTypeController {
 
-    @Autowired
+/*    @Autowired
     private IDisplayTypeService displayTypeService;
 
     @RequestMapping("getDisplayTypeList")
@@ -46,6 +46,6 @@ public class DisplayTypeController {
             map.put("msg", "error");
         }
         return map;
-    }
+    }*/
 }
 

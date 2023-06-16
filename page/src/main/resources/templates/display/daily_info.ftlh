@@ -67,7 +67,7 @@
                                                 <span class="fs-14">${displayDTO.updateTime?string("hh:mm")}</span>
                                             </div>
                                         </td>
-                                        <td><a href="javascript:void(0);" class="btn-link">林忆宁</a></td>
+                                        <td><a href="javascript:void(0);" class="btn-link">${displayDTO.publishUserName}</a></td>
                                         <td>
                                             <div class="dropdown dropstart">
                                                 <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">

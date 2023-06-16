@@ -32,39 +32,19 @@ public class DisplayController {
     private IDisplayService displayService;
 
     @RequestMapping("getPushEveryFuckingDayList")
-    public Map<String, Object> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
+    public List<Display> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,2);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
-        Map<String,Object> map = new HashMap<>();
-        List<Display> list = displayService.list(lambdaQueryWrapper);
-        if (list != null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data", list);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+        return displayService.list(lambdaQueryWrapper);
     }
 
     @RequestMapping("getExternalPerformanceList")
-    public Map<String, Object> getExternalPerformanceList(@RequestParam(required = false,defaultValue = "") String title){
+    public List<Display> getExternalPerformanceList(@RequestParam(required = false,defaultValue = "") String title){
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<Display>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,3);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
-        Map<String,Object> map = new HashMap<>();
-        List<Display> list = displayService.list(lambdaQueryWrapper);
-        if (list != null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data", list);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+        return displayService.list(lambdaQueryWrapper);
     }
 
     @RequestMapping("deleteDisplay")
@@ -82,18 +62,8 @@ public class DisplayController {
     }
 
     @RequestMapping("getDisplayById")
-    public Map<String, Object> getDisplayById(@RequestParam(value = "id") Integer id){
-        Display display = displayService.getById(id);
-        Map<String,Object> map = new HashMap<>();
-        if (display!=null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data",display);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+    public Display getDisplayById(@RequestParam(value = "id") Integer id){
+        return displayService.getById(id);
     }
 
 
