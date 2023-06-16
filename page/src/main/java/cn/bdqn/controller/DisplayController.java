@@ -2,9 +2,13 @@ package cn.bdqn.controller;
 
 import cn.bdqn.client.ActivatesClient;
 import cn.bdqn.client.DisplayClient;
+import cn.bdqn.client.UserClient;
 import cn.bdqn.dto.ActivitiesDTO;
 import cn.bdqn.dto.DisplayDTO;
+import cn.bdqn.entity.Users;
 import cn.bdqn.vo.ResultVO;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +26,17 @@ public class DisplayController {
     private DisplayClient displayClient;
     @Autowired
     private ActivatesClient activatesClient;
+    @Autowired
+    private UserClient userClient;
     @RequestMapping("/daily_info")
     public String toDailyInfo(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        ResultVO<List<DisplayDTO>> pushEveryFuckingDayList = displayClient.getPushEveryFuckingDayList(title);
-        List<DisplayDTO> displayDTOList = pushEveryFuckingDayList.getData();
-/*        for (DisplayDTO displayDTO:displayDTOList){
-            System.out.println(displayDTO.getTitle());
-        }*/
+        List<DisplayDTO> displayDTOList = displayClient.getPushEveryFuckingDayList(title);
+        for (DisplayDTO displayDTO : displayDTOList){
+            Users userById = userClient.getUserById(displayDTO.getPublishUserId());
+            JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
+            String realName = (String) jsonObject.get("realname");
+            displayDTO.setPublishUserName(realName);
+        }
         model.addAttribute("displayDTOList",displayDTOList);
         return "display/daily_info";
     }
@@ -38,7 +46,15 @@ public class DisplayController {
         if (title == null|| "".equals(title)){
             activitiesList = activatesClient.getActivitiesList();
         }else {
-            activitiesList = activatesClient.activitiesListByTitle(title).getData();
+            activitiesList = activatesClient.activitiesListByTitle(title);
+        }
+        for (ActivitiesDTO activitiesDTO : activitiesList){
+            DisplayDTO displayDTO = activitiesDTO.getDisplay();
+            Users userById = userClient.getUserById(displayDTO.getPublishUserId());
+            JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
+            String realName = (String) jsonObject.get("realname");
+            displayDTO.setPublishUserName(realName);
+            System.out.println(realName);
         }
         model.addAttribute("activitiesList",activitiesList);
         return "display/inner_activities";
@@ -46,11 +62,13 @@ public class DisplayController {
 
     @RequestMapping("/external_performance")
     public String toExternalPerformance(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        ResultVO<List<DisplayDTO>> externalPerformanceList = displayClient.getExternalPerformanceList(title);
-        List<DisplayDTO> displayDTOList = externalPerformanceList.getData();
-/*        for (DisplayDTO displayDTO:displayDTOList){
-            System.out.println(displayDTO.getTitle());
-        }*/
+        List<DisplayDTO> displayDTOList = displayClient.getExternalPerformanceList(title);
+        for (DisplayDTO displayDTO : displayDTOList){
+            Users userById = userClient.getUserById(displayDTO.getPublishUserId());
+            JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
+            String realName = (String) jsonObject.get("realname");
+            displayDTO.setPublishUserName(realName);
+        }
         model.addAttribute("displayDTOList",displayDTOList);
         return "display/external_performance";
     }
@@ -69,16 +87,19 @@ public class DisplayController {
     @RequestMapping("/editor")
     public String toEditor(
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String id,
+            @RequestParam(required = false, defaultValue = "-1") String activitiesId,
             @RequestParam(required = false) String signupNum,
             @RequestParam(required = false) String startTime,
             @RequestParam(required = false) String endTime,
+            @RequestParam(required = false, defaultValue = "-1") String displayId,
             Model model) {
         model.addAttribute("type", type.trim().equals("") ? "Display" : type);
-        model.addAttribute("id", id.trim().equals("") ? "-1" : id);
+        model.addAttribute("activitiesId", "undefined".equals(activitiesId.trim()) ? "-1" : activitiesId);
         model.addAttribute("signupNum", signupNum == null ? "" : signupNum);
         model.addAttribute("startTime", startTime == null ? "" : startTime);
         model.addAttribute("endTime", endTime == null ? "" : endTime);
+        model.addAttribute("display",("-1".equals(displayId)||"undefined".equals(displayId)) ? DisplayDTO.builder().id(-1).title("标题").content("").build() : displayClient.getDisplayById(Integer.parseInt(displayId))) ;
+
         return "display/editor";
     }
 
@@ -86,8 +107,8 @@ public class DisplayController {
     public String toEditorActivities(@RequestParam(required = false) String id, Model model){
         //System.out.println(id);
         if (id!=null){
-            ResultVO<ActivitiesDTO> activitiesById = activatesClient.getActivitiesById(Integer.parseInt(id));
-            model.addAttribute("activities",activitiesById.getData());
+            List<ActivitiesDTO> activitiesById = activatesClient.getActivitiesById(Integer.parseInt(id));
+            model.addAttribute("activities",activitiesById);
         }
         return "display/edit_activities";
     }
@@ -137,5 +158,26 @@ public class DisplayController {
             @RequestParam(value = "title") String title
     ){
         return activatesClient.addActivities(displayClient.getCreatedByCreationTimeAndTitle(createTime, title),signupNumber, startTime, endTime);
+    }
+
+    @RequestMapping("updDisplay")
+    @ResponseBody
+    public Map<String, Object> updDisplay(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content)
+    {
+        return displayClient.updateDisplay(id,title, content);
+    }
+
+    @RequestMapping("updActivities")
+    @ResponseBody
+    public Map<String, Object> updActivities(
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "signupNumber") Integer signupNumber,
+            @RequestParam(value = "startTime") String startTime,
+            @RequestParam(value = "endTime") String endTime)
+    {
+        return activatesClient.updateActivities(id,signupNumber,startTime,endTime);
     }
 }

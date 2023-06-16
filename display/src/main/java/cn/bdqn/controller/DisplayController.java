@@ -5,6 +5,7 @@ import cn.bdqn.entity.Display;
 import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,39 +32,19 @@ public class DisplayController {
     private IDisplayService displayService;
 
     @RequestMapping("getPushEveryFuckingDayList")
-    public Map<String, Object> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
+    public List<Display> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,2);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
-        Map<String,Object> map = new HashMap<>();
-        List<Display> list = displayService.list(lambdaQueryWrapper);
-        if (list != null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data", list);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+        return displayService.list(lambdaQueryWrapper);
     }
 
     @RequestMapping("getExternalPerformanceList")
-    public Map<String, Object> getExternalPerformanceList(@RequestParam(required = false,defaultValue = "") String title){
+    public List<Display> getExternalPerformanceList(@RequestParam(required = false,defaultValue = "") String title){
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<Display>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,3);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
-        Map<String,Object> map = new HashMap<>();
-        List<Display> list = displayService.list(lambdaQueryWrapper);
-        if (list != null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data", list);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+        return displayService.list(lambdaQueryWrapper);
     }
 
     @RequestMapping("deleteDisplay")
@@ -81,18 +62,8 @@ public class DisplayController {
     }
 
     @RequestMapping("getDisplayById")
-    public Map<String, Object> getDisplayById(@RequestParam(value = "id") Integer id){
-        Display display = displayService.getById(id);
-        Map<String,Object> map = new HashMap<>();
-        if (display!=null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data",display);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+    public Display getDisplayById(@RequestParam(value = "id") Integer id){
+        return displayService.getById(id);
     }
 
 
@@ -143,6 +114,29 @@ public class DisplayController {
         lambdaQueryWrapper.eq(Display::getCreateTime, createTime);
         List<Display> list = displayService.list(lambdaQueryWrapper);
         return list.get(0).getId();
+    }
+
+    @RequestMapping("updateDisplay")
+    public Map<String, Object> updateDisplay(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content)
+    {
+        Map<String,Object> map = new HashMap<>();
+        LambdaUpdateWrapper<Display> lambdaUpdateWrapper =  new LambdaUpdateWrapper<Display>();
+        lambdaUpdateWrapper.eq(Display::getId, id);
+        lambdaUpdateWrapper.set(Display::getTitle, title);
+        lambdaUpdateWrapper.set(Display::getContent, content);
+        lambdaUpdateWrapper.set(Display::getUpdateTime,new Date());
+
+        if(displayService.update(null, lambdaUpdateWrapper)){
+            map.put("code", 200);
+            map.put("msg", "success");
+        }else {
+            map.put("code", 500);
+            map.put("msg", "error");
+        }
+        return map;
     }
 }
 

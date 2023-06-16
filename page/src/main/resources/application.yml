@@ -10,6 +10,7 @@ spring:
     password: 114514
 server:
   port: 8003
+  max-http-header-size: 104857600
 eureka:
   client:
     service-url:
