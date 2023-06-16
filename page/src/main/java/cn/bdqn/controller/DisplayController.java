@@ -69,16 +69,19 @@ public class DisplayController {
     @RequestMapping("/editor")
     public String toEditor(
             @RequestParam(required = false) String type,
-            @RequestParam(required = false, defaultValue = "-1") String id,
+            @RequestParam(required = false, defaultValue = "-1") String activitiesId,
             @RequestParam(required = false) String signupNum,
             @RequestParam(required = false) String startTime,
             @RequestParam(required = false) String endTime,
+            @RequestParam(required = false, defaultValue = "-1") String displayId,
             Model model) {
         model.addAttribute("type", type.trim().equals("") ? "Display" : type);
-        model.addAttribute("id", id.trim().equals("") ? "-1" : id);
+        model.addAttribute("activitiesId", "undefined".equals(activitiesId.trim()) ? "-1" : activitiesId);
         model.addAttribute("signupNum", signupNum == null ? "" : signupNum);
         model.addAttribute("startTime", startTime == null ? "" : startTime);
         model.addAttribute("endTime", endTime == null ? "" : endTime);
+        model.addAttribute("display",("-1".equals(displayId)||"undefined".equals(displayId)) ? DisplayDTO.builder().id(-1).title("标题").content("").build() : displayClient.getDisplayById(Integer.parseInt(displayId)).getData()) ;
+
         return "display/editor";
     }
 
@@ -137,5 +140,26 @@ public class DisplayController {
             @RequestParam(value = "title") String title
     ){
         return activatesClient.addActivities(displayClient.getCreatedByCreationTimeAndTitle(createTime, title),signupNumber, startTime, endTime);
+    }
+
+    @RequestMapping("updDisplay")
+    @ResponseBody
+    public Map<String, Object> updDisplay(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content)
+    {
+        return displayClient.updateDisplay(id,title, content);
+    }
+
+    @RequestMapping("updActivities")
+    @ResponseBody
+    public Map<String, Object> updActivities(
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "signupNumber") Integer signupNumber,
+            @RequestParam(value = "startTime") String startTime,
+            @RequestParam(value = "endTime") String endTime)
+    {
+        return activatesClient.updateActivities(id,signupNumber,startTime,endTime);
     }
 }

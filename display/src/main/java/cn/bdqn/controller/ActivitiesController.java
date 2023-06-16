@@ -8,6 +8,7 @@ import cn.bdqn.service.IActivitiesService;
 import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -142,6 +143,29 @@ public class ActivitiesController {
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
+        }
+        return map;
+    }
+
+    @RequestMapping("updateActivities")
+    public Map<String, Object> updateActivities(
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "signupNum") Integer signupNumber,
+            @RequestParam(value = "startTime") String startTime,
+            @RequestParam(value = "endTime") String endTime){
+        Map<String,Object> map = new HashMap<>();
+        LambdaUpdateWrapper<Activities> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(Activities::getId, id);
+        lambdaUpdateWrapper.set(Activities::getSignupNumber, signupNumber);
+        lambdaUpdateWrapper.set(Activities::getStartTime,startTime);
+        lambdaUpdateWrapper.set(Activities::getEndTime,endTime);
+        lambdaUpdateWrapper.set(Activities::getUpdateTime, new Date());
+        if (activitiesService.update(null,lambdaUpdateWrapper)){
+            map.put("code", 200);
+            map.put("msg", "success");
+        }else {
+            map.put("code", 500);
+            map.put("msg", "error");
         }
         return map;
     }

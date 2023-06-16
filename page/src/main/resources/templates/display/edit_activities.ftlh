@@ -178,12 +178,18 @@
 
 <script>
 	function toEditor(){
+		let displayId;
+		let activitiesId;
+		<#if activities??>
+			displayId = ${activities.displayId};
+			activitiesId = ${activities.id};
+		</#if>
 		let signupNum = document.getElementById("signupNum").value;
 		let startTime = document.getElementById("startTime").value;
 		let startTimeHMS = document.getElementById("startTimeHMS").value;
 		let endTime = document.getElementById("endTime").value;
 		let endTimeHMS = document.getElementById("endTimeHMS").value;
-		let str = "signupNum="+signupNum+"&startTime="+startTime+" "+startTimeHMS+":00&endTime="+endTime+" "+endTimeHMS+":00";
+		let str = "signupNum="+signupNum+"&startTime="+startTime+" "+startTimeHMS+":00&endTime="+endTime+" "+endTimeHMS+":00&activitiesId="+activitiesId+"&displayId="+displayId;
 		window.location.href = "/display/editor?type=学社活动&"+str;
 	}
 </script>

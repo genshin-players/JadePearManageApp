@@ -3,8 +3,7 @@ package cn.bdqn.dto;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -20,6 +19,9 @@ import java.util.Date;
  * @since 2023-06-09
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DisplayDTO  {
 
     private Integer id;

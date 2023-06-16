@@ -41,4 +41,9 @@ public interface DisplayClient {
             @RequestParam(value = "createTime") String createTime,
             @RequestParam(value = "title")String title
     );
+    @RequestMapping("updateDisplay")
+    Map<String, Object> updateDisplay(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content);
 }

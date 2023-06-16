@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body">
                         <h4>内容标题：</h4>
-                        <input class="form-control" id="title" value="标题" placeholder="title">
+                        <input class="form-control" id="title" value="${display.title}" placeholder="title">
                     </div>
                 </div>
             </div>
@@ -223,61 +223,120 @@
     document.querySelector("#submit").addEventListener("click", ()=>{
         // getting data from editor
         const editorData = editor.getData();
+        const title = $("#title").val();
         console.log(editorData);
-        if (editorData.trim()===""){
-            zalert("内容不得为空")
-        } else if (editorData.trim() !== str) {
-            const date = new Date();
-            const year = date.getFullYear(); // 获取年份，例如：2022
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // 获取月份，并补零，例如：09
-            const day = String(date.getDate()).padStart(2, '0'); // 获取日期，并补零，例如：05
-            const hour = String(date.getHours()).padStart(2, '0'); // 获取小时，并补零，例如：14
-            const minute = String(date.getMinutes()).padStart(2, '0'); // 获取分钟，并补零，例如：30
-            const second = String(date.getSeconds()).padStart(2, '0'); // 获取秒数，并补零，例如：45
-            <#--const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;-->
-            const formattedDate = year + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second
-            console.log(formattedDate); // 输出类似于 "2022-09-05 14:30:45" 的字符串
-            let title = $("#title").val();
-            $.ajax({
-                async: true,
-                dataType: "json",
-                data: {
-                    title: title,
-                    content: editorData,
-                    displayTypeId: 1,
-                    createTime: formattedDate
-                },
-                method: "POST",
-                url: "/display/insertDisplay",
-                success: function () {
-                    if ("${type}" === "学社活动") {
-                        $.ajax({
-                            async: true,
-                            dataType: "json",
-                            data: {
-                                title: title,
-                                signupNum: signupNum,
-                                startTime: startTime,
-                                endTime: endTime,
-                                createTime: formattedDate
-                            },
-                            method: "POST",
-                            url: "/display/insertActivities",
-                            success: function () {
-                                window.location.href = "/display/inner_activities"
-                            },
-                            error: function () {
-                                zalert("insert activities error")
-                            }
-                        });
+        if (${display.id} === -1){
+            alert("进入添加")
+            if (editorData.trim()===""){
+                zalert("内容不得为空")
+            } else if (editorData.trim() !== str) {
+                const date = new Date();
+                const year = date.getFullYear(); // 获取年份，例如：2022
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // 获取月份，并补零，例如：09
+                const day = String(date.getDate()).padStart(2, '0'); // 获取日期，并补零，例如：05
+                const hour = String(date.getHours()).padStart(2, '0'); // 获取小时，并补零，例如：14
+                const minute = String(date.getMinutes()).padStart(2, '0'); // 获取分钟，并补零，例如：30
+                const second = String(date.getSeconds()).padStart(2, '0'); // 获取秒数，并补零，例如：45
+                <#--const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;-->
+                const formattedDate = year + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second
+                console.log(formattedDate); // 输出类似于 "2022-09-05 14:30:45" 的字符串
+                $.ajax({
+                    async: true,
+                    dataType: "json",
+                    data: {
+                        title: title,
+                        content: editorData,
+                        displayTypeId: 1,
+                        createTime: formattedDate
+                    },
+                    method: "POST",
+                    url: "/display/insertDisplay",
+                    success: function () {
+                        if ("${type}" === "学社活动") {
+                            $.ajax({
+                                async: true,
+                                dataType: "json",
+                                data: {
+                                    title: title,
+                                    signupNum: signupNum,
+                                    startTime: startTime,
+                                    endTime: endTime,
+                                    createTime: formattedDate
+                                },
+                                method: "POST",
+                                url: "/display/insertActivities",
+                                success: function () {
+                                    if ("${type}" === "学社活动"){
+                                        window.location.href = "/display/inner_activities"
+                                    }
+                                    if ("${type}" === "每日一推"){
+                                        window.location.href = "/display/daily_info"
+                                    }
+                                    if ("${type}" === "对外展览"){
+                                        window.location.href = "/display/external_performance"
+                                    }
+                                },
+                                error: function () {
+                                    zalert("insert activities error")
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        zalert("failed")
                     }
-                },
-                error: function () {
-                    zalert("failed")
-                }
-            })
+                })
+            } else {
+                zalert("请添加内容描述")
+            }
         } else {
-            zalert("请添加内容描述")
+            alert("进入修改")
+            if (editorData.trim()===""){
+                zalert("内容不得为空")
+            } else {
+                $.ajax({
+                    async:true,
+                    dataType:"json",
+                    data:{
+                        id: "${display.id}",
+                        title:title,
+                        content: editorData
+                    },
+                    method:"POST",
+                    url:"/display/updDisplay",
+                    success:function (){
+                        $.ajax({
+                            async:true,
+                            dataType:"json",
+                            data:{
+                                id:"${activitiesId}",
+                                signupNumber:signupNum,
+                                startTime:startTime,
+                                endTime:endTime
+                            },
+                            method:"POST",
+                            url:"/display/updActivities",
+                            success:function (){
+                                if ("${type}" === "学社活动"){
+                                    window.location.href = "/display/inner_activities"
+                                }
+                                if ("${type}" === "每日一推"){
+                                    window.location.href = "/display/daily_info"
+                                }
+                                if ("${type}" === "对外展览"){
+                                    window.location.href = "/display/external_performance"
+                                }
+                            },
+                            error:function () {
+                                zalert("update Failed")
+                            }
+                        })
+                    },
+                    error:function (){
+                        zalert("更新失败！")
+                    }
+                })
+            }
         }
     })
 
@@ -285,24 +344,10 @@
      * fill in the data which transporting from edit Activities page once this page is load
      */
 
+
     $(document).ready(function (){
         $("#warningBtn").click();
-        if (${id} > 0){
-            $.ajax({
-                async:true,
-                dataType:"json",
-                data:{
-                    id:"${id}"
-                },
-                method:"GET",
-                success:function (data) {
-
-                },
-                error:function () {
-
-                }
-            })
-        } else {
+        if (${display.id} === -1){
             if ("${type}" === '学社活动'){
                 console.log(signupNum,startTime,endTime)
                 str = "<p>本次活动每班报名人数为：<span style='font-size:18px;'>" +
@@ -314,7 +359,10 @@
                     "</strong></i></span></p>";
                 editor.setData(str);
             }
+        } else {
+            editor.setData(`${display.content?no_esc}`);
         }
+
     })
 </script>
 <!-- External css -->
