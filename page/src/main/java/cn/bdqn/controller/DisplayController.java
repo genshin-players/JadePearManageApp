@@ -98,7 +98,7 @@ public class DisplayController {
         model.addAttribute("signupNum", signupNum == null ? "" : signupNum);
         model.addAttribute("startTime", startTime == null ? "" : startTime);
         model.addAttribute("endTime", endTime == null ? "" : endTime);
-        model.addAttribute("display",("-1".equals(displayId)||"undefined".equals(displayId)) ? DisplayDTO.builder().id(-1).title("标题").content("").build() : displayClient.getDisplayById(Integer.parseInt(displayId)).getData()) ;
+        model.addAttribute("display",("-1".equals(displayId)||"undefined".equals(displayId)) ? DisplayDTO.builder().id(-1).title("标题").content("").build() : displayClient.getDisplayById(Integer.parseInt(displayId))) ;
 
         return "display/editor";
     }
