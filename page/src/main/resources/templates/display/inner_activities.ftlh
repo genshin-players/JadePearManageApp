@@ -16,7 +16,7 @@
                             </div>
                         </div>
                     </form>
-                    <a href="javascript:window.location.href='/display/inner_activities'" class="btn btn-primary mb-xxl-0 mb-4 "><i class="far fa-file-word me-2"></i>创建活动</a>
+                    <a href="javascript:window.location.href='/display/edit_activities'" class="btn btn-primary mb-xxl-0 mb-4 "><i class="far fa-file-word me-2"></i>创建活动</a>
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane active show" id="All">
