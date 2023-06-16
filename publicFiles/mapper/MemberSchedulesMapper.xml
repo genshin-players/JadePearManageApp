@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dddqmmx.mapper.MemberSchedulesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dddqmmx.entity.MemberSchedules">
+        <id column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="date" property="date" />
+        <result column="work_type_id" property="workTypeId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_user_id" property="createUserId" />
+    </resultMap>
+
+</mapper>
