@@ -1,5 +1,6 @@
 package cn.bdqn.mapper;
 
+import cn.bdqn.entity.Users;
 import cn.bdqn.entity.WorkClass;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -11,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @className WorkClassMapper
  * @describe TODO
  */
-public class WorkClassMapper {
+public interface WorkClassMapper  extends BaseMapper<WorkClass> {
 }
