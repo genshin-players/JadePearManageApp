@@ -107,8 +107,7 @@ public class DisplayController {
     public String toEditorActivities(@RequestParam(required = false) String id, Model model){
         //System.out.println(id);
         if (id!=null){
-            List<ActivitiesDTO> activitiesById = activatesClient.getActivitiesById(Integer.parseInt(id));
-            model.addAttribute("activities",activitiesById);
+            model.addAttribute("activities",activatesClient.getActivitiesById(Integer.parseInt(id)));
         }
         return "display/edit_activities";
     }
