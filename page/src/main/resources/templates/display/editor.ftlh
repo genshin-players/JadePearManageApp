@@ -306,14 +306,13 @@
                 }
             }
             else {
+                let param = {id: "${display.id}",title:title,content: editorData};
+                alert(param);
+                console.log(param)
                 $.ajax({
                     async:true,
                     dataType:"json",
-                    data:{
-                        id: "${display.id}",
-                        title:title,
-                        content: editorData
-                    },
+                    data:param,
                     method:"POST",
                     url:"/display/updDisplay",
                     success:function (){

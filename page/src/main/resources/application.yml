@@ -8,6 +8,10 @@ spring:
     url: jdbc:mysql://39.107.229.253:3306/jadepearl_app?useSSL=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: 114514
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 server:
   port: 8003
   max-http-header-size: 104857600
