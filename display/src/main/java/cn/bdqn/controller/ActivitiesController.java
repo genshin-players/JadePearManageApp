@@ -55,28 +55,19 @@ public class ActivitiesController {
 
     @RequestMapping("/getActivitiesById")
     @ResponseBody
-    public Map<String,Object> getActivitiesById(@RequestParam("id") Integer id){
+    public Activities getActivitiesById(@RequestParam("id") Integer id){
         Activities activities = activitiesService.getById(id);
         ActivitiesDTO activitiesDTO = new ActivitiesDTO();
         BeanUtils.copyProperties(activities, activitiesDTO);
         int displayId =activities.getDisplayId();
         Display display = displayService.getById(displayId);
         activitiesDTO.setDisplay(display);
-        Map<String,Object> map = new HashMap<>();
-        if (activities!=null&&activitiesDTO!=null){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data",activitiesDTO);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+        return activities;
     }
 
     @RequestMapping("/activitiesListByTitle")
     @ResponseBody
-    public Map<String,Object> activitiesListByTitle(@RequestParam("title") String title){
+    public List<ActivitiesDTO> activitiesListByTitle(@RequestParam("title") String title){
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(Display::getTitle, "%"+title+"%");
         List<Display> displayList = displayService.list(lambdaQueryWrapper);
@@ -91,16 +82,7 @@ public class ActivitiesController {
             activitiesDTO.setDisplay(display);
             dtoList.add(activitiesDTO);
         }
-        Map<String,Object> map = new HashMap<>();
-        if (displayList.size() > 0){
-            map.put("code", 200);
-            map.put("msg", "success");
-            map.put("data", dtoList);
-        }else {
-            map.put("code", 500);
-            map.put("msg", "error");
-        }
-        return map;
+        return dtoList;
     }
 
     @RequestMapping("deleteActivitiesById")

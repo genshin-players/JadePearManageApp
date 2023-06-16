@@ -2,9 +2,13 @@ package cn.bdqn.controller;
 
 import cn.bdqn.client.ActivatesClient;
 import cn.bdqn.client.DisplayClient;
+import cn.bdqn.client.UserClient;
 import cn.bdqn.dto.ActivitiesDTO;
 import cn.bdqn.dto.DisplayDTO;
+import cn.bdqn.entity.Users;
 import cn.bdqn.vo.ResultVO;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +26,17 @@ public class DisplayController {
     private DisplayClient displayClient;
     @Autowired
     private ActivatesClient activatesClient;
+    @Autowired
+    private UserClient userClient;
     @RequestMapping("/daily_info")
     public String toDailyInfo(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        ResultVO<List<DisplayDTO>> pushEveryFuckingDayList = displayClient.getPushEveryFuckingDayList(title);
-        List<DisplayDTO> displayDTOList = pushEveryFuckingDayList.getData();
-/*        for (DisplayDTO displayDTO:displayDTOList){
-            System.out.println(displayDTO.getTitle());
-        }*/
+        List<DisplayDTO> displayDTOList = displayClient.getPushEveryFuckingDayList(title);
+        for (DisplayDTO displayDTO : displayDTOList){
+            Users userById = userClient.getUserById(displayDTO.getPublishUserId());
+            JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
+            String realName = (String) jsonObject.get("realname");
+            displayDTO.setPublishUserName(realName);
+        }
         model.addAttribute("displayDTOList",displayDTOList);
         return "display/daily_info";
     }
@@ -38,7 +46,15 @@ public class DisplayController {
         if (title == null|| "".equals(title)){
             activitiesList = activatesClient.getActivitiesList();
         }else {
-            activitiesList = activatesClient.activitiesListByTitle(title).getData();
+            activitiesList = activatesClient.activitiesListByTitle(title);
+        }
+        for (ActivitiesDTO activitiesDTO : activitiesList){
+            DisplayDTO displayDTO = activitiesDTO.getDisplay();
+            Users userById = userClient.getUserById(displayDTO.getPublishUserId());
+            JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
+            String realName = (String) jsonObject.get("realname");
+            displayDTO.setPublishUserName(realName);
+            System.out.println(realName);
         }
         model.addAttribute("activitiesList",activitiesList);
         return "display/inner_activities";
@@ -46,11 +62,13 @@ public class DisplayController {
 
     @RequestMapping("/external_performance")
     public String toExternalPerformance(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        ResultVO<List<DisplayDTO>> externalPerformanceList = displayClient.getExternalPerformanceList(title);
-        List<DisplayDTO> displayDTOList = externalPerformanceList.getData();
-/*        for (DisplayDTO displayDTO:displayDTOList){
-            System.out.println(displayDTO.getTitle());
-        }*/
+        List<DisplayDTO> displayDTOList = displayClient.getExternalPerformanceList(title);
+        for (DisplayDTO displayDTO : displayDTOList){
+            Users userById = userClient.getUserById(displayDTO.getPublishUserId());
+            JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
+            String realName = (String) jsonObject.get("realname");
+            displayDTO.setPublishUserName(realName);
+        }
         model.addAttribute("displayDTOList",displayDTOList);
         return "display/external_performance";
     }
@@ -86,8 +104,8 @@ public class DisplayController {
     public String toEditorActivities(@RequestParam(required = false) String id, Model model){
         //System.out.println(id);
         if (id!=null){
-            ResultVO<ActivitiesDTO> activitiesById = activatesClient.getActivitiesById(Integer.parseInt(id));
-            model.addAttribute("activities",activitiesById.getData());
+            List<ActivitiesDTO> activitiesById = activatesClient.getActivitiesById(Integer.parseInt(id));
+            model.addAttribute("activities",activitiesById);
         }
         return "display/edit_activities";
     }

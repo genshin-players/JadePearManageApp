@@ -31,8 +31,8 @@ public interface ActivatesClient {
             @RequestParam(value = "endTime") String endTime);
 
     @RequestMapping("/getActivitiesById")
-    ResultVO<ActivitiesDTO> getActivitiesById(@RequestParam("id") Integer id);
+    List<ActivitiesDTO> getActivitiesById(@RequestParam("id") Integer id);
 
     @RequestMapping("/activitiesListByTitle")
-    ResultVO<List<ActivitiesDTO>> activitiesListByTitle(@RequestParam("title") String title);
+    List<ActivitiesDTO> activitiesListByTitle(@RequestParam("title") String title);
 }

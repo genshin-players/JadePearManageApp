@@ -30,4 +30,5 @@ public class DisplayDTO  {
     private Date createTime;
     private Date updateTime;
     private Integer publishUserId;
+    private String publishUserName;
 }

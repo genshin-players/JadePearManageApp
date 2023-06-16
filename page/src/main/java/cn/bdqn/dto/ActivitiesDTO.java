@@ -45,4 +45,5 @@ public class ActivitiesDTO {
     private Boolean isActive;
 
     private DisplayDTO display;
+
 }
