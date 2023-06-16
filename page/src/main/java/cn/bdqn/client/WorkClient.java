@@ -67,7 +67,7 @@ public interface WorkClient {
 
     //获取所有班级
     @RequestMapping("/getAllClasses")
-    public List<Classes> getAllClasses();
+    public ResultVO<List<Classes>> getAllClasses();
 
     @RequestMapping("/getAllWorkType")
     public List<SchedulesType> typeList();

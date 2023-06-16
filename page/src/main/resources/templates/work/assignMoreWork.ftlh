@@ -96,8 +96,6 @@
                         </div>
                             <hr  style="margin-top: 10px;background-color: white" >
 
-                            <div class="row">
-                                <div class="col-lg-3">
 
                             <div class="row classChoose" style="display: none">
                                 <div class="col-lg-2">
@@ -115,21 +113,6 @@
                             </div>
 
 
-                            <div class="row">
-                                <div class="col-lg-3">
-
-                                </div>
-                                <div class="col-lg-2">
-                                    <span class="text-white fw-bolder" style="font-size: 18px">日期:</span>
-                                </div>
-                                <div class="col-lg-4">
-                                    <input type="text" class="form-control mdate" placeholder="选择日期" name="date" <#if attendance??> value="${attendance.data.date?string('yyyy-MM-dd')}"</#if>  style="height: 35px;margin-left: 10px">
-                                </div>
-
-                                <br>
-                                <hr style="margin-top: 10px;background-color: white">
-
-
 
                                 <div class="row">
                                     <div class="col-lg-4">
@@ -144,7 +127,6 @@
 
 
                         </div>
-
 
                     </div>
                 </div>
