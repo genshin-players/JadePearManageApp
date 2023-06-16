@@ -1,9 +1,6 @@
 package cn.bdqn.vo;
 
-import cn.bdqn.entity.Classes;
-import cn.bdqn.entity.Schedules;
-import cn.bdqn.entity.SchedulesType;
-import cn.bdqn.entity.Users;
+import cn.bdqn.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +20,6 @@ public class MemberWorkDetailInfoVO {
     private Classes classes;//所属班级
     private Schedules schedules;//该成员指定日期的所有工作记录
     private SchedulesType schedulesType;//该学生指定的工作类型
+    private List<WorkClass>  workClasses;//负责班级
 
 }

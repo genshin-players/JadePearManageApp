@@ -3,6 +3,7 @@ package cn.bdqn.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class Schedules implements Serializable {
     /**
      * 工作日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     /**

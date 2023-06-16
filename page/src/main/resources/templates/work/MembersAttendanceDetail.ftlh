@@ -47,6 +47,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <ul class="star-review mb-2">
+                                            <input type="hidden" name="memId" value="${member.id}">
                                             <#assign adviserJson=adviser.identityInfo?eval/>
                                             <li><span class="text" style="font-weight: bolder;color: #0b3b97">班主任--${adviserJson.realname}</span></li> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <li><span class="text" style="font-weight: bolder;color: #0b3b97">联系方式--${json.phone}</span></li> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -84,7 +85,19 @@
                                                 <td>${detail.schedules.id}</td>
                                                 <#assign json=detail.member.identityInfo?eval/>
                                                 <td>${json.realname}</td>
-                                                <td>${detail.schedulesType.name}</td>
+                                                <td>${detail.schedulesType.name}
+                                                    <#if detail.schedulesType.id==1>
+                                                        (
+                                                        <#list detail.workClasses as wc>
+                                                            <#list classesList.data as c>
+                                                                <#if wc.classId==c.id>
+                                                                    ${c.name}&nbsp;
+                                                                </#if>
+                                                            </#list>
+                                                        </#list>
+                                                        )
+                                                    </#if>
+                                                </td>
                                                 <td>${detail.schedules.date?string('yyyy-MM-dd')}</td>
                                                 <#assign json=detail.createUser.identityInfo?eval/>
                                                 <td>${json.realname}</td>
@@ -109,8 +122,8 @@
                                                             <svg width="24px" height="24px" viewbox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="/toEditStudentAttendance">修改记录</a>
-                                                            <a class="dropdown-item" href="#">删除记录</a>
+                                                            <a class="dropdown-item" href="/toUpdateMemberWork?schedulesId=${detail.schedules.id}">修改记录</a>
+                                                            <a class="dropdown-item"  onclick="deleteOneWork(${detail.schedules.id})">删除记录</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -189,8 +202,31 @@
 
 <script>
     function toAssignOneWork() {
-        var memName=$("[name=memName]").val();
-        window.location.href="/toAssignWork?memName="+memName;
+        var memId=$("[name=memId]").val();
+        window.location.href="/toAssignWork?memId="+memId;
+
+    }
+
+    function deleteOneWork(schedulesId) {
+
+        if(confirm("确认删除吗")){
+            $.ajax({
+                type:"post",
+                url:"http://localhost:8003/deleteOneWork",
+                dataType:"json",
+                data:{schedulesId:schedulesId},
+                success:function(res){
+                    if (res.data>0){
+                        window.location.reload();
+                    }else {
+                        alert("删除失败");
+                    }
+                },
+                error:function () {
+                    alert("删除失败");
+                }
+            });
+        }
 
     }
 </script>

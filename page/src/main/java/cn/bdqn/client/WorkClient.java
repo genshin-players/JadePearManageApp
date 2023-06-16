@@ -1,8 +1,12 @@
 package cn.bdqn.client;
 
 import cn.bdqn.entity.Attendence;
+import cn.bdqn.entity.Classes;
+import cn.bdqn.entity.Schedules;
+import cn.bdqn.entity.SchedulesType;
 import cn.bdqn.vo.workvo.*;
 import cn.bdqn.vo.ResultVO;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
@@ -58,5 +62,40 @@ public interface WorkClient {
     //学社成员出勤详情
     @GetMapping("/toMemberWorkDetailInfo")
     public ResultVO<List<MemberWorkDetailInfoVO>> getMemberWorkDetailInfo(@RequestParam("memberId") Integer memberId);
+
+
+
+    //获取所有班级
+    @RequestMapping("/getAllClasses")
+    public List<Classes> getAllClasses();
+
+    @RequestMapping("/getAllWorkType")
+    public List<SchedulesType> typeList();
+
+
+    @PostMapping("/assignOneWork")
+    public ResultVO<Integer>assignOneWork(@RequestBody Schedules schedules,@RequestParam(value = "classIdArray",required = false) Integer[]classIdArray);
+
+
+
+
+    @PostMapping("/getSchedulesById")
+    public Schedules getSchedulesById(@RequestParam("schedulesId") Integer schedulesId);
+
+
+    @PostMapping("/updateOneWork")
+    public ResultVO<Integer> updateOneWork(@RequestBody Schedules schedules,@RequestParam(value = "classIdArray",required = false) Integer[]classIdArray);
+
+
+    @PostMapping("/deleteOneWork")
+    public ResultVO<Integer> deleteOneWork(@RequestParam("schedulesId") Integer schedulesId);
+
+
+    //给指定成员安排工作请求
+    @ResponseBody
+    @PostMapping("/assignMoreWork")
+    public ResultVO<Integer> assignMoreWork(@RequestBody Schedules schedules,
+                                            @RequestParam(value = "memberIdArray[]") Integer[]memberIdArray,
+                                            @RequestParam(value = "classIdArray[]",required = false) Integer[]classIdArray);
 
 }

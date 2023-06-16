@@ -37,7 +37,7 @@
             <div class="col-xl-8">
                 <div class="card bg-light bg" style="box-shadow: 10px 10px 20px 10px rgba(0, 0, 255, .2);opacity: 0.8 ">
                     <div class="card-header">
-                        <span class="card-title text-center text-primary" style="font-weight: bolder;font-size: 25px">安排工作</span>
+                        <span class="card-title text-center text-primary" style="font-weight: bolder;font-size: 25px">修改工作记录</span>
                     </div>
                     <div class="card-body">
 
@@ -47,14 +47,14 @@
                             <div class="col-lg-2">
                                 <span class="text-white fw-bolder" style="font-size: 18px">工作人员:</span>
                             </div>
+                            <input type="hidden" name="schedulesId" value="${schedules.id}">
                             <div class="col-lg-10">
                                 <#if member=="sb">
                                     <select class="multi-select" name="members" multiple="multiple" onchange="checkThis()">
-                                        <#list memberList as m>
-                                            <#assign json=m.identityInfo?eval/>
-                                            <option value="${m.id}">${json.realname}</option>
-                                        </#list>
-
+                                        <option value="1" <#if memName=="亚托克斯">selected</#if>>亚托克斯</option>
+                                        <option value="2" <#if memName=="暮光星灵">selected</#if>>暮光星灵</option>
+                                        <option value="3" <#if memName=="诺克萨斯之手">selected</#if>>诺克萨斯之手</option>
+                                        <option value="4" <#if memName=="佛耶戈">selected</#if>>佛耶戈</option>
                                     </select>
                                 <#else>
                                     <#assign json=member.identityInfo?eval/>
@@ -73,7 +73,7 @@
                                 <span class="text-white fw-bolder" style="font-size: 18px">工作时间:</span>
                             </div>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control mdate" placeholder="选择日期"  style="height: 35px" name="workTime" onchange="checkTime()">
+                                <input type="text" class="form-control mdate" placeholder="选择日期"  style="height: 35px" name="workTime" >
                             </div>
                             <div class="col-lg-4">
 
@@ -95,46 +95,46 @@
                                 </select>
                             </div>
                         </div>
-                            <hr  style="margin-top: 10px;background-color: white" >
+                        <hr  style="margin-top: 10px;background-color: white" >
 
 
-                            <div class="row classChoose" style="display: none">
-                                <div class="col-lg-2">
-                                    <span class="text-white fw-bolder" style="font-size: 18px">选择班级:</span>
-                                </div>
-                                <div class="col-lg-10">
-                                    <select class="multi-select" name="classId" multiple="multiple" >
+                        <div class="row classChoose" style="display: none">
+                            <div class="col-lg-2">
+                                <span class="text-white fw-bolder" style="font-size: 18px">选择班级:</span>
+                            </div>
+                            <div class="col-lg-10">
+                                <select class="multi-select" name="classId" multiple="multiple" >
                                     <#list classesList.data as c>
                                         <option value="${c.id}">${c.name}</option>
                                     </#list>
-                                    </select>
-                                </div>
-                                <br>
-                                <hr class="classChoose" style="display:none;margin-top: 10px;background-color: white">
+                                </select>
                             </div>
+                            <br>
+                            <hr class="classChoose" style="display:none;margin-top: 10px;background-color: white">
+                        </div>
 
 
 
-                                <div class="row">
-                                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-4">
 
-                                    </div>
-                                    <div class="col-lg-4" align="center">
-                                        <button class="btn btn-outline-secondary" onclick="submitWork()">提交</button>
-                                    </div>
-
-
-                                </div>
+                            </div>
+                            <div class="col-lg-4" align="center">
+                                <button class="btn btn-outline-secondary" onclick="submitWork()">提交</button>
+                            </div>
 
 
                         </div>
 
+
                     </div>
+
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 </div>
 <!--**********************************
     Content body end
@@ -238,7 +238,7 @@
 
 
     //检查时间 不能是今天之前
-    function checkTime() {
+    /*function checkTime() {
         let val= $("[name=workTime]").val();
         var date1=val.split("-");
         var dateNow=new Date();
@@ -246,7 +246,7 @@
             alert("工作时间不能是今天之前");
             $("[name=workTime]").val(dateNow.getFullYear()+"-"+(dateNow.getUTCMonth()+1)+"-"+dateNow.getDate());
         }
-    }
+    }*/
 
     //检查工作安排是否是查班 查班的话需要加上班级选择
     function checkWorkType() {
@@ -265,6 +265,7 @@
         var workTime=$("[name=workTime]").val();
         var workType=$("[name=workType]").val();
         var classId=$("[name=classId]").val();
+        var schedulesId=$("[name=schedulesId]").val();
 
         if(member_id==null){
             alert("工作人员不得为空");
@@ -277,9 +278,10 @@
 
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/assignOneWork",
+                    url:"http://localhost:8003/updateOneWork",
                     dataType:"json",
                     data:{
+                        id:schedulesId,
                         memberId:member_id,
                         date:workTime,
                         workTypeId:workType,
@@ -291,19 +293,22 @@
                         if(res.data >0){
                             window.location.href="/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
-                            alert("添加失败");
+                            alert("修改失败");
                         }
                     }
                 });
 
-            }else if(workType==1&&classId.length<=0){
+            }else if(workType===1&&classId.length<=0){
                 alert("社员负责班级不得为空");
             }else {
+
+
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/assignOneWork",
+                    url:"http://localhost:8003/updateOneWork",
                     dataType:"json",
                     data:{
+                        id:schedulesId,
                         memberId:member_id,
                         date:workTime,
                         workTypeId:workType,
@@ -314,10 +319,11 @@
                         if(res.data >0){
                             window.location.href="/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
-                            alert("添加失败");
+                            alert("修改失败");
                         }
                     }
                 });
+
             }
         }
 

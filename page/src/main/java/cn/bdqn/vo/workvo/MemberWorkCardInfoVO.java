@@ -1,12 +1,11 @@
 package cn.bdqn.vo.workvo;
 
-import cn.bdqn.entity.Classes;
-import cn.bdqn.entity.Schedules;
-import cn.bdqn.entity.SchedulesType;
-import cn.bdqn.entity.Users;
+import cn.bdqn.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * 学社工作卡片展示页面上展示的数据
@@ -20,4 +19,5 @@ public class MemberWorkCardInfoVO {
     private SchedulesType schedulesType;//工作分类信息
     private Classes classes;//班级表
     private Users createUser;//创建人，布置人
+    private List<WorkClass> workClasses;//负责班级
 }

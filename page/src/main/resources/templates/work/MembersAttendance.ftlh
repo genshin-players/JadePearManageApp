@@ -37,7 +37,11 @@
            <#if resultVO.data??>
                 <#list resultVO.data as vo>
                     <div class="col-xl-3">
-                        <div class="card text-white bg-danger" onclick="toDetailPage(this)"
+                        <div
+                                <#if vo.schedules.status==0>class="card text-white bg-danger"</#if>
+                                <#if vo.schedules.status==1>class="card text-white bg-success"</#if>
+
+                                onclick="toDetailPage(this)"
                              data_memberId="${vo.member.id}" data_date="${pageDate}">
                             <div class="card-header">
                                 <#assign json=vo.member.identityInfo?eval/>
@@ -53,7 +57,19 @@
 
                             </div>
                             <div class="card-body mb-0">
-                                <span class="text-white" style="font-weight: bolder;font-size: 18px">工作:</span><span style="font-size: 15px;margin-left: 40px">${vo.schedulesType.name}</span><br>
+                                <span class="text-white" style="font-weight: bolder;font-size: 18px">工作:</span><span style="font-size: 15px;margin-left: 40px">${vo.schedulesType.name}
+                                    <#if vo.schedules.workTypeId==1>
+                                        (
+                                        <#list vo.workClasses as wc >
+                                            <#list classesList.data as c>
+                                                <#if wc.classId==c.id>
+                                                    ${c.name}&nbsp;
+                                                </#if>
+                                            </#list>
+                                        </#list>
+                                        )
+                                    </#if>
+                                </span><br>
                                 <hr>
                                 <span class="text-white" style="font-weight: bolder;font-size: 18px">所在班:</span><span style="font-size: 15px;margin-left: 20px">${vo.classes.name}</span><br>
                                 <hr>
@@ -63,7 +79,7 @@
                     </div>
                 </#list>
 
-                <#else >
+                <#else>
                     <div class="row">
                         <div class="col-lg-12" align="center">
                             <span class="text" style="color:red;font-weight: bolder;font-size: 30px" >无记录</span>

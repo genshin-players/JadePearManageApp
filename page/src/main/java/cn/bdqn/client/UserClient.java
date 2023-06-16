@@ -48,4 +48,14 @@ public interface UserClient {
     Users selectUsersById(@RequestParam(value = "id")Integer id);
 
 
+    /**
+     * 提供给其他模块的接口
+     */
+    @GetMapping("/user/public/getUserById")
+    public Users getUserById(@RequestParam(value = "userId")Integer userId);
+
+
+    @GetMapping("/user/public/getAllMember")
+    public List<Users> getAllMember();
+
 }

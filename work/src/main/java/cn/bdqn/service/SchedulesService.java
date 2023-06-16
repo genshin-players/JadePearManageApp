@@ -31,4 +31,40 @@ public interface SchedulesService extends IService<Schedules> {
      */
     public List<MemberWorkDetailInfoVO> getMemberWorkDetailInfo(Integer memberId);
 
+    /**
+     * 给指定成员添加工作
+     * @param schedules
+     * @param classIdArray
+     * @return
+     */
+    public Integer assignOneWork(Schedules schedules,Integer[]classIdArray);
+
+
+    /**
+     * 给多个成员添加工作
+     * @param schedules
+     * @param classIdArray
+     * @return
+     */
+    public Integer assignMoreWork(Schedules schedules, Integer[]memberIdArray, Integer[]classIdArray) throws InterruptedException;
+
+
+
+    /**
+     * 给指定成员修改工作记录
+     * @param schedules
+     * @param classIdArray
+     * @return
+     */
+
+    public Integer updateOneWork(Schedules schedules,Integer[]classIdArray);
+
+
+    /**
+     *  将指定成员删除记录
+     * @param schedulesId
+     * @return
+     */
+    public Integer deleteOneWork(Integer schedulesId);
+
 }
