@@ -69,7 +69,7 @@ public class DisplayController {
     @RequestMapping("/editor")
     public String toEditor(
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String id,
+            @RequestParam(required = false, defaultValue = "-1") String id,
             @RequestParam(required = false) String signupNum,
             @RequestParam(required = false) String startTime,
             @RequestParam(required = false) String endTime,
