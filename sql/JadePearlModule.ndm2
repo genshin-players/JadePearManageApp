@@ -34,7 +34,7 @@
             "engine": "InnoDB",
             "characterSet": "utf8mb3",
             "collation": "utf8mb3_general_ci",
-            "autoIncrement": 13,
+            "autoIncrement": 18,
             "tablespace": "",
             "storage": "",
             "insertMethod": "",
@@ -65,9 +65,9 @@
             "dataLength": 16384,
             "indexLength": 16384,
             "maxDataLength": 0,
-            "rows": 1,
-            "updateTime": "2023-06-13 15:45:46",
-            "DDL": "CREATE TABLE `activities` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `display_id` int NOT NULL,\n  `signup_number` int NOT NULL COMMENT '报名人数',\n  `start_time` datetime NOT NULL COMMENT '报名开始时间，格式”yyyy-MM-dd HH:mm:sss“',\n  `end_time` datetime NOT NULL COMMENT '报名截止时间，格式”yyyy-MM-dd HH:mm:sss“',\n  `likes` int NOT NULL DEFAULT '0' COMMENT '点赞（热度）',\n  `create_time` date NOT NULL DEFAULT (curtime()) COMMENT '创建日期',\n  `update_time` date NOT NULL DEFAULT (curtime()) COMMENT '更新日期',\n  `is_active` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1代表TRUE(生效),0代表FALSE（不生效）',\n  PRIMARY KEY (`id`),\n  KEY `activities_display_id_fk` (`display_id`),\n  CONSTRAINT `activities_display_id_fk` FOREIGN KEY (`display_id`) REFERENCES `display` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3",
+            "rows": 3,
+            "updateTime": "2023-06-15 16:31:33",
+            "DDL": "CREATE TABLE `activities` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `display_id` int NOT NULL,\n  `signup_number` int NOT NULL COMMENT '报名人数',\n  `start_time` datetime NOT NULL COMMENT '报名开始时间，格式”yyyy-MM-dd HH:mm:sss“',\n  `end_time` datetime NOT NULL COMMENT '报名截止时间，格式”yyyy-MM-dd HH:mm:sss“',\n  `likes` int NOT NULL DEFAULT '0' COMMENT '点赞（热度）',\n  `create_time` date NOT NULL DEFAULT (curtime()) COMMENT '创建日期',\n  `update_time` date NOT NULL DEFAULT (curtime()) COMMENT '更新日期',\n  `is_active` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1代表TRUE(生效),0代表FALSE（不生效）',\n  PRIMARY KEY (`id`),\n  KEY `activities_display_id_fk` (`display_id`),\n  CONSTRAINT `activities_display_id_fk` FOREIGN KEY (`display_id`) REFERENCES `display` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3",
             "partitionBy": "",
             "partitionByExpr": "",
             "partitions": 0,
@@ -386,7 +386,7 @@
             "engine": "InnoDB",
             "characterSet": "utf8mb3",
             "collation": "utf8mb3_general_ci",
-            "autoIncrement": 37,
+            "autoIncrement": 41,
             "tablespace": "",
             "storage": "",
             "insertMethod": "",
@@ -417,9 +417,9 @@
             "dataLength": 16384,
             "indexLength": 49152,
             "maxDataLength": 0,
-            "rows": 21,
-            "updateTime": "2023-06-12 20:43:05",
-            "DDL": "CREATE TABLE `attendence` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `class_id` int NOT NULL COMMENT '班级id',\n  `student_id` int NOT NULL COMMENT '学生id',\n  `date` datetime NOT NULL COMMENT '日期，格式”yyyy-MM-dd HH:mm:sss“',\n  `is_present` int NOT NULL COMMENT '0.缺勤 1.迟到 2.在 3.请假',\n  `report_user_id` int NOT NULL COMMENT '汇报者id',\n  PRIMARY KEY (`id`),\n  KEY `attendence_classes_id_fk` (`class_id`),\n  KEY `attendence_users_id_fk` (`report_user_id`),\n  KEY `attendence_users_id_fk2` (`student_id`),\n  CONSTRAINT `attendence_classes_id_fk` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`),\n  CONSTRAINT `attendence_users_id_fk2` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3 COMMENT='出勤'",
+            "rows": 22,
+            "updateTime": "2023-06-15 22:43:04",
+            "DDL": "CREATE TABLE `attendence` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `class_id` int NOT NULL COMMENT '班级id',\n  `student_id` int NOT NULL COMMENT '学生id',\n  `date` datetime NOT NULL COMMENT '日期，格式”yyyy-MM-dd HH:mm:sss“',\n  `is_present` int NOT NULL COMMENT '0.缺勤 1.迟到 2.在 3.请假',\n  `report_user_id` int NOT NULL COMMENT '汇报者id',\n  PRIMARY KEY (`id`),\n  KEY `attendence_classes_id_fk` (`class_id`),\n  KEY `attendence_users_id_fk` (`report_user_id`),\n  KEY `attendence_users_id_fk2` (`student_id`),\n  CONSTRAINT `attendence_classes_id_fk` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`),\n  CONSTRAINT `attendence_users_id_fk2` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb3 COMMENT='出勤'",
             "partitionBy": "",
             "partitionByExpr": "",
             "partitions": 0,
@@ -1089,7 +1089,7 @@
             "engine": "InnoDB",
             "characterSet": "utf8mb3",
             "collation": "utf8mb3_general_ci",
-            "autoIncrement": 103,
+            "autoIncrement": 109,
             "tablespace": "",
             "storage": "",
             "insertMethod": "",
@@ -1114,15 +1114,15 @@
             "oldName": "display",
             "encryption": false,
             "createOptions": "",
-            "createTime": "2023-06-15 11:14:51",
+            "createTime": "2023-06-16 16:03:40",
             "checkTime": "",
             "dataFree": 0,
             "dataLength": 16384,
             "indexLength": 32768,
             "maxDataLength": 0,
-            "rows": 9,
-            "updateTime": "",
-            "DDL": "CREATE TABLE `display` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `title` varchar(50) NOT NULL COMMENT '标题',\n  `content` varchar(5000) DEFAULT NULL COMMENT '内容',\n  `display_type_id` int NOT NULL COMMENT '内容类型',\n  `cover_image` varchar(255) NOT NULL COMMENT '封面图片（待定）',\n  `create_time` datetime NOT NULL DEFAULT (curtime()),\n  `update_time` datetime NOT NULL DEFAULT (curtime()),\n  `publish_user_id` int NOT NULL,\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  PRIMARY KEY (`id`),\n  KEY `display_display_type_id_fk` (`display_type_id`),\n  KEY `display_users_id_fk` (`publish_user_id`),\n  CONSTRAINT `display_display_type_id_fk` FOREIGN KEY (`display_type_id`) REFERENCES `display_type` (`id`),\n  CONSTRAINT `display_users_id_fk` FOREIGN KEY (`publish_user_id`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb3 COMMENT='显示内容'",
+            "rows": 8,
+            "updateTime": "2023-06-15 12:04:14",
+            "DDL": "CREATE TABLE `display` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `title` varchar(50) NOT NULL COMMENT '标题',\n  `content` longtext COMMENT '内容',\n  `display_type_id` int NOT NULL COMMENT '内容类型',\n  `cover_image` varchar(255) NOT NULL COMMENT '封面图片（待定）',\n  `create_time` datetime NOT NULL DEFAULT (curtime()),\n  `update_time` datetime NOT NULL DEFAULT (curtime()),\n  `publish_user_id` int NOT NULL,\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  PRIMARY KEY (`id`),\n  KEY `display_display_type_id_fk` (`display_type_id`),\n  KEY `display_users_id_fk` (`publish_user_id`),\n  CONSTRAINT `display_display_type_id_fk` FOREIGN KEY (`display_type_id`) REFERENCES `display_type` (`id`),\n  CONSTRAINT `display_users_id_fk` FOREIGN KEY (`publish_user_id`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb3 COMMENT='显示内容'",
             "partitionBy": "",
             "partitionByExpr": "",
             "partitions": 0,
@@ -1187,8 +1187,8 @@
               {
                 "objectType": "TableField_MYSQL",
                 "name": "content",
-                "type": "varchar",
-                "length": 5000,
+                "type": "longtext",
+                "length": -2147483648,
                 "decimals": -2147483648,
                 "isUnsigned": false,
                 "isZeroFill": false,
@@ -1407,7 +1407,7 @@
                 "algorithm": "",
                 "lock": "",
                 "collation": "A",
-                "cardinality": "1",
+                "cardinality": "2",
                 "packed": "",
                 "IsVisibleIndex": true,
                 "fields": [
@@ -2051,7 +2051,7 @@
             "engine": "InnoDB",
             "characterSet": "utf8mb3",
             "collation": "utf8mb3_general_ci",
-            "autoIncrement": 3,
+            "autoIncrement": 105,
             "tablespace": "",
             "storage": "",
             "insertMethod": "",
@@ -2076,15 +2076,15 @@
             "oldName": "member_schedules",
             "encryption": false,
             "createOptions": "",
-            "createTime": "2023-06-15 14:16:45",
+            "createTime": "2023-06-15 20:37:25",
             "checkTime": "",
             "dataFree": 0,
             "dataLength": 16384,
             "indexLength": 32768,
             "maxDataLength": 0,
-            "rows": 2,
-            "updateTime": "2023-06-14 01:25:53",
-            "DDL": "CREATE TABLE `member_schedules` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `member_id` int NOT NULL COMMENT '工作学社成员id',\n  `date` date NOT NULL COMMENT '工作日期',\n  `work_type_id` int NOT NULL COMMENT '工作类型id',\n  `create_time` date NOT NULL DEFAULT (curdate()),\n  `update_time` date NOT NULL,\n  `create_user_id` int NOT NULL,\n  `status` tinyint(1) NOT NULL COMMENT '完成状态 0未完成，1已完成',\n  PRIMARY KEY (`id`),\n  KEY `member_schedules_users_id_fk` (`member_id`),\n  KEY `member_schedules_member_schedules_type_id_fk2` (`work_type_id`),\n  CONSTRAINT `member_schedules_member_schedules_type_id_fk` FOREIGN KEY (`work_type_id`) REFERENCES `member_schedules_type` (`id`),\n  CONSTRAINT `member_schedules_member_schedules_type_id_fk2` FOREIGN KEY (`work_type_id`) REFERENCES `member_schedules_type` (`id`),\n  CONSTRAINT `member_schedules_users_id_fk` FOREIGN KEY (`member_id`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COMMENT='学社成员工作安排'",
+            "rows": 5,
+            "updateTime": "2023-06-16 01:21:48",
+            "DDL": "CREATE TABLE `member_schedules` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `member_id` int NOT NULL COMMENT '工作学社成员id',\n  `date` date NOT NULL COMMENT '工作日期',\n  `work_type_id` int NOT NULL COMMENT '工作类型id',\n  `create_time` date NOT NULL DEFAULT (curdate()),\n  `update_time` datetime NOT NULL,\n  `create_user_id` int NOT NULL,\n  `status` tinyint(1) NOT NULL COMMENT '完成状态 0未完成，1已完成',\n  PRIMARY KEY (`id`),\n  KEY `member_schedules_users_id_fk` (`member_id`),\n  KEY `member_schedules_member_schedules_type_id_fk2` (`work_type_id`),\n  CONSTRAINT `member_schedules_member_schedules_type_id_fk` FOREIGN KEY (`work_type_id`) REFERENCES `member_schedules_type` (`id`),\n  CONSTRAINT `member_schedules_member_schedules_type_id_fk2` FOREIGN KEY (`work_type_id`) REFERENCES `member_schedules_type` (`id`),\n  CONSTRAINT `member_schedules_users_id_fk` FOREIGN KEY (`member_id`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb3 COMMENT='学社成员工作安排'",
             "partitionBy": "",
             "partitionByExpr": "",
             "partitions": 0,
@@ -2227,7 +2227,7 @@
               {
                 "objectType": "TableField_MYSQL",
                 "name": "update_time",
-                "type": "date",
+                "type": "datetime",
                 "length": -2147483648,
                 "decimals": -2147483648,
                 "isUnsigned": false,
@@ -2317,7 +2317,7 @@
                 "algorithm": "",
                 "lock": "",
                 "collation": "A",
-                "cardinality": "1",
+                "cardinality": "2",
                 "packed": "",
                 "IsVisibleIndex": true,
                 "fields": [
@@ -2343,7 +2343,7 @@
                 "algorithm": "",
                 "lock": "",
                 "collation": "A",
-                "cardinality": "2",
+                "cardinality": "1",
                 "packed": "",
                 "IsVisibleIndex": true,
                 "fields": [
@@ -2462,7 +2462,7 @@
             "oldName": "member_schedules_type",
             "encryption": false,
             "createOptions": "",
-            "createTime": "2023-06-07 11:48:11",
+            "createTime": "2023-06-16 03:29:19",
             "checkTime": "",
             "dataFree": 0,
             "dataLength": 16384,
@@ -2470,7 +2470,7 @@
             "maxDataLength": 0,
             "rows": 2,
             "updateTime": "2023-06-09 16:52:27",
-            "DDL": "CREATE TABLE `member_schedules_type` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `name` varchar(50) NOT NULL COMMENT '例：查寝，点名',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COMMENT='工作类型'",
+            "DDL": "CREATE TABLE `member_schedules_type` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `name` varchar(50) NOT NULL COMMENT '例：查寝，点名',\n  PRIMARY KEY (`id`),\n  KEY `id` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COMMENT='工作类型'",
             "partitionBy": "",
             "partitionByExpr": "",
             "partitions": 0,
@@ -2533,7 +2533,34 @@
                 "oldName": "name"
               }
             ],
-            "indexes": [],
+            "indexes": [
+              {
+                "objectType": "Index_MYSQL",
+                "name": "id",
+                "type": "NORMAL",
+                "method": "BTREE",
+                "comment": "",
+                "oldName": "id",
+                "online": false,
+                "keyBlockSize": 0,
+                "parser": "",
+                "algorithm": "",
+                "lock": "",
+                "collation": "A",
+                "cardinality": "2",
+                "packed": "",
+                "IsVisibleIndex": true,
+                "fields": [
+                  {
+                    "objectType": "IndexField_MYSQL",
+                    "name": "id",
+                    "keyLength": 0,
+                    "order": "ASC",
+                    "oldName": "id"
+                  }
+                ]
+              }
+            ],
             "primaryKey": {
               "objectType": "PrimaryKey_MYSQL",
               "name": "",
@@ -2562,7 +2589,7 @@
             "engine": "InnoDB",
             "characterSet": "utf8mb4",
             "collation": "utf8mb4_0900_ai_ci",
-            "autoIncrement": 2,
+            "autoIncrement": 94,
             "tablespace": "",
             "storage": "",
             "insertMethod": "",
@@ -2593,9 +2620,9 @@
             "dataLength": 16384,
             "indexLength": 32768,
             "maxDataLength": 0,
-            "rows": 0,
-            "updateTime": "",
-            "DDL": "CREATE TABLE `member_work_class` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `schedules_id` int NOT NULL,\n  `class_id` int NOT NULL,\n  `create_time` datetime NOT NULL DEFAULT (curtime()),\n  `update_time` datetime NOT NULL DEFAULT (curtime()),\n  PRIMARY KEY (`id`),\n  KEY `member_work_class_classes_id_fk` (`class_id`),\n  KEY `member_work_class_member_schedules_id_fk` (`schedules_id`),\n  CONSTRAINT `member_work_class_classes_id_fk` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`),\n  CONSTRAINT `member_work_class_member_schedules_id_fk` FOREIGN KEY (`schedules_id`) REFERENCES `member_schedules` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+            "rows": 14,
+            "updateTime": "2023-06-16 10:48:48",
+            "DDL": "CREATE TABLE `member_work_class` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `schedules_id` int NOT NULL,\n  `class_id` int NOT NULL,\n  `create_time` datetime NOT NULL DEFAULT (curtime()),\n  `update_time` datetime NOT NULL DEFAULT (curtime()),\n  PRIMARY KEY (`id`),\n  KEY `member_work_class_classes_id_fk` (`class_id`),\n  KEY `member_work_class_member_schedules_id_fk` (`schedules_id`),\n  CONSTRAINT `member_work_class_classes_id_fk` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`),\n  CONSTRAINT `member_work_class_member_schedules_id_fk` FOREIGN KEY (`schedules_id`) REFERENCES `member_schedules` (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
             "partitionBy": "",
             "partitionByExpr": "",
             "partitions": 0,
@@ -2750,7 +2777,7 @@
                 "algorithm": "",
                 "lock": "",
                 "collation": "A",
-                "cardinality": "0",
+                "cardinality": "3",
                 "packed": "",
                 "IsVisibleIndex": true,
                 "fields": [
@@ -2776,7 +2803,7 @@
                 "algorithm": "",
                 "lock": "",
                 "collation": "A",
-                "cardinality": "0",
+                "cardinality": "5",
                 "packed": "",
                 "IsVisibleIndex": true,
                 "fields": [
@@ -4589,9 +4616,9 @@
           "type": "table",
           "schemaName": "jadepearl_app",
           "tableName": "member_schedules",
-          "x": 1090,
+          "x": 1080,
           "y": 1130,
-          "width": 157,
+          "width": 172,
           "height": 210,
           "isBold": false,
           "titleColor": {
@@ -4934,7 +4961,7 @@
           "visible": true,
           "vertices": [
             {
-              "x": 1262,
+              "x": 1267,
               "y": 1255
             },
             {
@@ -4943,7 +4970,7 @@
             }
           ],
           "label": {
-            "x": 1258,
+            "x": 1263,
             "y": 1257,
             "width": 342,
             "height": 30,
@@ -4968,7 +4995,7 @@
           "visible": true,
           "vertices": [
             {
-              "x": 1262,
+              "x": 1267,
               "y": 1225
             },
             {
@@ -4977,7 +5004,7 @@
             }
           ],
           "label": {
-            "x": 1258,
+            "x": 1263,
             "y": 1227,
             "width": 350,
             "height": 30,
@@ -5040,7 +5067,7 @@
               "y": 1240
             },
             {
-              "x": 1075,
+              "x": 1065,
               "y": 1240
             }
           ],
