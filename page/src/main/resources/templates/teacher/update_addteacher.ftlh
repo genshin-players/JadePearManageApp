@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <div class="form-validation">
 
-                            <form class="needs-validation" novalidate="">
+                            <form class="needs-validation" novalidate="" enctype="multipart/form-data" method="post" action="upload">
                                 <div class="row">
                                     <div class="mb-3 row">
                                         <label class="col-lg-4 col-form-label" for="validationCustom06">用户名
@@ -105,6 +105,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <input type="file" name="account_info">
 
                                     <div class="mb-3 row">
                                         <div class="col-lg-8 ms-auto">

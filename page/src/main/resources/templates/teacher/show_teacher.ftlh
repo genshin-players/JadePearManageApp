@@ -28,6 +28,7 @@
                                         </div>
                                     </th>
                                     <th>ID</th>
+                                    <th>头像</th>
                                     <th>用户名</th>
                                     <th>班级</th>
                                     <th>姓名</th>
@@ -51,6 +52,12 @@
                                                 <h4 class="mb-0 mt-1 text-black">${user.id}</h4>
                                             </div>
                                         </td>
+                                        <td>
+                                            <div class="media-bx">
+                                               <img src="../static/image/1.png" alt="cg">
+                                            </div>
+                                        </td>
+
                                         <td>
                                             <div class="media-bx">
                                                 <h4 class="mb-0 mt-1 text-black" va>${user.username}</h4>

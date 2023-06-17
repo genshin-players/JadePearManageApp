@@ -105,6 +105,7 @@ public class UserController {
     @PostMapping("/add_Suser")
     public  String addSUser(@RequestParam(value = "username")String username,
                            @RequestParam(value = "realname") String  realname,
+                            @RequestParam(value = "class_id") Integer  class_id,
                            @RequestParam(value = "age") String age,
                            @RequestParam(value = "gender")String gender,
                            @RequestParam(value = "phone") String phone,
@@ -122,8 +123,24 @@ public class UserController {
                 '"'+"phone"+'"'+":"+'"'+phone+'"'+","+
                 '"'+"identity"+'"'+":"+'"'+identity+'"'
                 +"}");
+
         Map<String, Object> map = userClient.addUser(users);
-        System.out.println(map);
+        //==================================================
+        List<Users> users1 = userClient.showAll();
+        Users users2 = users1.get(users1.size() - 1);
+        System.out.println("111111111111111111111"+users2.getId());
+        //========================================================
+
+
+        //===========================================================
+        //添加Class——Student  表
+        StudentClass studentClass=new StudentClass();
+        studentClass.setClassId(class_id);
+        studentClass.setStudentId(users2.getId());
+        userClient.addStudentClass(studentClass);
+        //===============================================================
+
+
         return "redirect:show_student";
     }
 

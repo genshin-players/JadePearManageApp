@@ -18,7 +18,7 @@ public class User_ClassDTO implements Serializable {
     /**
      * json格式，账号信息，包含用户名密码（待定）
      */
-    private String accountInfo;
+    private String accountInfo;    //头像
 
     /**
      * json格式，身份信息，包含姓名、年龄、性别、联系方式等
