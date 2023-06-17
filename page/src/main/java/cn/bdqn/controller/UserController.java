@@ -83,20 +83,20 @@ public class UserController {
                 +"}");
 
         Map<String, Object> map = userClient.addUser(users);
-        //===============================
+        //==================================================
         List<Users> users1 = userClient.showAll();
         Users users2 = users1.get(users1.size() - 1);
         System.out.println("111111111111111111111"+users2.getId());
-        //===============================
+        //========================================================
 
 
-        //===================================================
+        //===========================================================
         //添加Class——Student  表
         StudentClass studentClass=new StudentClass();
         studentClass.setClassId(class_id);
         studentClass.setStudentId(users2.getId());
         userClient.addStudentClass(studentClass);
-        //===================================================
+        //===============================================================
 
 
         return "redirect:show_teacher";
