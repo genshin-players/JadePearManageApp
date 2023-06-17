@@ -293,15 +293,26 @@
             alert("进入修改")
             if (editorData.trim()===""){
                 zalert("内容不得为空")
-            } else {
+            } else if (editorData == `${display.content?no_esc}`){
+                alert("内容未改变")
+                if ("${type}" === "学社活动"){
+                    window.location.href = "/display/inner_activities"
+                }
+                if ("${type}" === "每日一推"){
+                    window.location.href = "/display/daily_info"
+                }
+                if ("${type}" === "对外展览"){
+                    window.location.href = "/display/external_performance"
+                }
+            }
+            else {
+                let param = {id: "${display.id}",title:title,content: editorData};
+                alert(param);
+                console.log(param)
                 $.ajax({
                     async:true,
                     dataType:"json",
-                    data:{
-                        id: "${display.id}",
-                        title:title,
-                        content: editorData
-                    },
+                    data:param,
                     method:"POST",
                     url:"/display/updDisplay",
                     success:function (){

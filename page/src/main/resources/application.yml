@@ -8,6 +8,10 @@ spring:
     url: jdbc:mysql://39.107.229.253:3306/jadepearl_app?useSSL=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: 114514
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 server:
   port: 8003
   max-http-header-size: 104857600
@@ -18,3 +22,15 @@ eureka:
 feign:
   hystrix:
     enabled: true
+  httpclient:
+    connection-timeout: 60000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000

@@ -56,14 +56,14 @@ public class ActivitiesController {
 
     @RequestMapping("/getActivitiesById")
     @ResponseBody
-    public Activities getActivitiesById(@RequestParam("id") Integer id){
+    public ActivitiesDTO getActivitiesById(@RequestParam("id") Integer id){
         Activities activities = activitiesService.getById(id);
         ActivitiesDTO activitiesDTO = new ActivitiesDTO();
         BeanUtils.copyProperties(activities, activitiesDTO);
         int displayId =activities.getDisplayId();
         Display display = displayService.getById(displayId);
         activitiesDTO.setDisplay(display);
-        return activities;
+        return activitiesDTO;
     }
 
     @RequestMapping("/activitiesListByTitle")
