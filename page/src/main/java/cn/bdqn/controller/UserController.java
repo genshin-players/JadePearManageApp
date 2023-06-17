@@ -1,7 +1,9 @@
 package cn.bdqn.controller;
 
 import cn.bdqn.client.UserClient;
+import cn.bdqn.dto.User_ClassDTO;
 import cn.bdqn.entity.Classes;
+import cn.bdqn.entity.StudentClass;
 import cn.bdqn.entity.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class UserController {
 
     @RequestMapping("show_teacher")
     public String showTeacher(Model model) {
-        List<Users> users = userClient.showTeacher();
+        List<User_ClassDTO> users = userClient.showTeacher();
         model.addAttribute("users",users);
         return "teacher/show_teacher";
     }
@@ -34,7 +36,7 @@ public class UserController {
 
     @RequestMapping("/show_student")
     public String  showStudent(Model model){
-        List<Users> users = userClient.showStudent();
+        List<User_ClassDTO> users = userClient.showStudent();
         model.addAttribute("users",users);
         return "student/show_student";
     }
@@ -60,10 +62,12 @@ public class UserController {
     @PostMapping("/add_Tuser")
     public  String addTUser(@RequestParam(value = "username")String username,
                            @RequestParam(value = "realname") String  realname,
+                           @RequestParam(value = "class_id") Integer  class_id,
                            @RequestParam(value = "age") String age,
                            @RequestParam(value = "gender")String gender,
                            @RequestParam(value = "phone") String phone,
                            @RequestParam(value = "identity") String identity){
+
         Users users=new Users();
         users.setUsername(username);
         users.setPassword("123456");
@@ -77,8 +81,24 @@ public class UserController {
                 '"'+"phone"+'"'+":"+'"'+phone+'"'+","+
                 '"'+"identity"+'"'+":"+'"'+identity+'"'
                 +"}");
+
         Map<String, Object> map = userClient.addUser(users);
-        System.out.println(map);
+        //===============================
+        List<Users> users1 = userClient.showAll();
+        Users users2 = users1.get(users1.size() - 1);
+        System.out.println("111111111111111111111"+users2.getId());
+        //===============================
+
+
+        //===================================================
+        //添加Class——Student  表
+        StudentClass studentClass=new StudentClass();
+        studentClass.setClassId(class_id);
+        studentClass.setStudentId(users2.getId());
+        userClient.addStudentClass(studentClass);
+        //===================================================
+
+
         return "redirect:show_teacher";
     }
 

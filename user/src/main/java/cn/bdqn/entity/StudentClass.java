@@ -20,7 +20,7 @@ import java.io.Serializable;
     public class StudentClass implements Serializable {
 
 
-    private Integer id;
+    private int id;
             /**
             * 学生id
             */

@@ -49,61 +49,64 @@ public class UsersController {
     private IClassesService classesService;
 
     @ResponseBody
-    @RequestMapping("showTeacher")
-    private  List<Users> showTeacher(){
+    @RequestMapping("showAll")
+    private  List<Users> showAll(){
+        List<Users> list = usersService.list();
+        return list;
 
-        //展示数据的集合
-        List<User_ClassDTO> ShowAll=new ArrayList<>();
-
-        QueryWrapper<Users> wrapper=new QueryWrapper<>();
-        wrapper.eq("role_id",3);
-        //Map<String,Object> map = new HashMap<>();
-        List<Users> list = usersService.list(wrapper);
-
-
-        return  list;
-       /* //班级名称
-        List<Classes> list1 = classesService.list();
-
-        //学生对应班级
-        List<StudentClass> list2 = studentClassService.list();
-
-        User_ClassDTO userClassDTO=new User_ClassDTO();
-        for (Users users : list) {
-            userClassDTO.setId(users.getId());
-            userClassDTO.setUsername(users.getUsername());
-            userClassDTO.setPassword(users.getPassword());
-            userClassDTO.setRoleId(userClassDTO.getRoleId());
-            userClassDTO.setAccountInfo(users.getAccountInfo());
-            userClassDTO.setIdentityInfo(users.getIdentityInfo());
-            userClassDTO.setCreateTime(users.getCreateTime());
-            userClassDTO.setUpdateTime(users.getUpdateTime());
-            for (StudentClass studentClass : list2) {
-                if (users.getId()==studentClass.getStudentId()){
-                    userClassDTO.setClassId(studentClass.getClassId());
-                }
-
-            }
-
-        }
-        for (Classes classes : list1) {
-            if (userClassDTO.getClassId()== classes.getId()){
-                userClassDTO.setName(classes.getName());
-                System.out.println(userClassDTO.getName());
-                ShowAll.add(userClassDTO);
-
-            }
-        }
-        return ShowAll;*/
     }
 
-    @RequestMapping("showStudent")
-    private  List<Users> showStudent(){
-        QueryWrapper<Users> wrapper=new QueryWrapper<>();
+    @ResponseBody
+   @RequestMapping("showTeacher")
+   private  List<User_ClassDTO> showTeacher(){
+       /* QueryWrapper<Users> wrapper=new QueryWrapper<>();
         wrapper.eq("role_id",6);
         List<Users> list = usersService.list(wrapper);
-        return list;
-       /* //展示数据的集合
+        return list;*/
+       //展示数据的集合
+       List<User_ClassDTO> ShowAll=new ArrayList<>();
+
+       QueryWrapper<Users> wrapper=new QueryWrapper<>();
+       wrapper.eq("role_id",3);
+       //Map<String,Object> map = new HashMap<>();
+       List<Users> list = usersService.list(wrapper);
+
+       for (Users users : list) {
+           User_ClassDTO userClassDTO=new User_ClassDTO();
+           BeanUtils.copyProperties(users,userClassDTO);
+
+
+           LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+           lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
+
+           //学生对应班级
+           StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
+
+
+           if (users.getId()==studentClass.getStudentId()){
+               userClassDTO.setClassId(studentClass.getClassId());
+           }
+           //班级名称
+           Classes classes = classesService.selectClassById(studentClass.getClassId());
+           if (userClassDTO.getClassId()== classes.getId()){
+               userClassDTO.setName(classes.getName());
+           }
+           System.out.println(userClassDTO.getName());
+           ShowAll.add(userClassDTO);
+
+       }
+
+       return ShowAll;
+   }
+
+
+    @RequestMapping("showStudent")
+    private  List<User_ClassDTO> showStudent(){
+       /* QueryWrapper<Users> wrapper=new QueryWrapper<>();
+        wrapper.eq("role_id",6);
+        List<Users> list = usersService.list(wrapper);
+        return list;*/
+        //展示数据的集合
         List<User_ClassDTO> ShowAll=new ArrayList<>();
 
         QueryWrapper<Users> wrapper=new QueryWrapper<>();
@@ -136,7 +139,7 @@ public class UsersController {
 
         }
 
-        return ShowAll;*/
+        return ShowAll;
     }
 
 
@@ -173,8 +176,23 @@ public class UsersController {
             map.put("code","500");
         }
         return map;
-
     }
+    @ResponseBody
+    @RequestMapping("addStudentClass")
+    private Map<String,Object> addUser(@RequestBody  StudentClass studentClass){
+        Map<String,Object>map=new HashMap<>();
+        boolean b = studentClassService.saveOrUpdate(studentClass);
+        if (b){
+            map.put("data",b);
+            map.put("msg","success");
+            map.put("code","200");
+        }else {
+            map.put("msg","error");
+            map.put("code","500");
+        }
+        return map;
+    }
+
 
     //查询所有的班级
     @ResponseBody

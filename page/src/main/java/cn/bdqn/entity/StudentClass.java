@@ -13,7 +13,7 @@ import java.io.Serializable;
 
     public class StudentClass implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private int id;
 
             /**
             * 学生id
@@ -24,6 +24,14 @@ import java.io.Serializable;
             * 班级id
             */
     private Integer classId;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Integer getStudentId() {
         return studentId;

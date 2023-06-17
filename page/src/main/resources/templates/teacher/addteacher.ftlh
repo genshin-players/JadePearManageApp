@@ -43,6 +43,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="mb-3 row">
                                         <label class="col-lg-4 col-form-label" for="validationCustom07">年龄
                                             <span class="text-danger">*</span>
@@ -164,7 +165,7 @@
 
     function submitEdit() {
 
-alert(132432141234)
+
 
         var addTid=$("[name=id]").val();
         var addTusername=$("[name=username]").val();

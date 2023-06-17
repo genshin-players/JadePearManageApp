@@ -1,6 +1,8 @@
 package cn.bdqn.client;
 
+import cn.bdqn.dto.User_ClassDTO;
 import cn.bdqn.entity.Classes;
+import cn.bdqn.entity.StudentClass;
 import cn.bdqn.entity.Users;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -13,11 +15,11 @@ import java.util.Map;
 public interface UserClient {
 
     @RequestMapping("/user/showTeacher")
-    List<Users> showTeacher();
+    List<User_ClassDTO> showTeacher();
 
 
     @RequestMapping("/user/showStudent")
-    List<Users> showStudent();
+    List<User_ClassDTO> showStudent();
 
 
     @RequestMapping("user/deleteTeacher_Student")
@@ -25,6 +27,15 @@ public interface UserClient {
 
     @PostMapping("/user/addUser")
     Map<String,Object>  addUser(@RequestBody  Users users);
+
+
+
+    @RequestMapping("/user/showAll")
+    List<Users> showAll();
+
+
+    @RequestMapping("/user/addStudentClass")
+     Map<String,Object> addStudentClass(@RequestBody StudentClass studentClass);
 
     @ResponseBody
     @RequestMapping("/user/showUserById")

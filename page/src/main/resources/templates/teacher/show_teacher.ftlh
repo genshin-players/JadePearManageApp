@@ -29,6 +29,7 @@
                                     </th>
                                     <th>ID</th>
                                     <th>用户名</th>
+                                    <th>班级</th>
                                     <th>姓名</th>
                                     <th>年龄</th>
                                     <th>性别</th>
@@ -53,6 +54,11 @@
                                         <td>
                                             <div class="media-bx">
                                                 <h4 class="mb-0 mt-1 text-black" va>${user.username}</h4>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="media-bx">
+                                                <h4 class="mb-0 mt-1 text-black" va>${user.name}</h4>
                                             </div>
                                         </td>
                                         <td>

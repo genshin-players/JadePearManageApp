@@ -41,6 +41,23 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="validationCustom05">班级
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="default-select wide form-control" id="validationCustom05" name="class_id"  >
+                                                <option data-display="艾欧尼亚班" value="1">艾欧尼亚班</option>
+                                                <option value="2" >暗影岛班</option>
+                                                <option value="3" >诺克萨斯班</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Please select a one.
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="mb-3 row">
                                         <label class="col-lg-4 col-form-label" for="validationCustom07">年龄
                                             <span class="text-danger">*</span>
@@ -166,23 +183,26 @@
 
         var addTusername=$("[name=username]").val();
         var addTrealname=$("[name=realname]").val();
+        var addTclass_id=$("[name=class_id]").val();
         var addTage=$("[name=age]").val();
         var addTgender=$("[name=gender]").val();
         var addTphone=$("[name=phone]").val();
         var addTidentity=$("[name=identity]").val();
 
-
+        alert("Class_IDDIDIDIID"+addTclass_id);
         $.ajax({
             type:"post",
             url:"http://localhost:8003/user/add_Tuser",
             data:{
                 "username":addTusername,
                 "realname":addTrealname,
+                "class_id":addTclass_id,
                 "age":addTage,
                 "gender":addTgender,
                 "phone":addTphone,
                 "identity":addTidentity,
             },
+
             dataType:"json",
             success:function(data){
                 window.location.href="http://localhost:8003/user/show_teacher"
