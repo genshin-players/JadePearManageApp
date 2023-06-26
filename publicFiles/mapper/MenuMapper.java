@@ -1,6 +1,6 @@
-package com.dddqmmx.mapper;
+package cn.bdqn.mapper;
 
-import com.dddqmmx.entity.Menu;
+import cn.bdqn.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

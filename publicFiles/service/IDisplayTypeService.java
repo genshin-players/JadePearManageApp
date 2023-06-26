@@ -1,6 +1,6 @@
-package com.dddqmmx.service;
+package cn.bdqn.service;
 
-import com.dddqmmx.entity.DisplayType;
+import cn.bdqn.entity.DisplayType;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.MemberSchedulesType;
-import com.dddqmmx.mapper.MemberSchedulesTypeMapper;
-import com.dddqmmx.service.IMemberSchedulesTypeService;
+import cn.bdqn.entity.MemberSchedulesType;
+import cn.bdqn.mapper.MemberSchedulesTypeMapper;
+import cn.bdqn.service.IMemberSchedulesTypeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

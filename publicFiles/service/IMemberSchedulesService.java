@@ -1,6 +1,6 @@
-package com.dddqmmx.service;
+package cn.bdqn.service;
 
-import com.dddqmmx.entity.MemberSchedules;
+import cn.bdqn.entity.MemberSchedules;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

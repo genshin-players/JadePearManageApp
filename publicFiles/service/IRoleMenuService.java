@@ -1,6 +1,6 @@
-package com.dddqmmx.service;
+package cn.bdqn.service;
 
-import com.dddqmmx.entity.RoleMenu;
+import cn.bdqn.entity.RoleMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,6 +1,6 @@
-package com.dddqmmx.mapper;
+package cn.bdqn.mapper;
 
-import com.dddqmmx.entity.Attendence;
+import cn.bdqn.entity.Attendence;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

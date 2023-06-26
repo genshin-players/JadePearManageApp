@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.RoleMenu;
-import com.dddqmmx.mapper.RoleMenuMapper;
-import com.dddqmmx.service.IRoleMenuService;
+import cn.bdqn.entity.RoleMenu;
+import cn.bdqn.mapper.RoleMenuMapper;
+import cn.bdqn.service.IRoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

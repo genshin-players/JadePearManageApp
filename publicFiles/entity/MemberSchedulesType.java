@@ -1,4 +1,4 @@
-package com.dddqmmx.entity;
+package cn.bdqn.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;

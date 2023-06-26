@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.Users;
-import com.dddqmmx.mapper.UsersMapper;
-import com.dddqmmx.service.IUsersService;
+import cn.bdqn.entity.Users;
+import cn.bdqn.mapper.UsersMapper;
+import cn.bdqn.service.IUsersService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

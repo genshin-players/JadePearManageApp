@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.StudentClass;
-import com.dddqmmx.mapper.StudentClassMapper;
-import com.dddqmmx.service.IStudentClassService;
+import cn.bdqn.entity.StudentClass;
+import cn.bdqn.mapper.StudentClassMapper;
+import cn.bdqn.service.IStudentClassService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

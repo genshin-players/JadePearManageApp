@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.Attendence;
-import com.dddqmmx.mapper.AttendenceMapper;
-import com.dddqmmx.service.IAttendenceService;
+import cn.bdqn.entity.Attendence;
+import cn.bdqn.mapper.AttendenceMapper;
+import cn.bdqn.service.IAttendenceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

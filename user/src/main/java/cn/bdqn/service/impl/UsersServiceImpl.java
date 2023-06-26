@@ -6,6 +6,8 @@ import cn.bdqn.entity.Users;
 
 import cn.bdqn.mapper.UsersMapper;
 import cn.bdqn.service.IUsersService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,4 +47,20 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     }
 
 
+    /**
+     * 登录方法
+     *
+     * @param userName
+     * @param password
+     */
+    @Override
+    public Users login(String userName, String password) {
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",userName);
+        Users users = usersMapper.selectOne(queryWrapper);
+        if (users!=null && password.equals(users.getPassword())){
+            return users;
+        }
+        return null;
+    }
 }

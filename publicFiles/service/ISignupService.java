@@ -1,6 +1,6 @@
-package com.dddqmmx.service;
+package cn.bdqn.service;
 
-import com.dddqmmx.entity.Signup;
+import cn.bdqn.entity.Signup;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

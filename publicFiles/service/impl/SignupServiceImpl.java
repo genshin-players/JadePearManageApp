@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.Signup;
-import com.dddqmmx.mapper.SignupMapper;
-import com.dddqmmx.service.ISignupService;
+import cn.bdqn.entity.Signup;
+import cn.bdqn.mapper.SignupMapper;
+import cn.bdqn.service.ISignupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

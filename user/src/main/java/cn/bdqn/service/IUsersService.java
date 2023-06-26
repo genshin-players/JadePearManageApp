@@ -26,5 +26,11 @@ public interface IUsersService extends IService<Users> {
     boolean updateUSers(Integer id, Users users);
 
 
+    /**
+     * 登录方法
+     */
+    Users login(String userName,String password);
+
+
 
 }

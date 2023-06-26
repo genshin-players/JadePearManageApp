@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.Classes;
-import com.dddqmmx.mapper.ClassesMapper;
-import com.dddqmmx.service.IClassesService;
+import cn.bdqn.entity.Classes;
+import cn.bdqn.mapper.ClassesMapper;
+import cn.bdqn.service.IClassesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

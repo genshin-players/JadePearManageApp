@@ -1,8 +1,8 @@
-package com.dddqmmx.service.impl;
+package cn.bdqn.service.impl;
 
-import com.dddqmmx.entity.Display;
-import com.dddqmmx.mapper.DisplayMapper;
-import com.dddqmmx.service.IDisplayService;
+import cn.bdqn.entity.Display;
+import cn.bdqn.mapper.DisplayMapper;
+import cn.bdqn.service.IDisplayService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

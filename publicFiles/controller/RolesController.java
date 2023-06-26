@@ -1,4 +1,4 @@
-package com.dddqmmx.controller;
+package cn.bdqn.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,6 +1,6 @@
-package com.dddqmmx.mapper;
+package cn.bdqn.mapper;
 
-import com.dddqmmx.entity.RoleMenu;
+import cn.bdqn.entity.RoleMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
