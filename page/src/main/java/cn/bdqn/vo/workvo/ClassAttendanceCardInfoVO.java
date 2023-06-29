@@ -23,7 +23,7 @@ public class ClassAttendanceCardInfoVO {
     private Long  absenteesNumber;//缺勤人数
     private Long latecomersNumber;//迟到人数
     private Long leaverNumber;//请假人数
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date attendanceDate;//出勤日期
     private Users reportUser;//报告者对象
 
