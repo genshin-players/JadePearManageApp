@@ -236,7 +236,6 @@
 
     $("#uploadButton").click(function (){
         let file = $('#coverImage')[0].files[0]; // 获取选择的文件
-
         let formData = new FormData(); // 创建FormData对象
         formData.append('file', file); // 将文件添加到FormData对象
         formData.append('id', ${display.id})

@@ -2,8 +2,10 @@ package cn.bdqn.controller;
 
 
 import cn.bdqn.entity.Display;
+import cn.bdqn.service.FileUploadService;
 import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
+import cn.bdqn.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -39,6 +41,8 @@ public class DisplayController {
 
     @Autowired
     private IDisplayService displayService;
+    @Autowired
+    private FileUploadService fileUploadService;
 
     @RequestMapping("getPushEveryFuckingDayList")
     public List<Display> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
@@ -156,16 +160,19 @@ public class DisplayController {
     ){
         Map<String,Object> map = new HashMap<>();
         if (!file.isEmpty()){
-            try {
-                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                File destPath  = new File("src/main/resources/static/uploads/images/" + File.separator + fileName);
-                file.transferTo(destPath);
-                displayService.updateById(Display.builder().id(Integer.parseInt(id)).coverImage(destPath.getPath()).build());
+            Result cover = fileUploadService.fileUpload(file, "cover");
+            LambdaUpdateWrapper<Display> lambdaUpdateWrapper = new LambdaUpdateWrapper<Display>();
+            lambdaUpdateWrapper.eq(Display::getId, id);
+            lambdaUpdateWrapper.set(Display::getCoverImage,cover.getData());
+            if (displayService.update(
+                    Display.builder()
+                            .id(Integer.valueOf(id))
+                            .coverImage((String) cover.getData())
+                            .build(),
+                    lambdaUpdateWrapper
+            )){
                 map.put("code", 200);
                 map.put("msg", "success");
-            } catch (IOException e) {
-                map.put("code", 500);
-                map.put("msg", "error");
             }
         } else {
             map.put("code", 500);
