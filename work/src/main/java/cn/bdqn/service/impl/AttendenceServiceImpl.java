@@ -65,7 +65,7 @@ public class AttendenceServiceImpl extends ServiceImpl<AttendenceMapper, Attende
                //班级总人数
                QueryWrapper<Class> classSizeWrapper=new QueryWrapper<>();
                classSizeWrapper.eq("class_id",classes.getId());
-               vo.setClassSize(classMapper.selectCount(classSizeWrapper)-2);
+               vo.setClassSize(classMapper.selectCount(classSizeWrapper));
                //出勤人数
                QueryWrapper<Attendence> attendanceNumWrapper=new QueryWrapper<>();
                attendanceNumWrapper.like("date",attendanceDate+"%");
@@ -177,7 +177,7 @@ public class AttendenceServiceImpl extends ServiceImpl<AttendenceMapper, Attende
                 if(c.getClassId()==classes.getId()){
                     //循环用户表
                     for(Users u:users){
-                        if(c.getStudentId()==u.getId()&&u.getRoleId()==6){
+                        if(c.getStudentId()==u.getId()){
                             studentC.add(u);
                         }
                     }
