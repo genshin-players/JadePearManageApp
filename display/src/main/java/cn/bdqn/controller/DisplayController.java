@@ -2,13 +2,24 @@ package cn.bdqn.controller;
 
 
 import cn.bdqn.entity.Display;
+import cn.bdqn.service.FileUploadService;
 import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
+import cn.bdqn.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +41,8 @@ public class DisplayController {
 
     @Autowired
     private IDisplayService displayService;
+    @Autowired
+    private FileUploadService fileUploadService;
 
     @RequestMapping("getPushEveryFuckingDayList")
     public List<Display> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
@@ -62,6 +75,7 @@ public class DisplayController {
     }
 
     @RequestMapping("getDisplayById")
+    @HystrixCommand(commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")})
     public Display getDisplayById(@RequestParam(value = "id") Integer id){
         return displayService.getById(id);
     }
@@ -133,6 +147,34 @@ public class DisplayController {
             map.put("code", 200);
             map.put("msg", "success");
         }else {
+            map.put("code", 500);
+            map.put("msg", "error");
+        }
+        return map;
+    }
+
+    @RequestMapping("/saveCoverImage")
+    public Map<String, Object> saveCoverImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("id") String id
+    ){
+        Map<String,Object> map = new HashMap<>();
+        if (!file.isEmpty()){
+            Result cover = fileUploadService.fileUpload(file, "cover");
+            LambdaUpdateWrapper<Display> lambdaUpdateWrapper = new LambdaUpdateWrapper<Display>();
+            lambdaUpdateWrapper.eq(Display::getId, id);
+            lambdaUpdateWrapper.set(Display::getCoverImage,cover.getData());
+            if (displayService.update(
+                    Display.builder()
+                            .id(Integer.valueOf(id))
+                            .coverImage((String) cover.getData())
+                            .build(),
+                    lambdaUpdateWrapper
+            )){
+                map.put("code", 200);
+                map.put("msg", "success");
+            }
+        } else {
             map.put("code", 500);
             map.put("msg", "error");
         }

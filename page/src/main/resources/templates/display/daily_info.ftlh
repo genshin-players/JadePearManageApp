@@ -126,7 +126,7 @@
 </div>
 <script>
     function toEditor(id){
-        let str = "id="+id;
+        let str = "displayId="+id;
         window.location.href = "/display/editor?type=每日一推&"+str;
     }
     function deleteDisplay(id){

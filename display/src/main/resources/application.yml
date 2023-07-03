@@ -17,4 +17,37 @@ mybatis-plus:
     mapper-locations: classpath:mapper/*.xml
 feign:
     hystrix:
-        enabled: true
+        enabled: true # 启用Feign的Hystrix支持
+    client:
+        config:
+            default:
+                connectTimeout: 100000 # 连接超时时间
+                readTimeout: 100000 # 读取超时时间
+
+hystrix:
+    command:
+        default:
+            execution:
+                timeout:
+                    enabled: false
+                isolation:
+                    thread:
+                        timeoutInMilliseconds: 300000
+zuul:
+    servlet:
+        max-request-size: 100MB
+        max-file-size: 100MB
+    host:
+        connect-timeout-millis: 1000000
+        socket-timeout-millis: 1000000
+    thread-pool:
+        use-global-thread-pool: true # 是否使用全局线程池
+        thread-name-prefix: zuulThreadPool # 线程名称前缀
+        core-size: 10 # 核心线程数
+        max-size: 100 # 最大线程数
+        queue-size: 1000 # 等待队列大小
+
+ribbon:
+    ConnectTimeot: 60000 # 连接超时时间（ms）
+    ReadTimeot: 60000 # 通信超时时间（ms）
+    SocketTimeout: 60000
