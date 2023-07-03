@@ -73,4 +73,18 @@ public interface AttendenceService extends IService<Attendence> {
      */
     public int delStudentAttendance(Integer attendanceId);
 
+
+    /**
+     * 从小程序接收数据 添加到出勤表
+     * @return
+     */
+    public int addClassAttendce(Integer classId,Date date,Integer reportUserId,Integer schedulesId,
+            Integer[]resQ,Integer[]resC,Integer[]resQj);
+
+    /**
+     * 从小程序接收数据 添加到出勤表 全部到齐
+     * @return
+     */
+    public int addAllClassAttendce(Integer classId,Date date,Integer reportUserId,Integer schedulesId);
+
 }
