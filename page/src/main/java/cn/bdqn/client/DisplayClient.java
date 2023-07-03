@@ -5,6 +5,7 @@ import cn.bdqn.vo.ResultVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -46,4 +47,8 @@ public interface DisplayClient {
             @RequestParam(value = "id") String id,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "content") String content);
+    @RequestMapping("/saveCoverImage")
+    Map<String, Object> saveCoverImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("id") String id);
 }

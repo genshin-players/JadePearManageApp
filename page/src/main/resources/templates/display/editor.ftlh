@@ -29,6 +29,24 @@
             <div class="col-xl-12 col-xxl-12">
                 <div class="card">
                     <div class="card-header">
+                        <h4 class="card-title">标题封面</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4>封面图片：</h4>
+                        <div class="input-group mb-3">
+                            <button id="uploadButton" class="btn btn-primary btn-sm" type="button">上传</button>
+                            <div class="form-file">
+                                <input id="coverImage" type="file" class="form-file-input form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-xxl-12">
+                <div class="card">
+                    <div class="card-header">
                         <h4 class="card-title">编辑内容</h4>
                     </div>
                     <div class="card-body custom-ckeditor">
@@ -216,8 +234,34 @@
         console.log(error)
     });
 
-    function zalert(str){
-        sweetAlert("Oops...", str, "error")
+    $("#uploadButton").click(function (){
+        let file = $('#coverImage')[0].files[0]; // 获取选择的文件
+
+        let formData = new FormData(); // 创建FormData对象
+        formData.append('file', file); // 将文件添加到FormData对象
+        formData.append('id', ${display.id})
+        console.log(formData)
+        // 发送Ajax请求
+        $.ajax({
+            url: '/display/updCoverImage',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function() {
+                // 上传成功后的处理逻辑
+                zalert("上传成功！","success")
+            },
+            error: function() {
+                // 上传失败后的处理逻辑
+                zalert("上传失败！","error")
+            }
+        });
+    })
+
+    function zalert(str, type){
+        sweetAlert(type, str, type)
+
     }
 
     document.querySelector("#submit").addEventListener("click", ()=>{
@@ -228,7 +272,7 @@
         if (${display.id} === -1){
             alert("进入添加")
             if (editorData.trim()===""){
-                zalert("内容不得为空")
+                zalert("内容不得为空","error")
             } else if (editorData.trim() !== str) {
                 const date = new Date();
                 const year = date.getFullYear(); // 获取年份，例如：2022
@@ -277,35 +321,26 @@
                                     }
                                 },
                                 error: function () {
-                                    zalert("insert activities error")
+                                    zalert("insert activities error","error")
                                 }
                             });
                         }
                     },
                     error: function () {
-                        zalert("failed")
+                        zalert("failed","error")
                     }
                 })
             } else {
-                zalert("请添加内容描述")
+                zalert("请添加内容描述","error")
             }
         } else {
             alert("进入修改")
             if (editorData.trim()===""){
-                zalert("内容不得为空")
+                zalert("内容不得为空","error")
             } else if (editorData == `${display.content?no_esc}`){
                 alert("内容未改变")
-                if ("${type}" === "学社活动"){
-                    window.location.href = "/display/inner_activities"
-                }
-                if ("${type}" === "每日一推"){
-                    window.location.href = "/display/daily_info"
-                }
-                if ("${type}" === "对外展览"){
-                    window.location.href = "/display/external_performance"
-                }
-            }
-            else {
+                toLastPage()
+            } else {
                 let param = {id: "${display.id}",title:title,content: editorData};
                 alert(param);
                 console.log(param)
@@ -316,40 +351,48 @@
                     method:"POST",
                     url:"/display/updDisplay",
                     success:function (){
-                        $.ajax({
-                            async:true,
-                            dataType:"json",
-                            data:{
-                                id:"${activitiesId}",
-                                signupNumber:signupNum,
-                                startTime:startTime,
-                                endTime:endTime
-                            },
-                            method:"POST",
-                            url:"/display/updActivities",
-                            success:function (){
-                                if ("${type}" === "学社活动"){
-                                    window.location.href = "/display/inner_activities"
+                        if ("${type}" === "学社活动"){
+                            $.ajax({
+                                async:true,
+                                dataType:"json",
+                                data:{
+                                    id:"${activitiesId}",
+                                    signupNumber:signupNum,
+                                    startTime:startTime,
+                                    endTime:endTime
+                                },
+                                method:"POST",
+                                url:"/display/updActivities",
+                                success:function (){
+                                    toLastPage()
+                                },
+                                error:function () {
+                                    zalert("update Failed","error")
                                 }
-                                if ("${type}" === "每日一推"){
-                                    window.location.href = "/display/daily_info"
-                                }
-                                if ("${type}" === "对外展览"){
-                                    window.location.href = "/display/external_performance"
-                                }
-                            },
-                            error:function () {
-                                zalert("update Failed")
-                            }
-                        })
+                            })
+                        } else {
+                            toLastPage()
+                        }
                     },
                     error:function (){
-                        zalert("更新失败！")
+                        zalert("更新失败！","error")
                     }
                 })
             }
         }
     })
+
+    function toLastPage(){
+        if ("${type}" === "学社活动"){
+            window.location.href = "/display/inner_activities"
+        }
+        if ("${type}" === "每日一推"){
+            window.location.href = "/display/daily_info"
+        }
+        if ("${type}" === "对外展览"){
+            window.location.href = "/display/external_performance"
+        }
+    }
 
     /**
      * fill in the data which transporting from edit Activities page once this page is load
@@ -357,7 +400,6 @@
 
 
     $(document).ready(function (){
-        $("#warningBtn").click();
         if (${display.id} === -1){
             if ("${type}" === '学社活动'){
                 console.log(signupNum,startTime,endTime)

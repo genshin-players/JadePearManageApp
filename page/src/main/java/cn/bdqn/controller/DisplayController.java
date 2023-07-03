@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,6 @@ public class DisplayController {
         model.addAttribute("startTime", startTime == null ? "" : startTime);
         model.addAttribute("endTime", endTime == null ? "" : endTime);
         model.addAttribute("display",("-1".equals(displayId)||"undefined".equals(displayId)) ? DisplayDTO.builder().id(-1).title("标题").content("").build() : displayClient.getDisplayById(Integer.parseInt(displayId))) ;
-
         return "display/editor";
     }
 
@@ -178,5 +178,14 @@ public class DisplayController {
             @RequestParam(value = "endTime") String endTime)
     {
         return activatesClient.updateActivities(id,signupNumber,startTime,endTime);
+    }
+
+    @RequestMapping("updCoverImage")
+    @ResponseBody
+    public Map<String, Object> saveCoverImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("id") String id)
+    {
+        return displayClient.saveCoverImage(file, id);
     }
 }
