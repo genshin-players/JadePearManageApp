@@ -49,6 +49,7 @@
                             </div>
                             <div class="col-lg-10">
 
+
                                     <select class="multi-select"  multiple="multiple" name="memId">
                                         <#list memberList as m>
                                             <#assign json=m.identityInfo?eval/>
@@ -56,6 +57,11 @@
                                         </#list>
 
                                     </select>
+
+
+
+
+
 
                             </div>
 
@@ -262,7 +268,7 @@
         var classId=$("[name=classId]").val();
 
 
-        if(member_id==null){
+        if(member_id.length<=0){
             alert("工作人员不得为空");
         }else if(workTime==null){
             alert("工作日期不得为空");
@@ -271,27 +277,31 @@
         }else {
 
             if(workType==1&&classId.length>0){
-
-                $.ajax({
-                    type:"post",
-                    url:"/assignMoreWork",
-                    dataType:"json",
-                    data:{
-                        memberIdArray:member_id,
-                        date:workTime,
-                        workTypeId:workType,
-                        classIdArray:classId,
-                        createUserId:1
-                    },
-                    success:function(res) {
-                        console.log(res);
-                        if(res.data >0){
-                            window.location.href="/toMemberWork?workDate="+workTime;
-                        }else {
-                            alert("添加失败");
+                if(workType==1&&member_id.length==1){
+                    $.ajax({
+                        type:"post",
+                        url:"/assignMoreWork",
+                        dataType:"json",
+                        data:{
+                            memberIdArray:member_id,
+                            date:workTime,
+                            workTypeId:workType,
+                            classIdArray:classId,
+                            createUserId:1
+                        },
+                        success:function(res) {
+                            console.log(res);
+                            if(res.data >0){
+                                window.location.href="/toMemberWork?workDate="+workTime;
+                            }else {
+                                alert("添加失败");
+                            }
                         }
-                    }
-                });
+                    });
+                }else {
+                    alert("当工作内容为查班时工作人员只能有一名，可以吩咐其他成员辅助指定成员查班");
+                }
+
 
             }else if(workType==1&&classId.length<=0){
                 alert("社员负责班级不得为空");
