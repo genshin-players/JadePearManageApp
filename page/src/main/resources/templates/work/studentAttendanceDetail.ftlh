@@ -160,7 +160,7 @@
     function delAttendance(attendanceId) {
         $.ajax({
             type:"post",
-            url:"http://localhost:8003/delStudentAttendance",
+            url:"/delStudentAttendance",
             data:{attendanceId:attendanceId},
             dataType:"json",
             success:function (data) {

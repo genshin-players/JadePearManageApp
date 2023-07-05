@@ -263,7 +263,7 @@
 
         $.ajax({
             type:"get",
-            url:"http://localhost:8003/getStudentByClass",
+            url:"/getStudentByClass",
             data:{classId:0},
             dataType:"json",
             success:function (data) {
@@ -284,7 +284,7 @@
         if(classId!=0&&classId!=null){
             $.ajax({
                 type:"get",
-                url:"http://localhost:8003/getStudentByClass",
+                url:"/getStudentByClass",
                 data:{classId:classId},
                 dataType:"json",
                 success:function (data) {
@@ -300,7 +300,7 @@
         }else {
             $.ajax({
                 type:"get",
-                url:"http://localhost:8003/getStudentByClass",
+                url:"/getStudentByClass",
                 data:{classId:0},
                 dataType:"json",
                 success:function (data) {
@@ -322,7 +322,7 @@
 
         $.ajax({
             type:"get",
-            url:"http://localhost:8003/getStudentByClass",
+            url:"/getStudentByClass",
             data:{classId:0},
             dataType:"json",
             success:function (data) {
@@ -373,7 +373,7 @@
         }else {
             $.ajax({
                 type:"post",
-                url:"http://localhost:8003/getAttendanceByStuIdAndDate",
+                url:"/getAttendanceByStuIdAndDate",
                 data:{"stuId":studentId,"attendanceDate":$("[name=date]").val()},
                 dataType:"json",
                 success:function (data) {
@@ -385,7 +385,7 @@
                     }else {
                         $.ajax({
                             type:"post",
-                            url:"http://localhost:8003/addStudentAttendance",
+                            url:"/addStudentAttendance",
                             data:{
                                 "classId":classId,
                                 "studentId":studentId,

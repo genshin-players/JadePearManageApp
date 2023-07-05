@@ -274,7 +274,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/assignMoreWork",
+                    url:"/assignMoreWork",
                     dataType:"json",
                     data:{
                         memberIdArray:member_id,
@@ -298,7 +298,7 @@
             }else {
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/assignMoreWork",
+                    url:"/assignMoreWork",
                     dataType:"json",
                     data:{
                         memberIdArray:member_id,

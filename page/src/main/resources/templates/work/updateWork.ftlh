@@ -278,7 +278,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/updateOneWork",
+                    url:"/updateOneWork",
                     dataType:"json",
                     data:{
                         id:schedulesId,
@@ -305,7 +305,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/updateOneWork",
+                    url:"/updateOneWork",
                     dataType:"json",
                     data:{
                         id:schedulesId,
