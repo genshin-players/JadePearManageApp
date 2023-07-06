@@ -100,7 +100,7 @@
                                             <i class="fa fa-angle-double-left me-3" aria-hidden="true"></i>上一页
                                         </button>
                                     </#if>
-                                    <#list 1..4 as i>
+                                    <#list 4..1 as i>
                                         <#if (now-i) gt 0>
                                             <button type="button" class="btn btn-rounded btn-primary" onclick="location='/display/daily_info?pageNum=${now-i}'">${now-i}</button>
                                         </#if>
