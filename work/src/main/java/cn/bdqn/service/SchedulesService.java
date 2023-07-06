@@ -2,6 +2,7 @@ package cn.bdqn.service;
 
 import cn.bdqn.entity.Schedules;
 import cn.bdqn.vo.MemberWorkCardInfoVO;
+import cn.bdqn.vo.MemberWorkClassVO;
 import cn.bdqn.vo.MemberWorkDetailInfoVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -66,5 +67,29 @@ public interface SchedulesService extends IService<Schedules> {
      * @return
      */
     public Integer deleteOneWork(Integer schedulesId);
+
+
+
+    /**
+     *  小程序我的工作展示工作 根据社员id
+     * @param memberId 社员编号
+     * @return 数据
+     */
+    public List<MemberWorkCardInfoVO> getMemberWorkCardInfoById(Integer memberId);
+
+    /**
+     *  社员完成工作后将工作状态改为完成
+     * @param schedulesId 工作id
+     * @return 受影响行数
+     */
+    public Integer confirmWork(Integer schedulesId);
+
+
+    /**
+     * 根据工作编号获取社员所负责的班级信息
+     * @param schedulesId 工作编号
+     * @return 负责班级信息
+     */
+    public MemberWorkClassVO getWorkClass(Integer schedulesId);
 
 }

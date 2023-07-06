@@ -9,6 +9,11 @@ import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -29,7 +41,8 @@ import java.util.*;
  * @author dddqmmx
  * @since 2023-06-09
  */
-@RestController
+@Controller
+@ResponseBody
 @RequestMapping("/activities")
 public class ActivitiesController {
 
@@ -37,7 +50,6 @@ public class ActivitiesController {
     private IActivitiesService activitiesService;
     @Autowired
     private IDisplayService displayService;
-
     @RequestMapping("/activitiesList")
     public List<ActivitiesDTO> getActivitiesList(){
         List<Activities> list = activitiesService.list();
@@ -71,6 +83,26 @@ public class ActivitiesController {
     public List<ActivitiesDTO> activitiesListByTitle(@RequestParam("title") String title){
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(Display::getTitle, "%"+title+"%");
+        List<Display> displayList = displayService.list(lambdaQueryWrapper);
+        List<ActivitiesDTO> dtoList = new ArrayList<>();
+        for (Display display : displayList){
+            int displayId = display.getId();
+            LambdaQueryWrapper<Activities> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper1.like(Activities::getDisplayId, displayId);
+            List<Activities> activatedList = activitiesService.list(lambdaQueryWrapper1);
+            ActivitiesDTO activitiesDTO = new ActivitiesDTO();
+            BeanUtils.copyProperties(activatedList.get(0), activitiesDTO);
+            activitiesDTO.setDisplay(display);
+            dtoList.add(activitiesDTO);
+        }
+        return dtoList;
+    }
+
+    @RequestMapping("/activitiesListByPublishUserId")
+    @ResponseBody
+    public List<ActivitiesDTO> activitiesListByPublishUserId(@RequestParam("publishUserId") String publishUserId){
+        LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(Display::getPublishUserId, "%"+publishUserId+"%");
         List<Display> displayList = displayService.list(lambdaQueryWrapper);
         List<ActivitiesDTO> dtoList = new ArrayList<>();
         for (Display display : displayList){

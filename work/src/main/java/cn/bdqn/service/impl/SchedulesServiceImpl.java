@@ -5,6 +5,7 @@ import cn.bdqn.entity.Class;
 import cn.bdqn.mapper.*;
 import cn.bdqn.service.SchedulesService;
 import cn.bdqn.vo.MemberWorkCardInfoVO;
+import cn.bdqn.vo.MemberWorkClassVO;
 import cn.bdqn.vo.MemberWorkDetailInfoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -349,5 +348,125 @@ public class SchedulesServiceImpl extends ServiceImpl<SchedulesMapper, Schedules
 
         }
         return 1;
+    }
+
+
+    /**
+     * 小程序我的工作展示工作 根据社员id
+     *
+     * @param memberId 社员编号
+     * @return 数据
+     */
+    @Override
+    public List<MemberWorkCardInfoVO> getMemberWorkCardInfoById(Integer memberId) {
+        //保存页面信息的列表
+        List<MemberWorkCardInfoVO> voList=new ArrayList<>();
+
+
+
+        //对应日期所有成员工作记录
+        List<Schedules> schedules=schedulesMapper.selectList(new QueryWrapper<Schedules>().eq("member_id",memberId)
+                .orderByDesc("date").orderByAsc("status"));
+        if(schedules!=null&&schedules.size()>0){
+            for(Schedules s:schedules){
+                MemberWorkCardInfoVO vo=new MemberWorkCardInfoVO();
+                vo.setSchedules(s);
+
+                //判断工作类型如果为1查班 查询负责班级
+                if(s.getWorkTypeId()==1){
+                    List<WorkClass> workClasses=workClassMapper.selectList(new QueryWrapper<WorkClass>().eq("schedules_id",s.getId()));
+                    List<Classes>workClass=new ArrayList<>();
+                    for (WorkClass classes:workClasses){
+                        Classes classes1 = classesMapper.selectById(classes.getClassId());
+                        workClass.add(classes1);
+                    }
+                    vo.setWorkClass(workClass);
+                    vo.setWorkClasses(workClasses);
+                }
+
+                //获取成员
+                Users users= usersMapper.selectById(s.getMemberId());
+                vo.setMember(users);
+                //获取布置人
+                Users createUser=usersMapper.selectById(s.getCreateUserId());
+                vo.setCreateUser(createUser);
+                //获取工作类型
+                SchedulesType schedulesType = schedulesTypeMapper.selectById(s.getWorkTypeId());
+                vo.setSchedulesType(schedulesType);
+                //获取班级
+                Class class1 = classMapper.selectOne(new QueryWrapper<Class>().eq("student_id", s.getMemberId()));
+                Classes classes = classesMapper.selectById(class1.getClassId());
+                vo.setClasses(classes);
+                voList.add(vo);
+            }
+
+            return voList;
+        }
+        return voList;
+    }
+
+
+    /**
+     * 社员完成工作后将工作状态改为完成
+     *
+     * @param schedulesId 工作id
+     * @return 受影响行数
+     */
+    @Override
+    @Transactional
+    public Integer confirmWork(Integer schedulesId) {
+        int count=0;
+        try {
+            Schedules schedules = schedulesMapper.selectById(schedulesId);
+            schedules.setStatus(1);
+            count=schedulesMapper.updateById(schedules);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
+
+
+    /**
+     * 根据工作编号获取社员所负责的班级信息
+     *
+     * @param schedulesId 工作编号
+     * @return 负责班级信息
+     */
+    @Override
+    public MemberWorkClassVO getWorkClass(Integer schedulesId) {
+        MemberWorkClassVO memberWorkClassVO=new MemberWorkClassVO();
+
+        Schedules schedules = schedulesMapper.selectById(schedulesId);
+        memberWorkClassVO.setSchedules(schedules);
+        Users users = usersMapper.selectById(schedules.getMemberId());
+        memberWorkClassVO.setMember(users);
+
+        List<WorkClass> workClasses = workClassMapper.selectList(new QueryWrapper<WorkClass>().eq("schedules_id", schedulesId));
+
+        List<Map<String,Object>> workClassesAndStudents = new ArrayList<>();
+        if(workClasses.size()>0){
+
+
+            for (WorkClass workClass: workClasses){
+                Map<String,Object> map = new HashMap<>();
+                map.put("workClass",workClass);
+
+                Classes classes = classesMapper.selectById(workClass.getClassId());
+                map.put("classes", classes);
+
+                List<Class>classList=classMapper.selectList(new QueryWrapper<Class>().eq("class_id",workClass.getClassId()));
+                List<Users>studentList=new ArrayList<>();
+                for (Class c: classList){
+                    Users users1 = usersMapper.selectById(c.getStudentId());
+                    studentList.add(users1);
+                }
+                map.put("studentList",studentList);
+                workClassesAndStudents.add(map);
+            }
+        }
+        memberWorkClassVO.setWorkClassesAndStudents(workClassesAndStudents);
+
+        return memberWorkClassVO;
     }
 }

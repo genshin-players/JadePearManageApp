@@ -149,14 +149,14 @@
     function prevDayF() {
         var pageD=$("#workTime").html();
         var date=new Date(pageD);
-        window.location.href="http://localhost:8003/toStuAttendance?attendanceDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()-1);
+        window.location.href="/toStuAttendance?attendanceDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()-1);
     }
 
     function nextDayF() {
         var pageD=$("#workTime").html();
         var date=new Date(pageD);
 
-        window.location.href="http://localhost:8003/toStuAttendance?attendanceDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()+1);
+        window.location.href="/toStuAttendance?attendanceDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()+1);
     }
 
 
@@ -164,7 +164,7 @@
     function toDetailPage(t) {
         var classId=t.getAttribute("data_classId");
         var attendanceDate=t.getAttribute("data_attendanceDate");
-        window.location.href="http://localhost:8003/toStuAttendanceDetail?attendanceDate="+attendanceDate+"&classId="+classId;
+        window.location.href="/toStuAttendanceDetail?attendanceDate="+attendanceDate+"&classId="+classId;
     }
 
 

@@ -277,7 +277,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/assignOneWork",
+                    url:"/assignOneWork",
                     dataType:"json",
                     data:{
                         memberId:member_id,
@@ -301,7 +301,7 @@
             }else {
                 $.ajax({
                     type:"post",
-                    url:"http://localhost:8003/assignOneWork",
+                    url:"/assignOneWork",
                     dataType:"json",
                     data:{
                         memberId:member_id,

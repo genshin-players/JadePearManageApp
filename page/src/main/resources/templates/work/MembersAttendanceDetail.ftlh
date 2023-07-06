@@ -212,7 +212,7 @@
         if(confirm("确认删除吗")){
             $.ajax({
                 type:"post",
-                url:"http://localhost:8003/deleteOneWork",
+                url:"/deleteOneWork",
                 dataType:"json",
                 data:{schedulesId:schedulesId},
                 success:function(res){

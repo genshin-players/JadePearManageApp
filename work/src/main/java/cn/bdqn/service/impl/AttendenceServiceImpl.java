@@ -1,13 +1,8 @@
 package cn.bdqn.service.impl;
 
-import cn.bdqn.entity.Attendence;
+import cn.bdqn.entity.*;
 import cn.bdqn.entity.Class;
-import cn.bdqn.entity.Classes;
-import cn.bdqn.entity.Users;
-import cn.bdqn.mapper.AttendenceMapper;
-import cn.bdqn.mapper.ClassMapper;
-import cn.bdqn.mapper.ClassesMapper;
-import cn.bdqn.mapper.UsersMapper;
+import cn.bdqn.mapper.*;
 import cn.bdqn.service.AttendenceService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +10,8 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.bdqn.vo.*;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -245,5 +242,173 @@ public class AttendenceServiceImpl extends ServiceImpl<AttendenceMapper, Attende
     @Override
     public int delStudentAttendance(Integer attendanceId) {
         return attendenceMapper.deleteById(attendanceId);
+    }
+
+
+    @Autowired
+    SchedulesMapper schedulesMapper;
+    @Autowired
+    WorkClassMapper workClassMapper;
+    /**
+     * 从小程序接收数据 添加到出勤表
+     * @return
+     */
+    @Override
+    @Transactional
+    public int addClassAttendce(Integer classId,  Date date, Integer reportUserId,Integer schedulesId,
+                                Integer[] resQ, Integer[] resC, Integer[] resQj) {
+        //保存本班所有学生id
+        List<Class> stuIdList = classMapper.selectList(new QueryWrapper<Class>().eq("class_id", classId));
+
+        if(resQ.length>0){
+            for (int i = 0; i < resQ.length; i++) {
+                Attendence a=new Attendence();
+                a.setClassId(classId);
+                a.setStudentId(resQ[i]);
+                a.setDate(date);
+                a.setReportUserId(reportUserId);
+                a.setIsPresent(0);
+                //封装出勤记录 后添加
+                int count=attendenceMapper.insert(a);
+                if(count<=0){throw new RuntimeException("添加出勤记录出现错误");}
+
+                //最后从所有学生集合删除添加的学生id
+                for (int j = 0; j < stuIdList.size(); j++) {
+                    Class cc=stuIdList.get(j);
+                    if(cc.getStudentId()==resQ[i]){stuIdList.remove(j);}
+                }
+            }
+        }
+
+        if(resC.length>0){
+            for (int i = 0; i < resC.length; i++) {
+                Attendence a=new Attendence();
+                a.setClassId(classId);
+                a.setStudentId(resC[i]);
+                a.setDate(date);
+                a.setReportUserId(reportUserId);
+                a.setIsPresent(1);
+                //封装出勤记录 后添加
+                int count=attendenceMapper.insert(a);
+                if(count<=0){throw new RuntimeException("添加出勤记录出现错误");}
+
+                //最后从所有学生集合删除添加的学生id
+                for (int j = 0; j < stuIdList.size(); j++) {
+                    Class cc=stuIdList.get(j);
+                    if(cc.getStudentId()==resC[i]){stuIdList.remove(j);}
+                }
+            }
+        }
+
+        if(resQj.length>0){
+            for (int i = 0; i < resQj.length; i++) {
+                Attendence a=new Attendence();
+                a.setClassId(classId);
+                a.setStudentId(resQj[i]);
+                a.setDate(date);
+                a.setReportUserId(reportUserId);
+                a.setIsPresent(3);
+                //封装出勤记录 后添加
+                int count=attendenceMapper.insert(a);
+                if(count<=0){throw new RuntimeException("添加出勤记录出现错误");}
+
+                //最后从所有学生集合删除添加的学生id
+                for (int j = 0; j < stuIdList.size(); j++) {
+                    Class cc=stuIdList.get(j);
+                    if(cc.getStudentId()==resQj[i]){stuIdList.remove(j);}
+                }
+            }
+        }
+
+        //最后添加正常出勤学生
+        if(stuIdList.size()>0){
+            for(Class c:stuIdList){
+                Attendence a=new Attendence();
+                a.setClassId(classId);
+                a.setStudentId(c.getStudentId());
+                a.setDate(date);
+                a.setReportUserId(reportUserId);
+                a.setIsPresent(2);
+                //封装出勤记录 后添加
+                int count=attendenceMapper.insert(a);
+                if(count<=0){throw new RuntimeException("添加出勤记录出现错误");}
+            }
+        }
+
+
+        WorkClass workClass = workClassMapper.selectOne(new QueryWrapper<WorkClass>()
+                .eq("schedules_id", schedulesId).eq("class_id", classId));
+        workClass.setStatus(1);
+        int i1 = workClassMapper.updateById(workClass);
+        if(i1<=0){throw new RuntimeException("更新出勤、记录状态出现错误");}
+
+
+
+        //判断该工作负责的所有班级是否全部完成
+        List<WorkClass> workClasses = workClassMapper.selectList(new QueryWrapper<WorkClass>().eq("schedules_id", schedulesId));
+        boolean flag=true;
+        for (WorkClass wc:workClasses){
+            if(wc.getStatus()==0){flag=false;}
+        }
+        if(flag){
+            Schedules schedules = schedulesMapper.selectById(schedulesId);
+            schedules.setStatus(1);
+            int i = schedulesMapper.updateById(schedules);
+            if(i<=0){throw new RuntimeException("更新工作记录状态出现错误");}
+        }
+
+
+        return 1;
+    }
+
+
+    /**
+     * 从小程序接收数据 添加到出勤表 全部到齐
+     */
+    @Override
+    public int addAllClassAttendce(Integer classId, Date date, Integer reportUserId, Integer schedulesId) {
+        //保存本班所有学生id
+        List<Class> stuIdList = classMapper.selectList(new QueryWrapper<Class>().eq("class_id", classId));
+
+
+        //最后添加正常出勤学生
+        if(stuIdList.size()>0){
+            for(Class c:stuIdList){
+                Attendence a=new Attendence();
+                a.setClassId(classId);
+                a.setStudentId(c.getStudentId());
+                a.setDate(date);
+                a.setReportUserId(reportUserId);
+                a.setIsPresent(2);
+                //封装出勤记录 后添加
+                int count=attendenceMapper.insert(a);
+                if(count<=0){throw new RuntimeException("添加出勤记录出现错误");}
+            }
+        }
+
+
+        WorkClass workClass = workClassMapper.selectOne(new QueryWrapper<WorkClass>()
+                .eq("schedules_id", schedulesId).eq("class_id", classId));
+        workClass.setStatus(1);
+        int i1 = workClassMapper.updateById(workClass);
+        if(i1<=0){throw new RuntimeException("更新出勤、记录状态出现错误");}
+
+
+
+        //判断该工作负责的所有班级是否全部完成
+        List<WorkClass> workClasses = workClassMapper.selectList(new QueryWrapper<WorkClass>().eq("schedules_id", schedulesId));
+        boolean flag=true;
+        for (WorkClass wc:workClasses){
+            if(wc.getStatus()==0){flag=false;}
+        }
+        if(flag){
+            Schedules schedules = schedulesMapper.selectById(schedulesId);
+            schedules.setStatus(1);
+            int i = schedulesMapper.updateById(schedules);
+            if(i<=0){throw new RuntimeException("更新工作记录状态出现错误");}
+        }
+
+
+        return 1;
     }
 }

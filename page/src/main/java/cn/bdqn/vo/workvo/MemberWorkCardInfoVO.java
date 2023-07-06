@@ -19,5 +19,6 @@ public class MemberWorkCardInfoVO {
     private SchedulesType schedulesType;//工作分类信息
     private Classes classes;//班级表
     private Users createUser;//创建人，布置人
-    private List<WorkClass> workClasses;//负责班级
+    private List<WorkClass>  workClasses;//负责班级的表
+    private List<Classes> workClass;//负责班级
 }
