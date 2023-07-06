@@ -134,7 +134,8 @@ public class DisplayController {
     public Map<String, Object> updateDisplay(
             @RequestParam(value = "id") String id,
             @RequestParam(value = "title") String title,
-            @RequestParam(value = "content") String content)
+            @RequestParam(value = "content") String content,
+            @RequestParam(value = "coverImage") String coverImage)
     {
         Map<String,Object> map = new HashMap<>();
         LambdaUpdateWrapper<Display> lambdaUpdateWrapper =  new LambdaUpdateWrapper<Display>();
@@ -142,6 +143,7 @@ public class DisplayController {
         lambdaUpdateWrapper.set(Display::getTitle, title);
         lambdaUpdateWrapper.set(Display::getContent, content);
         lambdaUpdateWrapper.set(Display::getUpdateTime,new Date());
+        lambdaUpdateWrapper.set(Display::getCoverImage,coverImage);
 
         if(displayService.update(null, lambdaUpdateWrapper)){
             map.put("code", 200);
@@ -153,32 +155,26 @@ public class DisplayController {
         return map;
     }
 
-    @RequestMapping("/saveCoverImage")
+    @PostMapping("/saveCoverImage")
     public Map<String, Object> saveCoverImage(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("id") String id
+            @RequestPart("file") MultipartFile file
     ){
         Map<String,Object> map = new HashMap<>();
         if (!file.isEmpty()){
             Result cover = fileUploadService.fileUpload(file, "cover");
-            LambdaUpdateWrapper<Display> lambdaUpdateWrapper = new LambdaUpdateWrapper<Display>();
-            lambdaUpdateWrapper.eq(Display::getId, id);
-            lambdaUpdateWrapper.set(Display::getCoverImage,cover.getData());
-            if (displayService.update(
-                    Display.builder()
-                            .id(Integer.valueOf(id))
-                            .coverImage((String) cover.getData())
-                            .build(),
-                    lambdaUpdateWrapper
-            )){
                 map.put("code", 200);
                 map.put("msg", "success");
-            }
+                map.put("imgUrl", cover.getData());
         } else {
             map.put("code", 500);
             map.put("msg", "error");
         }
         return map;
+    }
+
+    @PostMapping("/upload")
+    public String upload(@RequestPart("file") MultipartFile file) {
+        return String.valueOf(fileUploadService.fileUpload(file,"display").getData());
     }
 }
 

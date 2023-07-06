@@ -12,9 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -93,12 +91,14 @@ public class DisplayController {
             @RequestParam(required = false) String startTime,
             @RequestParam(required = false) String endTime,
             @RequestParam(required = false, defaultValue = "-1") String displayId,
+            @RequestParam(required = false, defaultValue = "") String coverImage,
             Model model) {
         model.addAttribute("type", type.trim().equals("") ? "Display" : type);
         model.addAttribute("activitiesId", "undefined".equals(activitiesId.trim()) ? "-1" : activitiesId);
         model.addAttribute("signupNum", signupNum == null ? "" : signupNum);
         model.addAttribute("startTime", startTime == null ? "" : startTime);
         model.addAttribute("endTime", endTime == null ? "" : endTime);
+        model.addAttribute("coverImage", coverImage == null ? "-1" : coverImage);
         model.addAttribute("display",("-1".equals(displayId)||"undefined".equals(displayId)) ? DisplayDTO.builder().id(-1).title("标题").content("").build() : displayClient.getDisplayById(Integer.parseInt(displayId))) ;
         return "display/editor";
     }
@@ -164,9 +164,10 @@ public class DisplayController {
     public Map<String, Object> updDisplay(
             @RequestParam(value = "id") String id,
             @RequestParam(value = "title") String title,
-            @RequestParam(value = "content") String content)
+            @RequestParam(value = "content") String content,
+            @RequestParam(value = "coverImage") String coverImage)
     {
-        return displayClient.updateDisplay(id,title, content);
+        return displayClient.updateDisplay(id,title, content,coverImage);
     }
 
     @RequestMapping("updActivities")
@@ -180,12 +181,18 @@ public class DisplayController {
         return activatesClient.updateActivities(id,signupNumber,startTime,endTime);
     }
 
-    @RequestMapping("updCoverImage")
+    @PostMapping("updCoverImage")
     @ResponseBody
     public Map<String, Object> saveCoverImage(
             @RequestParam("file") MultipartFile file,
             @RequestParam("id") String id)
     {
         return displayClient.saveCoverImage(file, id);
+    }
+
+    @PostMapping("uploadImage")
+    @ResponseBody
+    public String upload(@RequestPart MultipartFile file){
+        return displayClient.upload(file);
     }
 }

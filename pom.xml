@@ -17,6 +17,7 @@
         <module>work</module>
         <module>display</module>
         <module>user</module>
+        <module>upload</module>
     </modules>
 
     <parent>

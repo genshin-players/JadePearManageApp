@@ -3,8 +3,11 @@ package cn.bdqn.client;
 import cn.bdqn.dto.DisplayDTO;
 import cn.bdqn.vo.ResultVO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -46,9 +49,12 @@ public interface DisplayClient {
     Map<String, Object> updateDisplay(
             @RequestParam(value = "id") String id,
             @RequestParam(value = "title") String title,
-            @RequestParam(value = "content") String content);
-    @RequestMapping("/saveCoverImage")
+            @RequestParam(value = "content") String content,
+            @RequestParam(value = "coverImage") String coverImage);
+    @PostMapping(value = "/saveCoverImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Map<String, Object> saveCoverImage(
-            @RequestParam("file") MultipartFile file,
+            @RequestPart("file") MultipartFile file,
             @RequestParam("id") String id);
+    @PostMapping("/upload")
+    String upload(@RequestPart("file") MultipartFile file);
 }

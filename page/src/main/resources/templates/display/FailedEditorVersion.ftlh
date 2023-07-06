@@ -87,9 +87,9 @@
     // This sample still does not showcase all CKEditor 5 features (!)
     // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
     CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
-        /*fileRepository: {
+        fileRepository: {
             uploadUrl: '/display/uploadImage'
-        },*/
+        },
         /*image:{
             upload:{
                 url: "/display/uploadImage",
@@ -215,7 +215,7 @@
             // These two are commercial, but you can try them out without registering to a trial.
             // 'ExportPdf',
             // 'ExportWord',
-            'CKBox',
+            // 'CKBox',
             'CKFinder',
             'EasyImage',
             // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
@@ -339,8 +339,8 @@
             });*/
         })
         .catch( error => {
-            console.log(error)
-        });
+        console.log(error)
+    });
 
     //拖拽与复制粘贴的图片文件上传 操你妈这他妈是ckeditor4的5用不了
 
@@ -388,7 +388,7 @@
         console.log(formData)
         // 发送Ajax请求
         $.ajax({
-            url: '/upload/updCoverImage',
+            url: '/display/saveCoverImage',
             type: 'POST',
             data: formData,
             contentType: false,
