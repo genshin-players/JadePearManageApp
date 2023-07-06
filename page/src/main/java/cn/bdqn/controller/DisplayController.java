@@ -9,6 +9,10 @@ import cn.bdqn.entity.Users;
 import cn.bdqn.vo.ResultVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 @Controller
 @RequestMapping("/display")
@@ -29,6 +40,134 @@ public class DisplayController {
     private ActivatesClient activatesClient;
     @Autowired
     private UserClient userClient;
+
+    @RequestMapping("/export_activities_excel")
+    public String exportActivitiesExcel(HttpServletResponse response){
+        response.setContentType("application/binary;charset=utf-8");
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            String fileName = new String(("activities").getBytes(), StandardCharsets.UTF_8);
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            // 2. 创建工作表
+            XSSFSheet sheet = workbook.createSheet("WriterDataTest");
+            // 3. 模拟待写入数据
+            Map<String,Object[]> data = new TreeMap<>();
+            data.put("1", new Object[] {"ID","标题","报名人数", "报名开始时间", "报名结束时间","点赞"});
+            List<ActivitiesDTO> list = activatesClient.getActivitiesList();
+            int id = 2;
+            for (ActivitiesDTO activitiesDTO:list){
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                data.put(String.valueOf(id++),new Object[]{activitiesDTO.getId(),activitiesDTO.getDisplay().getTitle(), activitiesDTO.getSignupNumber(), sdf.format(activitiesDTO.getStartTime()), sdf.format(activitiesDTO.getEndTime()), activitiesDTO.getLikes()});
+            }
+            //4. 遍历数据写入表中
+            Set<String> keySet = data.keySet();
+            int rowNum = 0;
+            for (String key : keySet){
+                Row row = sheet.createRow(rowNum++);
+                Object [] objArr = data.get(key);
+                int cellNum = 0;
+                for (Object obj: objArr){
+                    Cell cell  = row.createCell(cellNum++);
+                    if (obj instanceof String){
+                        cell.setCellValue((String)obj);
+                    }else if(obj instanceof Integer){
+                        cell.setCellValue((Integer)obj);
+                    }
+                }
+            }
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("/export_daily_excel")
+    public String exportDailyExcel(HttpServletResponse response){
+        response.setContentType("application/binary;charset=utf-8");
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            String fileName = new String(("daily").getBytes(), StandardCharsets.UTF_8);
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            // 2. 创建工作表
+            XSSFSheet sheet = workbook.createSheet("WriterDataTest");
+            // 3. 模拟待写入数据
+            Map<String,Object[]> data = new TreeMap<>();
+            data.put("1", new Object[] {"ID","标题", "创建时间", "修改时间"});
+            List<DisplayDTO> list = displayClient.getPushEveryFuckingDayList("");
+            int id = 2;
+            for (DisplayDTO displayDTO:list){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                data.put(String.valueOf(id++),new Object[]{displayDTO.getId(),displayDTO.getTitle(),sdf.format(displayDTO.getCreateTime()), sdf.format(displayDTO.getUpdateTime())});
+            }
+            //4. 遍历数据写入表中
+            Set<String> keySet = data.keySet();
+            int rowNum = 0;
+            for (String key : keySet){
+                Row row = sheet.createRow(rowNum++);
+                Object [] objArr = data.get(key);
+                int cellNum = 0;
+                for (Object obj: objArr){
+                    Cell cell  = row.createCell(cellNum++);
+                    if (obj instanceof String){
+                        cell.setCellValue((String)obj);
+                    }else if(obj instanceof Integer){
+                        cell.setCellValue((Integer)obj);
+                    }
+                }
+            }
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("/export_external_performance_excel")
+    public String exportExternalPerformanceExcel(HttpServletResponse response){
+        response.setContentType("application/binary;charset=utf-8");
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            String fileName = new String(("external_performance").getBytes(), StandardCharsets.UTF_8);
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            // 2. 创建工作表
+            XSSFSheet sheet = workbook.createSheet("WriterDataTest");
+            // 3. 模拟待写入数据
+            Map<String,Object[]> data = new TreeMap<>();
+            data.put("1", new Object[] {"ID","标题", "创建时间", "修改时间"});
+            List<DisplayDTO> list = displayClient.getExternalPerformanceList("");
+            int id = 2;
+            for (DisplayDTO displayDTO:list){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                data.put(String.valueOf(id++),new Object[]{displayDTO.getId(),displayDTO.getTitle(),sdf.format(displayDTO.getCreateTime()), sdf.format(displayDTO.getUpdateTime())});
+            }
+            //4. 遍历数据写入表中
+            Set<String> keySet = data.keySet();
+            int rowNum = 0;
+            for (String key : keySet){
+                Row row = sheet.createRow(rowNum++);
+                Object [] objArr = data.get(key);
+                int cellNum = 0;
+                for (Object obj: objArr){
+                    Cell cell  = row.createCell(cellNum++);
+                    if (obj instanceof String){
+                        cell.setCellValue((String)obj);
+                    }else if(obj instanceof Integer){
+                        cell.setCellValue((Integer)obj);
+                    }
+                }
+            }
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @RequestMapping("/daily_info")
     public String toDailyInfo(@RequestParam(required = false,defaultValue = "") String title,Model model) {
         List<DisplayDTO> displayDTOList = displayClient.getPushEveryFuckingDayList(title);

@@ -16,7 +16,10 @@
                             </div>
                         </div>
                     </form>
-                    <a href="javascript:window.location.href='/display/editor?type=每日一推'" class="btn btn-primary mb-xxl-0 mb-4 "><i class="far fa-file-word me-2"></i>创建每日一推内容</a>
+                    <div>
+                        <a href="javascript:window.location.href='/display/export_daily_excel'" class="btn btn-primary mb-xxl-0 mb-4 "><i class="far fa-file-word me-2"></i>下载Excel表格</a>
+                        <a href="javascript:window.location.href='/display/editor?type=每日一推'" class="btn btn-primary mb-xxl-0 mb-4 "><i class="far fa-file-word me-2"></i>创建每日一推内容</a>
+                    </div>
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane active show" id="All">
