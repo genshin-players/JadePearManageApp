@@ -28,7 +28,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/displayType")
-public class DisplayTypeController {
+public class  DisplayTypeController {
 
 /*    @Autowired
     private IDisplayTypeService displayTypeService;

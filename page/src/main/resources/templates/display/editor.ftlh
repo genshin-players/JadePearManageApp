@@ -77,7 +77,7 @@
 <script src="/js/styleSwitcher.js"></script>
 <script src="/js/sweetalert2.min.js"></script>
 <script>
-    let Editor;
+    let editor;
     let str;
     let signupNum = "${signupNum}";
     let startTime = "${startTime}";
@@ -246,7 +246,7 @@
         ]
     }).then(
         newEditor => {
-            Editor = newEditor;
+            editor = newEditor;
             /*//非base64图片上传处理
             editor.model.document.on('change:data', () => {
                 //监听编辑器内容变化事件
@@ -420,6 +420,7 @@
     }
 
     document.querySelector("#submit").addEventListener("click", ()=>{
+        alert(ciurl)
         // getting data from editor
         const editorData = editor.getData();
         const title = $("#title").val();
@@ -461,7 +462,7 @@
                                     startTime: startTime,
                                     endTime: endTime,
                                     createTime: formattedDate,
-                                    coverImage: $("#coverImageUrl").val()
+                                    coverImage: ciurl
                                 },
                                 method: "POST",
                                 url: "/display/insertActivities",
@@ -493,11 +494,11 @@
             alert("进入修改")
             if (editorData.trim()===""){
                 zalert("内容不得为空","error")
-            } else if (editorData == `${display.content?no_esc}`){
+            } else if (ciurl === "" && editorData == `${display.content?no_esc}`){
                 alert("内容未改变")
                 toLastPage()
             } else {
-                let param = {id: "${display.id}",title:title,content: editorData,coverImage:$("#coverImageUrl").val()};
+                let param = {id: "${display.id}",title:title,content: editorData,coverImage:ciurl};
                 alert(param);
                 console.log(param)
                 $.ajax({
@@ -566,10 +567,10 @@
                     "</strong></i></span>至<span style='font-size:18px;'><i><strong>" +
                     endTime +
                     "</strong></i></span></p>";
-                Editor.setData(str);
+                editor.setData(str);
             }
         } else {
-            Editor.setData(`${display.content?no_esc}`);
+            editor.setData(`${display.content?no_esc}`);
             let img = $(`<img>`);
             $("#coverImageUrl").val("${coverImage}");
             img.attr('src', coverImageUrl);
