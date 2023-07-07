@@ -9,6 +9,8 @@ import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
@@ -50,19 +52,42 @@ public class ActivitiesController {
     private IActivitiesService activitiesService;
     @Autowired
     private IDisplayService displayService;
+
     @RequestMapping("/activitiesList")
-    public List<ActivitiesDTO> getActivitiesList(){
-        List<Activities> list = activitiesService.list();
-        List<ActivitiesDTO> dtoList = new ArrayList<>();
-        for (Activities activities:list){
-            ActivitiesDTO activitiesDTO = new ActivitiesDTO();
-            BeanUtils.copyProperties(activities, activitiesDTO);
-            int displayId =activities.getDisplayId();
-            Display display = displayService.getById(displayId);
-            activitiesDTO.setDisplay(display);
-            dtoList.add(activitiesDTO);
+    @ResponseBody
+    public List<ActivitiesDTO> activitiesListByTitle(
+            @RequestParam(value = "title",required = false) String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum){
+        PageHelper.startPage(pageNum, 2);
+        LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        List<ActivitiesDTO> dtoList = new ArrayList<>();;
+        if (title==null||"".equals(title)){
+            List<Activities> list = activitiesService.list();
+            for (Activities activities:list){
+                ActivitiesDTO activitiesDTO = new ActivitiesDTO();
+                BeanUtils.copyProperties(activities, activitiesDTO);
+                int displayId =activities.getDisplayId();
+                Display display = displayService.getById(displayId);
+                activitiesDTO.setDisplay(display);
+                dtoList.add(activitiesDTO);
+            }
+        }else {
+            lambdaQueryWrapper.like(Display::getTitle, "%"+title+"%");
+            lambdaQueryWrapper.eq(Display::getDisplayTypeId,1);
+            List<Display> displayList = displayService.list(lambdaQueryWrapper);
+            for (Display display : displayList){
+                int displayId = display.getId();
+                LambdaQueryWrapper<Activities> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
+                lambdaQueryWrapper1.like(Activities::getDisplayId, displayId);
+                List<Activities> activatedList = activitiesService.list(lambdaQueryWrapper1);
+                ActivitiesDTO activitiesDTO = new ActivitiesDTO();
+                BeanUtils.copyProperties(activatedList.get(0), activitiesDTO);
+                activitiesDTO.setDisplay(display);
+                dtoList.add(activitiesDTO);
+            }
         }
-        return dtoList;
+        PageInfo pageInfo = new PageInfo(dtoList);
+        return pageInfo.getList();
     }
 
 
@@ -76,26 +101,6 @@ public class ActivitiesController {
         Display display = displayService.getById(displayId);
         activitiesDTO.setDisplay(display);
         return activitiesDTO;
-    }
-
-    @RequestMapping("/activitiesListByTitle")
-    @ResponseBody
-    public List<ActivitiesDTO> activitiesListByTitle(@RequestParam("title") String title){
-        LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(Display::getTitle, "%"+title+"%");
-        List<Display> displayList = displayService.list(lambdaQueryWrapper);
-        List<ActivitiesDTO> dtoList = new ArrayList<>();
-        for (Display display : displayList){
-            int displayId = display.getId();
-            LambdaQueryWrapper<Activities> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper1.like(Activities::getDisplayId, displayId);
-            List<Activities> activatedList = activitiesService.list(lambdaQueryWrapper1);
-            ActivitiesDTO activitiesDTO = new ActivitiesDTO();
-            BeanUtils.copyProperties(activatedList.get(0), activitiesDTO);
-            activitiesDTO.setDisplay(display);
-            dtoList.add(activitiesDTO);
-        }
-        return dtoList;
     }
 
     @RequestMapping("/activitiesListByPublishUserId")
