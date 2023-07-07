@@ -3,6 +3,8 @@ package cn.bdqn.client;
 import cn.bdqn.dto.ActivitiesDTO;
 import cn.bdqn.dto.DisplayDTO;
 import cn.bdqn.vo.ResultVO;
+import cn.bdqn.vo.displayvo.ActivitiesPageVO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +20,9 @@ import java.util.Map;
 public interface ActivatesClient {
 
     @RequestMapping("/activitiesList")
-    List<ActivitiesDTO> getActivitiesList();
+    ActivitiesPageVO activitiesList(
+            @RequestParam(value = "title",required = false) String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum);
 
     @RequestMapping("deleteActivitiesById")
     Map<String, Object> deleteActivitiesById(@RequestParam(value = "activitiesId") Integer activitiesId, @RequestParam(value = "displayId") Integer displayId);
@@ -32,10 +36,6 @@ public interface ActivatesClient {
 
     @RequestMapping("/getActivitiesById")
     ActivitiesDTO getActivitiesById(@RequestParam("id") Integer id);
-
-    @RequestMapping("/activitiesListByTitle")
-    List<ActivitiesDTO> activitiesListByTitle(@RequestParam("title") String title);
-
     @RequestMapping("updateActivities")
     Map<String, Object> updateActivities(
             @RequestParam(value = "id") Integer id,
