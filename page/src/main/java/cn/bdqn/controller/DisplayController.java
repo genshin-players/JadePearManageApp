@@ -182,6 +182,7 @@ public class DisplayController {
         model.addAttribute("displayDTOList",pushEveryFuckingDayList.getList());
         model.addAttribute("pages",pushEveryFuckingDayList.getPages());
         model.addAttribute("now",Integer.parseInt(pageNum));
+        model.addAttribute("title",title);
         return "display/daily_info";
     }
     @RequestMapping("/inner_activities")
@@ -200,6 +201,7 @@ public class DisplayController {
         model.addAttribute("activitiesList",activitiesList.getList());
         model.addAttribute("pages",activitiesList.getPages());
         model.addAttribute("now",pageNum);
+        model.addAttribute("title",title);
         return "display/inner_activities";
     }
 
@@ -218,6 +220,7 @@ public class DisplayController {
         model.addAttribute("displayDTOList",displayDTOList.getList());
         model.addAttribute("pages",displayDTOList.getPages());
         model.addAttribute("now",pageNum);
+        model.addAttribute("title",title);
         return "display/external_performance";
     }
 
