@@ -11,7 +11,7 @@
                     <form id="search" action="/display/external_performance">
                         <div class="table-search">
                             <div class="input-group search-area mb-xxl-0 mb-4">
-                                <input name="title" type="text" class="form-control" placeholder="按照标题查询">
+                                <input name="title" type="text" <#if title??>value="${title}"</#if> class="form-control" placeholder="按照标题查询">
                                 <span class="input-group-text"><a href="javascript:$('#search').submit()"><i class="flaticon-381-search-2"></i></a></span>
                             </div>
                         </div>
@@ -24,7 +24,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active show" id="All">
                         <div class="table-responsive">
-                            <table class="table card-table default-table display mb-4 dataTablesCard table-responsive-xl " id="guestTable-all">
+                            <table class="table card-table default-table display mb-4 dataTablesCard table-responsive-xl ">
                                 <thead>
                                 <tr>
                                     <th class="bg-none">
@@ -90,6 +90,34 @@
                                 </#list>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="d-flex mb-4 justify-content-between align-items-center flex-wrap">
+                            <div style="font-size: 20px" class="dataTables_info" id="guestTable-all_info" role="status" aria-live="polite">共${pages}页,当前第${now}页</div>
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <#if now != 1>
+                                    <button type="button" class="btn btn-outline-dark" onclick="location='/display/external_performance?pageNum=${now-1}&title=${title}'">
+                                        <i class="fa fa-angle-double-left me-3" aria-hidden="true"></i>上一页
+                                    </button>
+                                </#if>
+                                <#list 4..1 as i>
+                                    <#if (now-i) gt 0>
+                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/display/external_performance?pageNum=${now-i}&title=${title}'">${now-i}</button>
+                                    </#if>
+                                </#list>
+                                <#list now..(now+4) as i>
+                                    <#if i<=pages>
+                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/display/external_performance?pageNum=${i}&title=${title}'">${i}</button>
+                                    </#if>
+                                </#list>
+                                <#if now != pages>
+                                    <button type="button" class="btn btn-outline-dark" onclick="location='/display/external_performance?pageNum=${now+1}&title=${title}'">
+                                        下一页<i class="fa fa-angle-double-right ms-3" aria-hidden="true"></i>
+                                    </button>
+                                </#if>
+                                <#--                                <a class="paginate_button next disabled" aria-controls="guestTable-all" data-dt-idx="2" tabindex="0" id="guestTable-all_next">-->
+                                <#--                                    -->
+                                <#--                                </a>-->
+                            </div>
                         </div>
                     </div>
                 </div>

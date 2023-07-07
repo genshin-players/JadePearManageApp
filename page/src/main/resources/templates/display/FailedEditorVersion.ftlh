@@ -461,7 +461,7 @@
                                     startTime: startTime,
                                     endTime: endTime,
                                     createTime: formattedDate,
-                                    coverImage: $("#coverImageUrl").val()
+                                    coverImage: ciurl
                                 },
                                 method: "POST",
                                 url: "/display/insertActivities",
