@@ -56,11 +56,11 @@ public class MpController {
      * @return
      */
     @PostMapping("/compareOldPwd")
-    public Map<String,Object> getUserById(Integer userId,String oldPwd){
+    public Map<String,Object> getUserById(String userId,String oldPwd){
         Map<String,Object>map=new HashMap<>();
 
         try {
-            Users user= usersService.getById(userId);
+            Users user= usersService.getById(Integer.valueOf(userId));
             if(oldPwd.equals(user.getPassword())){
                 map.put("data","true");
                 map.put("code",200);
@@ -79,11 +79,11 @@ public class MpController {
     }
 
     @PostMapping("/updateUserPwd")
-    public Map<String,Object> updateUserPwd(Integer userId,String newPwd){
+    public Map<String,Object> updateUserPwd(String userId,String newPwd){
         Map<String,Object>map=new HashMap<>();
 
         try {
-            Users user= usersService.getById(userId);
+            Users user= usersService.getById(Integer.valueOf(userId));
             user.setPassword(newPwd);
             usersService.updateById(user);
             map.put("data","true");
