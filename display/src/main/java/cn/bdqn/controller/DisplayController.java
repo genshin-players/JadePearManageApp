@@ -8,9 +8,12 @@ import cn.bdqn.util.DateTimeUtil;
 import cn.bdqn.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +37,8 @@ import java.util.Map;
  * @author dddqmmx
  * @since 2023-06-09
  */
-@RestController
+@Controller
+@ResponseBody
 @CrossOrigin
 @RequestMapping("display")
 public class DisplayController {
@@ -45,22 +49,32 @@ public class DisplayController {
     private FileUploadService fileUploadService;
 
     @RequestMapping("getPushEveryFuckingDayList")
-    public List<Display> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title){
+    public PageInfo<Display> getPushEveryFuckingDayList(
+            @RequestParam(required = false,defaultValue = "") String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum){
+        PageHelper.startPage(pageNum, 2);
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,2);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
-        return displayService.list(lambdaQueryWrapper);
+        List<Display> displayList = displayService.list(lambdaQueryWrapper);
+        return new PageInfo(displayList);
     }
 
     @RequestMapping("getExternalPerformanceList")
-    public List<Display> getExternalPerformanceList(@RequestParam(required = false,defaultValue = "") String title){
+    public PageInfo<Display> getExternalPerformanceList(
+            @RequestParam(required = false,defaultValue = "") String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum){
+        PageHelper.startPage(pageNum, 2);
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<Display>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,3);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
-        return displayService.list(lambdaQueryWrapper);
+        List<Display> displayList = displayService.list(lambdaQueryWrapper);
+        PageInfo pageInfo = new PageInfo(displayList);
+        return pageInfo;
     }
 
     @RequestMapping("deleteDisplay")
+
     public Map<String, Object> deleteDisplay(@RequestParam(value = "id") Integer id){
         boolean b = displayService.removeById(id);
         Map<String,Object> map = new HashMap<>();

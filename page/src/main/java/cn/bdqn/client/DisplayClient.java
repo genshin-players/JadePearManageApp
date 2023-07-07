@@ -2,6 +2,8 @@ package cn.bdqn.client;
 
 import cn.bdqn.dto.DisplayDTO;
 import cn.bdqn.vo.ResultVO;
+import cn.bdqn.vo.displayvo.DisplayPageVO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +27,13 @@ import java.util.Map;
 @RequestMapping("display")
 public interface DisplayClient {
     @RequestMapping("getPushEveryFuckingDayList")
-    List<DisplayDTO> getPushEveryFuckingDayList(@RequestParam(required = false,defaultValue = "") String title);
+    DisplayPageVO getPushEveryFuckingDayList(
+            @RequestParam(required = false,defaultValue = "") String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum);
     @RequestMapping("getExternalPerformanceList")
-    List<DisplayDTO> getExternalPerformanceList(@RequestParam(required = false,defaultValue = "") String title);
+    DisplayPageVO getExternalPerformanceList(
+            @RequestParam(required = false,defaultValue = "") String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum);
     @RequestMapping("deleteDisplay")
     Map<String, Object> deleteDisplay(@RequestParam(value = "id") Integer id);
     @RequestMapping("getDisplayById")

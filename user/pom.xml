@@ -58,10 +58,10 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -73,6 +73,17 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-client</artifactId>
         </dependency>
+
+
+        <!--FastDFS  客户端-->
+        <dependency>
+            <groupId>com.github.tobato</groupId>
+            <artifactId>fastdfs-client</artifactId>
+            <version>1.27.2</version>
+        </dependency>
+
+
+
 
     </dependencies>
 

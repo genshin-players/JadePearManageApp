@@ -7,6 +7,8 @@ import cn.bdqn.dto.ActivitiesDTO;
 import cn.bdqn.dto.DisplayDTO;
 import cn.bdqn.entity.Users;
 import cn.bdqn.vo.ResultVO;
+import cn.bdqn.vo.displayvo.ActivitiesPageVO;
+import cn.bdqn.vo.displayvo.DisplayPageVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.ss.usermodel.Cell;
@@ -52,7 +54,7 @@ public class DisplayController {
             // 3. 模拟待写入数据
             Map<String,Object[]> data = new TreeMap<>();
             data.put("1", new Object[] {"ID","标题","报名人数", "报名开始时间", "报名结束时间","点赞"});
-            List<ActivitiesDTO> list = activatesClient.getActivitiesList();
+            List<ActivitiesDTO> list = activatesClient.activitiesList("",1).getList();
             int id = 2;
             for (ActivitiesDTO activitiesDTO:list){
 
@@ -95,9 +97,9 @@ public class DisplayController {
             // 3. 模拟待写入数据
             Map<String,Object[]> data = new TreeMap<>();
             data.put("1", new Object[] {"ID","标题", "创建时间", "修改时间"});
-            List<DisplayDTO> list = displayClient.getPushEveryFuckingDayList("");
+            DisplayPageVO list = displayClient.getPushEveryFuckingDayList("",1);
             int id = 2;
-            for (DisplayDTO displayDTO:list){
+            for (DisplayDTO displayDTO:list.getList()){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 data.put(String.valueOf(id++),new Object[]{displayDTO.getId(),displayDTO.getTitle(),sdf.format(displayDTO.getCreateTime()), sdf.format(displayDTO.getUpdateTime())});
             }
@@ -137,9 +139,9 @@ public class DisplayController {
             // 3. 模拟待写入数据
             Map<String,Object[]> data = new TreeMap<>();
             data.put("1", new Object[] {"ID","标题", "创建时间", "修改时间"});
-            List<DisplayDTO> list = displayClient.getExternalPerformanceList("");
+            DisplayPageVO list = displayClient.getExternalPerformanceList("",1);
             int id = 2;
-            for (DisplayDTO displayDTO:list){
+            for (DisplayDTO displayDTO:list.getList()){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 data.put(String.valueOf(id++),new Object[]{displayDTO.getId(),displayDTO.getTitle(),sdf.format(displayDTO.getCreateTime()), sdf.format(displayDTO.getUpdateTime())});
             }
@@ -167,26 +169,27 @@ public class DisplayController {
     }
 
     @RequestMapping("/daily_info")
-    public String toDailyInfo(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        List<DisplayDTO> displayDTOList = displayClient.getPushEveryFuckingDayList(title);
-        for (DisplayDTO displayDTO : displayDTOList){
+    public String toDailyInfo(@RequestParam(required = false,defaultValue = "") String title,
+                              @RequestParam(required = false,defaultValue = "1") String pageNum,
+                              Model model) {
+        DisplayPageVO pushEveryFuckingDayList = displayClient.getPushEveryFuckingDayList(title, Integer.parseInt(pageNum));
+        for (DisplayDTO displayDTO : pushEveryFuckingDayList.getList()){
             Users userById = userClient.getUserById(displayDTO.getPublishUserId());
             JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
             String realName = (String) jsonObject.get("realname");
             displayDTO.setPublishUserName(realName);
         }
-        model.addAttribute("displayDTOList",displayDTOList);
+        model.addAttribute("displayDTOList",pushEveryFuckingDayList.getList());
+        model.addAttribute("pages",pushEveryFuckingDayList.getPages());
+        model.addAttribute("now",Integer.parseInt(pageNum));
         return "display/daily_info";
     }
     @RequestMapping("/inner_activities")
-    public String toInnerActivities(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        List<ActivitiesDTO> activitiesList = null;
-        if (title == null|| "".equals(title)){
-            activitiesList = activatesClient.getActivitiesList();
-        }else {
-            activitiesList = activatesClient.activitiesListByTitle(title);
-        }
-        for (ActivitiesDTO activitiesDTO : activitiesList){
+    public String toInnerActivities(@RequestParam(required = false,defaultValue = "") String title,
+                                    @RequestParam(required = false,defaultValue = "1") Integer pageNum,
+                                    Model model) {
+        ActivitiesPageVO activitiesList = activatesClient.activitiesList(title,pageNum);
+        for (ActivitiesDTO activitiesDTO : activitiesList.getList()){
             DisplayDTO displayDTO = activitiesDTO.getDisplay();
             Users userById = userClient.getUserById(displayDTO.getPublishUserId());
             JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
@@ -194,20 +197,27 @@ public class DisplayController {
             displayDTO.setPublishUserName(realName);
             System.out.println(realName);
         }
-        model.addAttribute("activitiesList",activitiesList);
+        model.addAttribute("activitiesList",activitiesList.getList());
+        model.addAttribute("pages",activitiesList.getPages());
+        model.addAttribute("now",pageNum);
         return "display/inner_activities";
     }
 
     @RequestMapping("/external_performance")
-    public String toExternalPerformance(@RequestParam(required = false,defaultValue = "") String title,Model model) {
-        List<DisplayDTO> displayDTOList = displayClient.getExternalPerformanceList(title);
-        for (DisplayDTO displayDTO : displayDTOList){
+    public String toExternalPerformance(
+            @RequestParam(required = false,defaultValue = "") String title,
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum,
+            Model model) {
+        DisplayPageVO displayDTOList = displayClient.getExternalPerformanceList(title,pageNum);
+        for (DisplayDTO displayDTO : displayDTOList.getList()){
             Users userById = userClient.getUserById(displayDTO.getPublishUserId());
             JSONObject jsonObject = JSON.parseObject(userById.getIdentityInfo());
             String realName = (String) jsonObject.get("realname");
             displayDTO.setPublishUserName(realName);
         }
-        model.addAttribute("displayDTOList",displayDTOList);
+        model.addAttribute("displayDTOList",displayDTOList.getList());
+        model.addAttribute("pages",displayDTOList.getPages());
+        model.addAttribute("now",pageNum);
         return "display/external_performance";
     }
 

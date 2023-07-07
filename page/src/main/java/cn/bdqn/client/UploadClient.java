@@ -24,4 +24,6 @@ public interface UploadClient {
     Map<String, Object> saveCoverImage(@RequestPart("file") MultipartFile file);
     @PostMapping("/upload")
     String upload(@RequestPart("file") MultipartFile file);
+    @PostMapping(value = "/saveAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Map<String, Object> saveAvatar(@RequestPart("file") MultipartFile file);
 }

@@ -24,72 +24,102 @@
                 <div class="tab-content">
                     <div class="tab-pane active show" id="All">
                         <div class="table-responsive">
-                            <table class="table card-table default-table display mb-4 dataTablesCard table-responsive-xl " id="guestTable-all">
-                                <thead>
-                                <tr>
-                                    <th class="bg-none">
-                                        <div class="form-check style-1">
-                                            <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                                        </div>
-                                    </th>
-                                    <th>ID</th>
-                                    <th>标题</th>
-                                    <th>创建时间</th>
-                                    <th>修改时间</th>
-                                    <th>创建者</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <#list displayDTOList as displayDTO>
+                            <div id="guestTable-all_wrapper" class="dataTables_wrapper no-footer">
+                                <table class="table card-table default-table display mb-4 dataTablesCard table-responsive-xl " >
+                                    <thead>
                                     <tr>
-                                        <td>
+                                        <th class="bg-none">
                                             <div class="form-check style-1">
-                                                <input class="form-check-input" type="checkbox" value="">
+                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
                                             </div>
-                                        </td>
-                                        <td>
-                                            <div class="media-bx">
-                                                <h4 id="id" class="mb-0 mt-1 text-black">${displayDTO.id}</h4>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <h4 id="title" class="mb-0 mt-1 text-black">${displayDTO.title}</h4>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <h5>${displayDTO.createTime?string("yyyy-MM-dd")}</h5>
-                                                <span class="fs-14">${displayDTO.createTime?string("hh:mm")}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <h5>${displayDTO.updateTime?string("yyyy-MM-dd")}</h5>
-                                                <span class="fs-14">${displayDTO.updateTime?string("hh:mm")}</span>
-                                            </div>
-                                        </td>
-                                        <td><a href="javascript:void(0);" class="btn-link">${displayDTO.publishUserName}</a></td>
-                                        <td>
-                                            <div class="dropdown dropstart">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M18 12C18 12.5523 18.4477 13 19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12Z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path d="M4 12C4 12.5523 4.44772 13 5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12Z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="javascript:toEditor(${displayDTO.id});">编辑</a>
-                                                    <a class="dropdown-item" href="javascript:deleteDisplay(${displayDTO.id});">删除</a>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        </th>
+                                        <th>ID</th>
+                                        <th>标题</th>
+                                        <th>创建时间</th>
+                                        <th>修改时间</th>
+                                        <th>创建者</th>
+                                        <th>操作</th>
                                     </tr>
-                                </#list>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <#list displayDTOList as displayDTO>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check style-1">
+                                                    <input class="form-check-input" type="checkbox" value="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="media-bx">
+                                                    <h4 id="id" class="mb-0 mt-1 text-black">${displayDTO.id}</h4>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <h4 id="title" class="mb-0 mt-1 text-black">${displayDTO.title}</h4>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <h5>${displayDTO.createTime?string("yyyy-MM-dd")}</h5>
+                                                    <span class="fs-14">${displayDTO.createTime?string("hh:mm")}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <h5>${displayDTO.updateTime?string("yyyy-MM-dd")}</h5>
+                                                    <span class="fs-14">${displayDTO.updateTime?string("hh:mm")}</span>
+                                                </div>
+                                            </td>
+                                            <td><a href="javascript:void(0);" class="btn-link">${displayDTO.publishUserName}</a></td>
+                                            <td>
+                                                <div class="dropdown dropstart">
+                                                    <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            <path d="M18 12C18 12.5523 18.4477 13 19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12Z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            <path d="M4 12C4 12.5523 4.44772 13 5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12Z" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="javascript:toEditor(${displayDTO.id});">编辑</a>
+                                                        <a class="dropdown-item" href="javascript:deleteDisplay(${displayDTO.id});">删除</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex mb-4 justify-content-between align-items-center flex-wrap">
+                                <div style="font-size: 20px" class="dataTables_info" id="guestTable-all_info" role="status" aria-live="polite">共${pages}页,当前第${now}页</div>
+                                <div class="dataTables_paginate paging_simple_numbers">
+                                    <#if now != 1>
+                                        <button type="button" class="btn btn-outline-dark" onclick="location='/display/daily_info?pageNum=${now-1}'">
+                                            <i class="fa fa-angle-double-left me-3" aria-hidden="true"></i>上一页
+                                        </button>
+                                    </#if>
+                                    <#list 4..1 as i>
+                                        <#if (now-i) gt 0>
+                                            <button type="button" class="btn btn-rounded btn-primary" onclick="location='/display/daily_info?pageNum=${now-i}'">${now-i}</button>
+                                        </#if>
+                                    </#list>
+                                    <#list now..(now+4) as i>
+                                        <#if i<=pages>
+                                            <button type="button" class="btn btn-rounded btn-primary" onclick="location='/display/daily_info?pageNum=${i}'">${i}</button>
+                                        </#if>
+                                    </#list>
+                                    <#if now != pages>
+                                        <button type="button" class="btn btn-outline-dark" onclick="location='/display/daily_info?pageNum=${now+1}'">
+                                            下一页<i class="fa fa-angle-double-right ms-3" aria-hidden="true"></i>
+                                        </button>
+                                    </#if>
+                                    <#--                                <a class="paginate_button next disabled" aria-controls="guestTable-all" data-dt-idx="2" tabindex="0" id="guestTable-all_next">-->
+                                    <#--                                    -->
+                                    <#--                                </a>-->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

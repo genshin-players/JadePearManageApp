@@ -47,5 +47,22 @@ public class UploadController {
     public String upload(@RequestPart("file") MultipartFile file) {
         return String.valueOf(fileUploadService.fileUpload(file,"display").getData());
     }
+
+    @PostMapping("/saveAvatar")
+    public Map<String, Object> saveAvatar(
+            @RequestPart("file") MultipartFile file
+    ){
+        Map<String,Object> map = new HashMap<>();
+        if (!file.isEmpty()){
+            Result cover = fileUploadService.fileUpload(file, "avatar");
+            map.put("code", 200);
+            map.put("msg", "success");
+            map.put("imgUrl", cover.getData());
+        } else {
+            map.put("code", 500);
+            map.put("msg", "error");
+        }
+        return map;
+    }
 }
 
