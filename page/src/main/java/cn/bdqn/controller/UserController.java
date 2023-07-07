@@ -66,13 +66,16 @@ public class UserController {
                            @RequestParam(value = "age") String age,
                            @RequestParam(value = "gender")String gender,
                            @RequestParam(value = "phone") String phone,
-                           @RequestParam(value = "identity") String identity){
+                           @RequestParam(value = "identity") String identity,
+                            @RequestParam(value = "account_info") String account_info
+    ){
 
         Users users=new Users();
         users.setUsername(username);
         users.setPassword("123456");
         users.setCreateTime(new Date());
         users.setUpdateTime(new Date());
+        users.setAccountInfo(account_info);
         users.setRoleId(3);
         users.setIdentityInfo("{"+
                 '"'+"realname"+'"'+":"+'"'+realname+'"'+","+
@@ -86,7 +89,6 @@ public class UserController {
         //==================================================
         List<Users> users1 = userClient.showAll();
         Users users2 = users1.get(users1.size() - 1);
-        System.out.println("111111111111111111111"+users2.getId());
         //========================================================
 
 
@@ -109,13 +111,16 @@ public class UserController {
                            @RequestParam(value = "age") String age,
                            @RequestParam(value = "gender")String gender,
                            @RequestParam(value = "phone") String phone,
-                           @RequestParam(value = "identity") String identity){
+                           @RequestParam(value = "identity") String identity,
+                            @RequestParam(value = "account_info") String account_info
+                            ){
         Users users=new Users();
         users.setUsername(username);
         users.setPassword("123456");
         users.setCreateTime(new Date());
         users.setUpdateTime(new Date());
         users.setRoleId(6);
+        users.setAccountInfo(account_info);
         users.setIdentityInfo("{"+
                 '"'+"realname"+'"'+":"+'"'+realname+'"'+","+
                 '"'+"age"+'"'+":"+'"'+age+'"'+","+

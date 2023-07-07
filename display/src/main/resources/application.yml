@@ -56,3 +56,8 @@ ribbon:
     ConnectTimeot: 60000 # 连接超时时间（ms）
     ReadTimeot: 60000 # 通信超时时间（ms）
     SocketTimeout: 60000
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql

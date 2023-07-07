@@ -105,7 +105,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="file" name="account_info">
+                                    <div class="mb-3 row">
+                                        <div class="input-group mb-3">
+                                            <button id="uploadButton" class="btn btn-primary btn-sm" type="button">上传头像</button>
+                                            <div class="form-file">
+                                                <input id="coverImage" type="file" class="form-file-input form-control">
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="mb-3 row">
                                         <div class="col-lg-8 ms-auto">
@@ -176,6 +183,7 @@
 
 
 <script>
+    var ciurl = "";
 
 
     function submitEdit() {
@@ -202,6 +210,7 @@
                 "gender":addTgender,
                 "phone":addTphone,
                 "identity":addTidentity,
+                "account_info":ciurl
             },
 
             dataType:"json",

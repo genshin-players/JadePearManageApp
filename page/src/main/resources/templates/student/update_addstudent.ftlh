@@ -107,6 +107,15 @@
                                     </div>
 
                                     <div class="mb-3 row">
+                                        <div class="input-group mb-3">
+                                            <button id="uploadButton" class="btn btn-primary btn-sm" type="button">上传头像</button>
+                                            <div class="form-file">
+                                                <input id="coverImage" type="file" class="form-file-input form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row">
                                         <div class="col-lg-8 ms-auto">
                                             <button type="submit" class="btn btn-primary" onclick="submitEdit()">提交</button>
                                         </div>
@@ -176,6 +185,7 @@
 
 <script>
 
+    var ciurl = "";
 
     function submitEdit() {
 
@@ -201,6 +211,8 @@
                 "gender":addTgender,
                 "phone":addTphone,
                 "identity":addTidentity,
+                "account_info":ciurl
+
             },
 
             dataType:"json",
@@ -213,7 +225,31 @@
         });
     }
 
-
+    $("#uploadButton").click(function (){
+        let file = $('#coverImage')[0].files[0]; // 获取选择的文件
+        let formData = new FormData(); // 创建FormData对象
+        formData.append('file', file); // 将文件添加到FormData对象
+        console.log(formData)
+        // 发送Ajax请求
+        $.ajax({
+            url: '/upload/updAvatar',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                // 上传成功后的处理逻辑
+                alert("上传成功！")
+                ciurl = data.imgUrl;
+                alert(data.imgUrl)
+            },
+            error: function(data) {
+                // 上传失败后的处理逻辑
+                alert("上传失败！")
+                console.log(data)
+            }
+        });
+    })
 
 </script>
 

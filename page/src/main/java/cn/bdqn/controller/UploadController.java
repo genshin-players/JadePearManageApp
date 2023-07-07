@@ -30,6 +30,13 @@ public class UploadController {
     @PostMapping("uploadImage")
     @ResponseBody
     public String upload(@RequestPart MultipartFile file){
+
         return uploadClient.upload(file);
+    }
+    @PostMapping("updAvatar")
+    @ResponseBody
+    public Map<String, Object> updAvatar(@RequestParam("file") MultipartFile file)
+    {
+        return uploadClient.saveAvatar(file);
     }
 }

@@ -54,7 +54,7 @@
                                         </td>
                                         <td>
                                             <div class="media-bx">
-                                               <img src="../static/image/1.png" alt="cg">
+                                                <img src="${user.accountInfo}" alt="cg" >
                                             </div>
                                         </td>
 
