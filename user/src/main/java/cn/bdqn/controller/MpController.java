@@ -50,4 +50,50 @@ public class MpController {
         return map;
     }
 
+
+    /**
+     * 比较传过来的密码是否和数据库中的一致
+     * @return
+     */
+    @PostMapping("/compareOldPwd")
+    public Map<String,Object> getUserById(Integer userId,String oldPwd){
+        Map<String,Object>map=new HashMap<>();
+
+        try {
+            Users user= usersService.getById(userId);
+            if(oldPwd.equals(user.getPassword())){
+                map.put("data","true");
+                map.put("code",200);
+                map.put("msg","success");
+            }else {
+                map.put("data","false");
+                map.put("code",500);
+                map.put("msg","error");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("code",500);
+            map.put("msg","error");
+        }
+        return map;
+    }
+
+    @PostMapping("/updateUserPwd")
+    public Map<String,Object> updateUserPwd(Integer userId,String newPwd){
+        Map<String,Object>map=new HashMap<>();
+
+        try {
+            Users user= usersService.getById(userId);
+            user.setPassword(newPwd);
+            usersService.updateById(user);
+            map.put("data","true");
+            map.put("code",200);
+            map.put("msg","error");
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("code",500);
+            map.put("msg","error");
+        }
+        return map;
+    }
 }
