@@ -87,6 +87,7 @@ public class ActivitiesController {
             }
         }
         PageInfo pageInfo = new PageInfo(dtoList);
+        System.out.println(pageInfo.getPageNum());
         return pageInfo.getList();
     }
 
