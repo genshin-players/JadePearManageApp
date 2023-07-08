@@ -15,7 +15,10 @@ import java.util.Map;
 public interface UserClient {
 
     @RequestMapping("/user/showTeacher")
-    List<User_ClassDTO> showTeacher();
+    List<User_ClassDTO> showTeacher(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum
+    );
 
 
     @RequestMapping("/user/showStudent")
@@ -29,6 +32,9 @@ public interface UserClient {
     Map<String,Object>  addUser(@RequestBody  Users users);
 
 
+
+    @RequestMapping("/user/ShowCount")
+      Integer ShowCount();
 
     @RequestMapping("/user/showAll")
     List<Users> showAll();

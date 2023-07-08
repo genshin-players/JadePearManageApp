@@ -6,6 +6,7 @@ import cn.bdqn.dto.User_ClassDTO;
 import cn.bdqn.entity.Classes;
 import cn.bdqn.entity.StudentClass;
 import cn.bdqn.entity.Users;
+import cn.bdqn.mapper.UsersMapper;
 import cn.bdqn.service.IClassesService;
 import cn.bdqn.service.IStudentClassService;
 import cn.bdqn.service.IUsersService;
@@ -16,6 +17,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.netflix.discovery.converters.Auto;
 import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,9 @@ public class UsersController {
     private IUsersService usersService;
 
     @Autowired
+    private UsersMapper usersMapper;
+
+    @Autowired
     private IStudentClassService studentClassService;
 
     @Autowired
@@ -57,6 +62,15 @@ public class UsersController {
     private  List<Users> showAll(){
         List<Users> list = usersService.list();
         return list;
+
+    }
+
+
+    @ResponseBody
+    @RequestMapping("ShowCount")
+    private  Integer ShowCount(){
+        Integer integer = usersMapper.selectCount(null);
+        return integer;
 
     }
 
@@ -73,6 +87,7 @@ public class UsersController {
 
         QueryWrapper<Users> wrapper=new QueryWrapper<>();
 
+        PageInfo pageInfo = null;
        if (username==null || "".equals(username)){
            wrapper.eq("role_id",3);
            //Map<String,Object> map = new HashMap<>();
@@ -94,33 +109,39 @@ public class UsersController {
                    userClassDTO.setName(classes.getName());
                }
                showAll.add(userClassDTO);
+               pageInfo = new PageInfo(showAll);
            }
        }else {
            LambdaQueryWrapper<Users> QueryWrapper = new LambdaQueryWrapper<>();
            QueryWrapper.like(Users::getUsername, "%"+username+"%");
            QueryWrapper.eq(Users::getRoleId,3);
            List<Users> list = usersService.list(QueryWrapper);
-
-           for (Users users : list) {
-               User_ClassDTO userClassDTO=new User_ClassDTO();
-               BeanUtils.copyProperties(users,userClassDTO);
-               LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-               lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
-               //学生对应班级
-               StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
-               if (users.getId()==studentClass.getStudentId()){
-                   userClassDTO.setClassId(studentClass.getClassId());
+           if (list!=null){
+               for (Users users : list) {
+                   User_ClassDTO userClassDTO=new User_ClassDTO();
+                   BeanUtils.copyProperties(users,userClassDTO);
+                   LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                   lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
+                   //学生对应班级
+                   StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
+                   if (users.getId()==studentClass.getStudentId()){
+                       userClassDTO.setClassId(studentClass.getClassId());
+                   }
+                   //班级名称
+                   Classes classes = classesService.selectClassById(studentClass.getClassId());
+                   if (userClassDTO.getClassId()== classes.getId()){
+                       userClassDTO.setName(classes.getName());
+                   }
+                   showAll.add(userClassDTO);
+                   pageInfo = new PageInfo(showAll);
                }
-               //班级名称
-               Classes classes = classesService.selectClassById(studentClass.getClassId());
-               if (userClassDTO.getClassId()== classes.getId()){
-                   userClassDTO.setName(classes.getName());
-               }
-               showAll.add(userClassDTO);
            }
+
+
+
        }
 
-        PageInfo pageInfo = new PageInfo(showAll);
+
         System.out.println(pageInfo.getPageNum());
         return pageInfo.getList();
    }
