@@ -22,7 +22,10 @@ public interface UserClient {
 
 
     @RequestMapping("/user/showStudent")
-    List<User_ClassDTO> showStudent();
+    List<User_ClassDTO> showStudent(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum
+    );
 
 
     @RequestMapping("user/deleteTeacher_Student")
@@ -33,8 +36,11 @@ public interface UserClient {
 
 
 
-    @RequestMapping("/user/ShowCount")
-      Integer ShowCount();
+    @RequestMapping("/user/ShowCountT")
+      Integer ShowCountT();
+
+    @RequestMapping("/user/ShowCountS")
+    Integer ShowCountS();
 
     @RequestMapping("/user/showAll")
     List<Users> showAll();

@@ -67,9 +67,21 @@ public class UsersController {
 
 
     @ResponseBody
-    @RequestMapping("ShowCount")
+    @RequestMapping("ShowCountT")
     private  Integer ShowCount(){
-        Integer integer = usersMapper.selectCount(null);
+        QueryWrapper queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("role_id",3);
+        Integer integer = usersMapper.selectCount(queryWrapper);
+        return integer;
+
+    }
+
+    @ResponseBody
+    @RequestMapping("ShowCountS")
+    private  Integer ShowCountS(){
+        QueryWrapper queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("role_id",6);
+        Integer integer = usersMapper.selectCount(queryWrapper);
         return integer;
 
     }
@@ -140,53 +152,89 @@ public class UsersController {
 
 
        }
+       if ("".equals(pageInfo.getList())){
+           return pageInfo.getList();
+       }else {
+           return showAll;
+       }
 
-
-        System.out.println(pageInfo.getPageNum());
-        return pageInfo.getList();
    }
 
 
     @RequestMapping("showStudent")
-    private  List<User_ClassDTO> showStudent(){
-       /* QueryWrapper<Users> wrapper=new QueryWrapper<>();
-        wrapper.eq("role_id",6);
-        List<Users> list = usersService.list(wrapper);
-        return list;*/
+    private  List<User_ClassDTO> showStudent(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum
+    ){
+        PageHelper.startPage(pageNum, 2);
         //展示数据的集合
-        List<User_ClassDTO> ShowAll=new ArrayList<>();
+        List<User_ClassDTO> showAll=new ArrayList<>();
+
+
 
         QueryWrapper<Users> wrapper=new QueryWrapper<>();
-        wrapper.eq("role_id",6);
-        //Map<String,Object> map = new HashMap<>();
-        List<Users> list = usersService.list(wrapper);
+        PageInfo pageInfo = null;
+        if (username==null || "".equals(username)){
+            wrapper.eq("role_id",6);
+            //Map<String,Object> map = new HashMap<>();
+            List<Users> list = usersService.list(wrapper);
 
-        for (Users users : list) {
-            User_ClassDTO userClassDTO=new User_ClassDTO();
-            BeanUtils.copyProperties(users,userClassDTO);
-
-
-            LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
-
-            //学生对应班级
-            StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
+            for (Users users : list) {
+                User_ClassDTO userClassDTO=new User_ClassDTO();
+                BeanUtils.copyProperties(users,userClassDTO);
 
 
-            if (users.getId()==studentClass.getStudentId()){
+                LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
+
+                //学生对应班级
+                StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
+
+
+                if (users.getId()==studentClass.getStudentId()){
                     userClassDTO.setClassId(studentClass.getClassId());
                 }
-            //班级名称
-            Classes classes = classesService.selectClassById(studentClass.getClassId());
-            if (userClassDTO.getClassId()== classes.getId()){
-                        userClassDTO.setName(classes.getName());
+                //班级名称
+                Classes classes = classesService.selectClassById(studentClass.getClassId());
+                if (userClassDTO.getClassId()== classes.getId()){
+                    userClassDTO.setName(classes.getName());
                 }
-            System.out.println(userClassDTO.getName());
-            ShowAll.add(userClassDTO);
+                showAll.add(userClassDTO);
+                pageInfo = new PageInfo(showAll);
+
+            }
+        }else {
+            LambdaQueryWrapper<Users> QueryWrapper = new LambdaQueryWrapper<>();
+            QueryWrapper.like(Users::getUsername, "%"+username+"%");
+            QueryWrapper.eq(Users::getRoleId,6);
+            List<Users> list = usersService.list(QueryWrapper);
+            if (list!=null){
+                for (Users users : list) {
+                    User_ClassDTO userClassDTO=new User_ClassDTO();
+                    BeanUtils.copyProperties(users,userClassDTO);
+                    LambdaQueryWrapper<StudentClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                    lambdaQueryWrapper.eq(StudentClass::getStudentId,users.getId());
+                    //学生对应班级
+                    StudentClass studentClass = studentClassService.getOne(lambdaQueryWrapper);
+                    if (users.getId()==studentClass.getStudentId()){
+                        userClassDTO.setClassId(studentClass.getClassId());
+                    }
+                    //班级名称
+                    Classes classes = classesService.selectClassById(studentClass.getClassId());
+                    if (userClassDTO.getClassId()== classes.getId()){
+                        userClassDTO.setName(classes.getName());
+                    }
+                    showAll.add(userClassDTO);
+                    pageInfo = new PageInfo(showAll);
+                }
+            }
 
         }
-
-        return ShowAll;
+        if ("".equals(pageInfo.getList())){
+            return pageInfo.getList();
+        }else {
+            return showAll;
+        }
     }
 
 

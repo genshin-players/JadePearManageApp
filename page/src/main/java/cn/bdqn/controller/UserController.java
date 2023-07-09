@@ -34,7 +34,7 @@ public class UserController {
             Model model) {
         List<User_ClassDTO> user_classDTOS = userClient.showTeacher(username, pageNum);
 
-        Integer integer = userClient.ShowCount();
+        Integer integer = userClient.ShowCountT();
 
         model.addAttribute("users",user_classDTOS);
         model.addAttribute("pages",integer);
@@ -45,9 +45,17 @@ public class UserController {
 
 
     @RequestMapping("/show_student")
-    public String  showStudent(Model model){
-        List<User_ClassDTO> users = userClient.showStudent();
+    public String  showStudent(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum,
+            Model model){
+        List<User_ClassDTO> users = userClient.showStudent(username, pageNum);
+
+        Integer integer = userClient.ShowCountS();
         model.addAttribute("users",users);
+        model.addAttribute("pages",integer);
+        model.addAttribute("username",username);
+        model.addAttribute("now",pageNum);
         return "student/show_student";
     }
 //=============================================================================================
