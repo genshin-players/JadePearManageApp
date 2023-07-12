@@ -8,12 +8,22 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="d-flex mb-4 justify-content-between align-items-center flex-wrap">
-                    <div class="table-search">
-                        <div class="input-group search-area mb-xxl-0 mb-4">
-                            <input type="text" class="form-control" placeholder="按照老师姓名查询">
-                            <span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
+                   <#-- <form id="search" action="/user/show_teacher">
+                        <div class="table-search">
+                            <div class="input-group search-area mb-xxl-0 mb-4">
+                                <input name="username" <#if username??>value="${username}"</#if> type="text" class="form-control" placeholder="按照老师姓名查询">
+                                <span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
+                            </div>
                         </div>
-                    </div>
+                    </form>-->
+                    <form id="search" action="/user/show_teacher">
+                        <div class="table-search">
+                            <div class="input-group search-area mb-xxl-0 mb-4">
+                                <input name="username" <#if username??>value="${username}"</#if> type="text" class="form-control" placeholder="按照标题查询">
+                                <span class="input-group-text"><a href="javascript:$('#search').submit()"><i class="flaticon-381-search-2"></i></a></span>
+                            </div>
+                        </div>
+                    </form>
                     <a href="/update_addteacher" class="btn btn-primary mb-xxl-0 mb-4 "><i class="far fa-file-word me-2"></i>添加老师</a>
                 </div>
                 <div class="tab-content">
@@ -115,6 +125,34 @@
                                 </#list>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="d-flex mb-4 justify-content-between align-items-center flex-wrap">
+                            <div style="font-size: 20px" class="dataTables_info" id="guestTable-all_info" role="status" aria-live="polite">共${pages}页,当前第${now}页</div>
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <#if now != 1>
+                                    <button type="button" class="btn btn-outline-dark" onclick="location='/user/show_teacher?pageNum=${now-1}&username=${username!""}'">
+                                        <i class="fa fa-angle-double-left me-3" aria-hidden="true"></i>上一页
+                                    </button>
+                                </#if>
+                                <#list 4..1 as i>
+                                    <#if (now-i) gt 0>
+                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/user/show_teacher?pageNum=${now-i}&username=${username!""}'">${now-i}</button>
+                                    </#if>
+                                </#list>
+                                <#list now..(now+4) as i>
+                                    <#if i<=pages>
+                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/user/show_teacher?pageNum=${i}&username=${username!""}'">${i}</button>
+                                    </#if>
+                                </#list>
+                                <#if now != pages>
+                                    <button type="button" class="btn btn-outline-dark" onclick="location='/user/show_teacher?pageNum=${now+1}&username=${username!""}'">
+                                        下一页<i class="fa fa-angle-double-right ms-3" aria-hidden="true"></i>
+                                    </button>
+                                </#if>
+                                <#--                                <a class="paginate_button next disabled" aria-controls="guestTable-all" data-dt-idx="2" tabindex="0" id="guestTable-all_next">-->
+                                <#--                                    -->
+                                <#--                                </a>-->
+                            </div>
                         </div>
                     </div>
                 </div>

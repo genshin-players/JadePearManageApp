@@ -55,16 +55,15 @@ public class ActivitiesController {
 
     @RequestMapping("/activitiesList")
     @ResponseBody
-    public PageInfo<ActivitiesDTO> activitiesList(
+    public List<ActivitiesDTO> activitiesListByTitle(
             @RequestParam(value = "title",required = false) String title,
             @RequestParam(required = false,defaultValue = "1") Integer pageNum){
-        PageInfo pageInfo = null;
         PageHelper.startPage(pageNum, 2);
+        LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         List<ActivitiesDTO> dtoList = new ArrayList<>();;
         if (title==null||"".equals(title)){
             List<Activities> list = activitiesService.list();
-            pageInfo = new PageInfo(list);
-            for (Activities activities:(List<Activities>)pageInfo.getList()){
+            for (Activities activities:list){
                 ActivitiesDTO activitiesDTO = new ActivitiesDTO();
                 BeanUtils.copyProperties(activities, activitiesDTO);
                 int displayId =activities.getDisplayId();
@@ -73,12 +72,10 @@ public class ActivitiesController {
                 dtoList.add(activitiesDTO);
             }
         }else {
-            LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.like(Display::getTitle, "%"+title+"%");
             lambdaQueryWrapper.eq(Display::getDisplayTypeId,1);
             List<Display> displayList = displayService.list(lambdaQueryWrapper);
-            pageInfo = new PageInfo(displayList);
-            for (Display display : (List<Display>)pageInfo.getList()){
+            for (Display display : displayList){
                 int displayId = display.getId();
                 LambdaQueryWrapper<Activities> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
                 lambdaQueryWrapper1.like(Activities::getDisplayId, displayId);
@@ -89,9 +86,9 @@ public class ActivitiesController {
                 dtoList.add(activitiesDTO);
             }
         }
-        pageInfo.setList(dtoList);
-        //return new PageInfo(dtoList)
-        return pageInfo;
+        PageInfo pageInfo = new PageInfo(dtoList);
+        System.out.println(pageInfo.getPageNum());
+        return pageInfo.getList();
     }
 
 

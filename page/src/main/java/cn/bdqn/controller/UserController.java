@@ -6,6 +6,7 @@ import cn.bdqn.entity.Classes;
 import cn.bdqn.entity.StudentClass;
 import cn.bdqn.entity.Users;
 
+import cn.bdqn.vo.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -27,17 +28,34 @@ public class UserController {
 
 
     @RequestMapping("show_teacher")
-    public String showTeacher(Model model) {
-        List<User_ClassDTO> users = userClient.showTeacher();
-        model.addAttribute("users",users);
+    public String showTeacher(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum,
+            Model model) {
+        List<User_ClassDTO> user_classDTOS = userClient.showTeacher(username, pageNum);
+
+        Integer integer = userClient.ShowCountT();
+
+        model.addAttribute("users",user_classDTOS);
+        model.addAttribute("pages",integer);
+        model.addAttribute("username",username);
+        model.addAttribute("now",pageNum);
         return "teacher/show_teacher";
     }
 
 
     @RequestMapping("/show_student")
-    public String  showStudent(Model model){
-        List<User_ClassDTO> users = userClient.showStudent();
+    public String  showStudent(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum,
+            Model model){
+        List<User_ClassDTO> users = userClient.showStudent(username, pageNum);
+
+        Integer integer = userClient.ShowCountS();
         model.addAttribute("users",users);
+        model.addAttribute("pages",integer);
+        model.addAttribute("username",username);
+        model.addAttribute("now",pageNum);
         return "student/show_student";
     }
 //=============================================================================================
