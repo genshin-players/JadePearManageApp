@@ -10,7 +10,6 @@
     <groupId>cn.bdqn</groupId>
     <artifactId>work</artifactId>
     <packaging>jar</packaging>
-
     <name>work</name>
 
     <properties>
@@ -20,6 +19,18 @@
     </properties>
 
     <dependencies>
+        <!-- shiro和spring的整合包  -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <!-- shiro和ehcache整合包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>1.9.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -75,6 +86,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

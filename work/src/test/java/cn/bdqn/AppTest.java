@@ -4,6 +4,8 @@ package cn.bdqn;
 import com.github.davidfantasy.mybatisplus.generatorui.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.MybatisPlusToolsApplication;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.junit.Test;
 
 /**
  * Unit test for simple App.
@@ -11,30 +13,20 @@ import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 public class AppTest {
     public static void main(String[] args) {
 
-        GeneratorConfig config = GeneratorConfig.builder().
-                jdbcUrl("jdbc:mysql://39.107.229.253:3306/jadepearl_app?" +
-                        "useSSL=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai")
-                .userName("root").password("114514").driverClassName("com.mysql.cj.jdbc.Driver")
-                // 数据库schema，POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
-                // .schemaName("myBusiness")
-                // 如果需要修改各类生成文件的默认命名规则，可自定义一个NameConverter实例，覆盖相应的名称转换方法：
-                .nameConverter(new NameConverter() {
-                    /**
-                     * 自定义Service类文件的名称规则
-                     */
-                    public String serviceNameConvert(String tableName) {
-                        return this.entityNameConvert(tableName) + "Service";
-                    }
+        //使用MD5加密
+        Md5Hash result = new Md5Hash("member1");
+        System.out.println("md5加密后的结果：" + result);
 
-                    /**
-                     * 自定义Controller类文件的名称规则
-                     */
-                    public String controllerNameConvert(String tableName) {
-                        return this.entityNameConvert(tableName) + "Controller";
-                    }
-                }).basePackage("cn.bdqn").port(8068).build();
+        System.out.println("==================================");
+        //加盐后加密,加密5次
+        Md5Hash result1 = new Md5Hash("member3", "fuckingeveryone", 5);
+        System.out.println("md5加密后加盐的结果" + result1);
 
-        MybatisPlusToolsApplication.run(config);
+    }
+
+    @Test
+    void test1(){
+
 
     }
 }

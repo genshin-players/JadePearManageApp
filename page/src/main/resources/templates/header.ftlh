@@ -118,6 +118,16 @@
                 <li class="nav-item">
                     <a class="nav-link active" data-bs-toggle="tab" href="#chat">Chat</a>
                 </li>
+            </ul><ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#notes">Notes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#alerts">Alerts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#chat">Chat</a>
+                </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade active show" id="chat" role="tabpanel">
@@ -623,7 +633,7 @@
                                 <span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
                             </div>
                         </li>
-                        <li class="nav-item dropdown notification_dropdown">
+                        <#--<li class="nav-item dropdown notification_dropdown">
                             <a class="nav-link bell-link ai-icon" href="javascript:void(0);">
                                 <svg width="24" height="22" viewbox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M23.6667 5.16666C23.6667 2.5895 21.5772 0.5 19 0.5C15.1162 0.5 8.88387 0.5 5.00004 0.5C2.42287 0.5 0.333374 2.5895 0.333374 5.16666V20.3333C0.333374 20.8058 0.618046 21.2305 1.05321 21.4113C1.48955 21.5922 1.99121 21.4918 2.32487 21.1582C2.32487 21.1582 4.59287 18.8902 5.9672 17.517C6.4047 17.0795 6.99739 16.8333 7.61689 16.8333H19C21.5772 16.8333 23.6667 14.7438 23.6667 12.1667V5.16666ZM21.3334 5.16666C21.3334 3.87866 20.2892 2.83333 19 2.83333C15.1162 2.83333 8.88387 2.83333 5.00004 2.83333C3.71204 2.83333 2.66671 3.87866 2.66671 5.16666V17.517L4.31638 15.8673C5.19138 14.9923 6.37905 14.5 7.61689 14.5H19C20.2892 14.5 21.3334 13.4558 21.3334 12.1667V5.16666ZM6.16671 12.1667H15.5C16.144 12.1667 16.6667 11.644 16.6667 11C16.6667 10.356 16.144 9.83333 15.5 9.83333H6.16671C5.52271 9.83333 5.00004 10.356 5.00004 11C5.00004 11.644 5.52271 12.1667 6.16671 12.1667ZM6.16671 7.5H17.8334C18.4774 7.5 19 6.97733 19 6.33333C19 5.68933 18.4774 5.16666 17.8334 5.16666H6.16671C5.52271 5.16666 5.00004 5.68933 5.00004 6.33333C5.00004 6.97733 5.52271 7.5 6.16671 7.5Z" fill="#1362FC"></path>
@@ -773,27 +783,51 @@
                                     </ul>
                                 </div>
                             </div>`
-                        </li>
+                        </li>-->
+                        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+                        <script>
+                            $(function () {
+                                var loginUser,roleList;
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/shiro/getLoginUser",
+                                    success: function (data) {
+                                        var identity=JSON.parse(data.identityInfo);
+                                        $(".realname").html(identity.realname);
+
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "/shiro/getAllRoles",
+                                            success: function (res) {
+                                                for (let i = 0; i < res.length; i++) {
+                                                    if(data.roleId==res[i].id){
+                                                        $(".rolename").html(res[i].name);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+
+                            });
+
+                        </script>
                         <li class="nav-item dropdown header-profile">
                             <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
                                 <img src="/image/user_icon.jpg" alt="">
                                 <div class="header-info ms-3">
-                                    <span>林忆宁</span>
-                                    <small>社长</small>
+                                    <span class="realname">xxx</span>
+                                    <small class="rolename">xxx</small>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="app-profile.ftlh" class="dropdown-item ai-icon">
                                     <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                    <span class="ms-2">Profile </span>
+                                    <span class="ms-2">用户 </span>
                                 </a>
-                                <a href="email-inbox.html" class="dropdown-item ai-icon">
-                                    <svg id="icon-inbox" xmlns="http://www.w3.org/2000/svg" class="text-success" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                                    <span class="ms-2">Inbox </span>
-                                </a>
-                                <a href="javascript:;" class="dropdown-item ai-icon">
+                                <a href="javascript:if(confirm('确定退出登录吗?')){window.location='/shiro/logout'};" class="dropdown-item ai-icon">
                                     <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                    <span class="ms-2">Logout </span>
+                                    <span class="ms-2">退出登录 </span>
                                 </a>
                             </div>
                         </li>
