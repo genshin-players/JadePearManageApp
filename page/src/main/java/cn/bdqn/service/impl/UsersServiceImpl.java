@@ -26,13 +26,20 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private DefaultWebSecurityManager securityManager;
 
 
-    public void userLogin(String username, String password) {
+    public void userLogin(String username, String password,String rememberMe) {
         // 1.将SecurityManager对象设置到运行环境中
         SecurityUtils.setSecurityManager(securityManager);
         // 2.获取Subject对象
         Subject subject = SecurityUtils.getSubject();
         // 3.将前端传来的用户名密码封装为Shiro提供的身份对象
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+
+        if(rememberMe != null) {
+            // 如果用户选择记住我，则生成记住我Cookie
+            token.setRememberMe(true);
+        }
+
+
         // 4.Shiro认证
         subject.login(token);
     }

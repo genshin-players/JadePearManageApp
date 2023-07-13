@@ -19,7 +19,7 @@ public class AppTest {
 
         System.out.println("==================================");
         //加盐后加密,加密5次
-        Md5Hash result1 = new Md5Hash("member3", "fuckingeveryone", 5);
+        Md5Hash result1 = new Md5Hash("viego", "fuckingeveryone", 5);
         System.out.println("md5加密后加盐的结果" + result1);
 
     }

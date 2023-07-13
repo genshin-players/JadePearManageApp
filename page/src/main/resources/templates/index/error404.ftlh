@@ -12,9 +12,9 @@
 	<meta name="description" content="Innap : Hotel Admin Template">
 	
 	<!-- PAGE TITLE HERE -->
-	<title>404</title>
+	<title>权限不足</title>
 	
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     
 </head>
 
@@ -24,9 +24,9 @@
             <div class="row justify-content-center h-100 align-items-center">
                 <div class="col-md-7">
                     <div class="form-input-content text-center error-page">
-                        <h1 class="error-text fw-bold">404</h1>
-                        <h4><i class="fa fa-exclamation-triangle text-warning"></i> 无此页面!</h4>
-                        <p>你可能输错了地址，或者页面移动了。.</p>
+                        <h1 class="error-text fw-bold">500</h1>
+                        <h4><i class="fa fa-exclamation-triangle text-warning"></i> 权限不足!</h4>
+                        <p>你的角色无法访问此页面。</p>
 						<div>
                             <a class="btn btn-primary" href="/">回到主页面</a>
                         </div>
@@ -40,9 +40,9 @@
 	Scripts
 ***********************************-->
 <!-- Required vendors -->
-<script src="js/global.min.js"></script>
-<script src="js/custom.min.js"></script>
-<script src="js/deznav-init.js"></script>
-<script src="js/styleSwitcher.js"></script>
+<script src="/js/global.min.js"></script>
+<script src="/js/custom.min.js"></script>
+<script src="/js/deznav-init.js"></script>
+<script src="/js/styleSwitcher.js"></script>
 </body>
 </html>

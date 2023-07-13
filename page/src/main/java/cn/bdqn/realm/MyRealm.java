@@ -1,14 +1,19 @@
 package cn.bdqn.realm;
 
+import cn.bdqn.entity.Menu;
 import cn.bdqn.entity.Users;
+import cn.bdqn.mapper.MenuMapper;
 import cn.bdqn.mapper.UsersMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class MyRealm extends AuthorizingRealm {
     @Autowired
@@ -39,10 +44,22 @@ public class MyRealm extends AuthorizingRealm {
 
     }
 
+    @Autowired
+    private MenuMapper menuMapper;
     //自定义授权方法
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        //获取当前用户
+        Users users= (Users) principalCollection.getPrimaryPrincipal();
+        //从数据库中查询该用户权限
+        List<Menu> menuList = menuMapper.getMenuByUserId(users.getId());
+        //遍历菜单，将此用户菜单交给shiro管理
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        System.out.println(menuList);
+        for(Menu menu:menuList){
+            info.addStringPermission(menu.getPath());
+        }
+        return info;
     }
 
 

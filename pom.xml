@@ -18,7 +18,6 @@
         <module>display</module>
         <module>user</module>
         <module>upload</module>
-        <module>shiro</module>
     </modules>
 
     <parent>
