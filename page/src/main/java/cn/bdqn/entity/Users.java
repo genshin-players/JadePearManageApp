@@ -12,7 +12,7 @@ import java.util.Date;
  * </p>
  *
  * @author 
- * @since 2023-06-09
+ * @since 2023-07-11
  */
 public class Users implements Serializable {
 
@@ -21,6 +21,9 @@ public class Users implements Serializable {
     private Integer id;
     private String username;
     private String password;
+    private String salt;
+
+
     private Integer roleId;
 
     /**
@@ -35,6 +38,13 @@ public class Users implements Serializable {
     private Date createTime;
     private Date updateTime;
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
     public Integer getId() {
         return id;
     }
