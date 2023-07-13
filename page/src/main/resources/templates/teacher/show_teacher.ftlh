@@ -16,7 +16,7 @@
                             </div>
                         </div>
                     </form>-->
-                    <form id="search" action="/user/show_teacher">
+                    <form id="search" action="/user/teacher">
                         <div class="table-search">
                             <div class="input-group search-area mb-xxl-0 mb-4">
                                 <input name="username" <#if username??>value="${username}"</#if> type="text" class="form-control" placeholder="按照标题查询">
@@ -116,8 +116,8 @@
                                                     </svg>
                                                 </a>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="/user/showUser_ById?id=${user.id}">修改</a>
-                                                    <a class="dropdown-item" href="/user/deleteTeacher?id=${user.id}">删除</a>
+                                                    <a class="dropdown-item" href="/user/teacher/showUser_ById?id=${user.id}">修改</a>
+                                                    <a class="dropdown-item" href="/user/teacher/deleteTeacher?id=${user.id}">删除</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -130,22 +130,22 @@
                             <div style="font-size: 20px" class="dataTables_info" id="guestTable-all_info" role="status" aria-live="polite">共${pages}页,当前第${now}页</div>
                             <div class="dataTables_paginate paging_simple_numbers">
                                 <#if now != 1>
-                                    <button type="button" class="btn btn-outline-dark" onclick="location='/user/show_teacher?pageNum=${now-1}&username=${username!""}'">
+                                    <button type="button" class="btn btn-outline-dark" onclick="location='/user/teacher?pageNum=${now-1}&username=${username!""}'">
                                         <i class="fa fa-angle-double-left me-3" aria-hidden="true"></i>上一页
                                     </button>
                                 </#if>
                                 <#list 4..1 as i>
                                     <#if (now-i) gt 0>
-                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/user/show_teacher?pageNum=${now-i}&username=${username!""}'">${now-i}</button>
+                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/user/teacher?pageNum=${now-i}&username=${username!""}'">${now-i}</button>
                                     </#if>
                                 </#list>
                                 <#list now..(now+4) as i>
                                     <#if i<=pages>
-                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/user/show_teacher?pageNum=${i}&username=${username!""}'">${i}</button>
+                                        <button type="button" class="btn btn-rounded btn-primary" onclick="location='/user/teacher?pageNum=${i}&username=${username!""}'">${i}</button>
                                     </#if>
                                 </#list>
                                 <#if now != pages>
-                                    <button type="button" class="btn btn-outline-dark" onclick="location='/user/show_teacher?pageNum=${now+1}&username=${username!""}'">
+                                    <button type="button" class="btn btn-outline-dark" onclick="location='/user/teacher?pageNum=${now+1}&username=${username!""}'">
                                         下一页<i class="fa fa-angle-double-right ms-3" aria-hidden="true"></i>
                                     </button>
                                 </#if>

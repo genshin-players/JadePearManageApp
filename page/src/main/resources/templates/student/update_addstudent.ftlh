@@ -202,7 +202,7 @@
         alert("Class_IDDIDIDIID"+addTclass_id);
         $.ajax({
             type:"post",
-            url:"http://localhost:8003/user/add_Suser",
+            url:"http://localhost:8003/user/teacher/add_Suser",
             data:{
                 "username":addTusername,
                 "realname":addTrealname,
@@ -217,10 +217,10 @@
 
             dataType:"json",
             success:function(data){
-                window.location.href="http://localhost:8003/user/show_teacher"
+                window.location.href="http://localhost:8003/user/teacher"
             },
             error:function(data){
-                alert("修改失败");
+                alert("添加失败");
             }
         });
     }

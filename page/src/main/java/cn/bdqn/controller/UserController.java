@@ -27,7 +27,7 @@ public class UserController {
     private UserClient userClient;
 
 
-    @RequestMapping("show_teacher")
+    @RequestMapping("teacher")
     public String showTeacher(
             @RequestParam(value = "username",required = false) String username,
             @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum,
@@ -44,7 +44,7 @@ public class UserController {
     }
 
 
-    @RequestMapping("/show_student")
+    @RequestMapping("/student")
     public String  showStudent(
             @RequestParam(value = "username",required = false) String username,
             @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum,
@@ -59,26 +59,25 @@ public class UserController {
         return "student/show_student";
     }
 //=============================================================================================
-    @RequestMapping("/deleteTeacher")
+    @RequestMapping("teacher/deleteTeacher")
     public String  deleteTeacher(@RequestParam(value = "id") Integer id){
         Map<String, Object> map = userClient.deleteTeacher(id);
         System.out.println("删除成功");
-        System.out.println(id);
-
-        return "redirect:show_teacher";
+        return "redirect:/user/teacher";
     }
 
-    @RequestMapping("/deleteStudent")
+    @RequestMapping("student/deleteStudent")
     public String   deleteStudent(Integer id){
         Map<String, Object> map= userClient.deleteTeacher(id);
-        return "redirect:show_student";
+        System.out.println("删除成功");
+        return "redirect:/user/student";
     }
 
 //========================================================================================
 
 
-    @PostMapping("/add_Tuser")
-    public  String addTUser(@RequestParam(value = "username")String username,
+    @PostMapping("teacher/add_Tuser")
+    public  void addTUser(@RequestParam(value = "username")String username,
                            @RequestParam(value = "realname") String  realname,
                            @RequestParam(value = "class_id") Integer  class_id,
                            @RequestParam(value = "age") String age,
@@ -119,10 +118,10 @@ public class UserController {
         //===============================================================
 
 
-        return "redirect:show_teacher";
+
     }
 
-    @PostMapping("/add_Suser")
+    @PostMapping("teacher/add_Suser")
     public  String addSUser(@RequestParam(value = "username")String username,
                            @RequestParam(value = "realname") String  realname,
                             @RequestParam(value = "class_id") Integer  class_id,
@@ -164,20 +163,27 @@ public class UserController {
         //===============================================================
 
 
-        return "redirect:show_student";
+        return "redirect:/user/student";
     }
 
 
 
-    @RequestMapping("/showUser_ById")
+    @RequestMapping("teacher/showUser_ById")    //√
     private String showUserById(@RequestParam(value = "id") Integer id,Model model){
         Users users = userClient.showUserById(id);
         model.addAttribute("users",users);
         return "teacher/addteacher";
     }
 
+    @RequestMapping("teacher/showSser_ById")    //√
+    private String showSserById(@RequestParam(value = "id") Integer id,Model model){
+        Users users = userClient.showUserById(id);
+        model.addAttribute("users",users);
+        return "student/addstudent";
+    }
+
    /* @ResponseBody*/
-    @RequestMapping("/update_User")
+    @RequestMapping("teacher/update_User")
     public String updateUser(@RequestParam(value = "id")Integer id,
                              @RequestParam(value = "username")String username,
                              @RequestParam(value = "realname") String  realname,
@@ -201,7 +207,7 @@ public class UserController {
         System.out.println(users);
          userClient.updateUser(users/*, users.getId()*/);
 
-        return "teacher/update_addteacher";
+        return "redirect:/user/teacher";
 
     }
 
