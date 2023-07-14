@@ -261,12 +261,14 @@
 
     //提交按钮点击事件
     function submitWork() {
-        var member_id=$("[name=memId]").val();
+        var member_id=$("[name=members]").val();
+        member_id=parseInt(member_id);
         var workTime=$("[name=workTime]").val();
         var workType=$("[name=workType]").val();
         var classId=$("[name=classId]").val();
 
-        if(member_id==null){
+
+        if(member_id.length<=0){
             alert("工作人员不得为空");
         }else if(workTime==null){
             alert("工作日期不得为空");
@@ -277,7 +279,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"/assignOneWork",
+                    url:"/work/assignWork/assignOneWork",
                     dataType:"json",
                     data:{
                         memberId:member_id,
@@ -289,7 +291,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/toMemberWorkDetailInfo?memberId="+member_id;
+                            window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
                             alert("添加失败");
                         }
@@ -301,7 +303,7 @@
             }else {
                 $.ajax({
                     type:"post",
-                    url:"/assignOneWork",
+                    url:"/work/assignWork/assignOneWork",
                     dataType:"json",
                     data:{
                         memberId:member_id,
@@ -312,7 +314,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/toMemberWorkDetailInfo?memberId="+member_id;
+                            window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
                             alert("添加失败");
                         }

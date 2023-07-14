@@ -7,6 +7,8 @@ import cn.bdqn.service.MenuService;
 import cn.bdqn.service.RolesService;
 import cn.bdqn.service.UsersService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

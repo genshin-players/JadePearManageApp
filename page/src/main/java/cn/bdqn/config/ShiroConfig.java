@@ -7,18 +7,21 @@ import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
+import org.apache.shiro.web.filter.mgt.FilterChainManager;
+import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.Filter;
+import java.util.*;
 
 @Configuration
 public class ShiroConfig {
@@ -67,18 +70,14 @@ public class ShiroConfig {
         //过滤器工厂设置SecurityManager
         filterFactory.setSecurityManager(defaultWebSecurityManager);
         //设置shiro的拦截规则
-        Map<String,String>   filterMap = new HashMap<>();
+        Map<String,String>  filterMap = new HashMap<>();
+
         //不拦截的相关资源
         filterMap.put("/shiro/login", "anon");
         filterMap.put("/shiro/toLogin", "anon");
         //filterMap.put("/shiro/getLoginUser", "anon");
         filterMap.put("/shiro/notFound", "anon");
-        filterMap.put("/css/**", "anon");
-        filterMap.put("/js/**", "anon");
-        filterMap.put("/files/**", "anon");
-        filterMap.put("/font/**", "anon");
-        filterMap.put("/image/**", "anon");
-        filterMap.put("/picture/**", "anon");
+
 
         //鉴权过滤器
         filterMap.put("/user/show_teacher","perms[/user/show_teacher]");
@@ -86,15 +85,29 @@ public class ShiroConfig {
         filterMap.put("/display/daily_info","perms[/display/daily_info]");
         filterMap.put("/display/inner_activities","perms[/display/inner_activities]");
         filterMap.put("/display/external_performance","perms[/display/external_performance]");
-        filterMap.put("/toMemberWork","perms[/toMemberWork]");
-        filterMap.put("/toStuAttendance","perms[/toStuAttendance]");
-        filterMap.put("/toAssignMoreWork","perms[/toAssignMoreWork]");
+
+
+
+
         filterMap.put("/Name","perms[/Name]");
         filterMap.put("/Select","perms[/Select]");
         filterMap.put("/User","perms[/User]");
         filterMap.put("/Password","perms[/Password]");
         filterMap.put("/Images","perms[/Images]");
 
+
+        filterMap.put("/css/**", "anon");
+        filterMap.put("/js/**", "anon");
+        filterMap.put("/files/**", "anon");
+        filterMap.put("/font/**", "anon");
+        filterMap.put("/image/**", "anon");
+        filterMap.put("/picture/**", "anon");
+
+
+
+        /*filterMap.put("/work/assignWork/**","perms[/work/memberWork,/work/assignWork]");
+        filterMap.put("/work/memberWork/**","perms[/work/memberWork,/work/assignWork]");
+        filterMap.put("/work/stuAttendance/**","perms[/work/stuAttendance]");*/
 
         //其余资源都需要认证
         filterMap.put("/**", "user");
@@ -105,8 +118,16 @@ public class ShiroConfig {
         //配置权限不足的页面
         filterFactory.setUnauthorizedUrl("/shiro/notFound");
 
+        Map<String, String> fil = filterFactory.getFilterChainDefinitionMap();
+        for (String s : fil.keySet()) {
+            System.out.println(s+"  = "+fil.get(s));
+        }
+
+
         return filterFactory;
     }
+
+
 
     @Bean
     public SessionManager sessionManager(MySessionListener sessionListener) {
@@ -149,6 +170,23 @@ public class ShiroConfig {
     }
 
 
+
+
+    //开启Shiro的注解支持
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager defaultWebSecurityManager) {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(defaultWebSecurityManager);
+        return advisor;
+    }
+
+    //开启AOP的注解支持
+    @Bean
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAPP = new DefaultAdvisorAutoProxyCreator();
+        defaultAPP.setProxyTargetClass(true);
+        return defaultAPP;
+    }
 
 
 }

@@ -280,7 +280,7 @@
                 if(workType==1&&member_id.length==1){
                     $.ajax({
                         type:"post",
-                        url:"/assignMoreWork",
+                        url:"/assignWork/assignMoreWork",
                         dataType:"json",
                         data:{
                             memberIdArray:member_id,
@@ -292,7 +292,7 @@
                         success:function(res) {
                             console.log(res);
                             if(res.data >0){
-                                window.location.href="/toMemberWork?workDate="+workTime;
+                                window.location.href="work/memberWork?workDate="+workTime;
                             }else {
                                 alert("添加失败");
                             }
@@ -308,7 +308,7 @@
             }else {
                 $.ajax({
                     type:"post",
-                    url:"/assignMoreWork",
+                    url:"/assignWork/assignMoreWork",
                     dataType:"json",
                     data:{
                         memberIdArray:member_id,
@@ -319,7 +319,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/toMemberWork?workDate="+workTime;
+                            window.location.href="work/memberWork?workDate="+workTime;
                         }else {
                             alert("添加失败");
                         }

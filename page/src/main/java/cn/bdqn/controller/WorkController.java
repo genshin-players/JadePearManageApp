@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.errorprone.annotations.FormatString;
 import lombok.Data;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import java.util.*;
 
 @Controller
 @CrossOrigin
+@RequestMapping("/work")
 public class WorkController {
     @Autowired
     WorkClient workClient;
@@ -30,7 +32,8 @@ public class WorkController {
     UserClient userClient;
 
     //学生出勤页面请求
-    @RequestMapping("/toStuAttendance")
+    @RequestMapping("/stuAttendance")
+    @RequiresPermissions("/work/stuAttendance")
     public String toStuAttendance(@RequestParam(required = false) String attendanceDate,Model model){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         if(attendanceDate==null){
@@ -51,7 +54,8 @@ public class WorkController {
 
 
     //学生出勤详情页面请求
-    @RequestMapping("/toStuAttendanceDetail")
+    @RequestMapping("/stuAttendance/toStuAttendanceDetail")
+    @RequiresPermissions("/work/stuAttendance")
     public String toStuAttendanceDetail(String attendanceDate,Integer classId,Model model) {
 
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -72,23 +76,13 @@ public class WorkController {
 
         return "work/studentAttendanceDetail";
     }
-    //学社出勤页面请求
-    @RequestMapping("/toMembersAttendance")
-    public String toMembersAttendance(){
-        return "work/MembersAttendance";
-    }
-    //学社出勤详情页面请求
-    @RequestMapping("/toMemAttendanceDetail")
-    public String toMemAttendanceDetail(String memName,String date,Model model) throws ParseException {
-        model.addAttribute("memName", memName);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        Date date1=sdf.parse(date);
-        model.addAttribute("date", date1);
-        return "work/MembersAttendanceDetail";
-    }
+
+
+
 
     //班级出勤页面去往  新增出勤记录页面
-    @RequestMapping("/toAddStudentAttendance")
+    @RequestMapping("/stuAttendance/toAddStudentAttendance")
+    @RequiresPermissions("/work/stuAttendance")
     public String toAddStudentAttendance(Model model){
         ResultVO<ToStudentAttendancePageVO> resultVO = workClient.toStudentAttendancePageVO();
         model.addAttribute("resultVO",resultVO);
@@ -97,7 +91,8 @@ public class WorkController {
     }
 
     //班级出勤页面点击 修改  修改出勤记录
-    @RequestMapping("/toUpdateStudentAttendance")
+    @RequestMapping("/stuAttendance/toUpdateStudentAttendance")
+    @RequiresPermissions("/work/stuAttendance")
     public String toUpdateStudentAttendance(@RequestParam("attendanceId") Integer attendanceId,Model model){
         ResultVO<ToStudentAttendancePageVO> resultVO = workClient.toStudentAttendancePageVO();
         model.addAttribute("resultVO",resultVO);
@@ -108,12 +103,16 @@ public class WorkController {
     }
 
     //根据出勤id获取出勤记录
-    @RequestMapping("/getAttendanceById")
+    @RequestMapping("/stuAttendance/getAttendanceById")
+    @RequiresPermissions("/work/stuAttendance")
     public ResultVO<Attendence> getAttendanceById(@RequestParam("attendanceId") Integer attendanceId){
         return workClient.getAttendanceById(attendanceId);
     }
+
+
     @ResponseBody
-    @GetMapping("/getStudentByClass")
+    @GetMapping("/stuAttendance/getStudentByClass")
+    @RequiresPermissions("/work/stuAttendance")
     public Map<String,Object> getStudentByClass(Integer classId){
         Map<String,Object>map=new HashMap<>();
         ResultVO<ToStudentAttendancePageVO> resultVO = workClient.toStudentAttendancePageVO();
@@ -136,8 +135,9 @@ public class WorkController {
     }
 
     //新增出勤记录
-    @PostMapping("/addStudentAttendance")
+    @PostMapping("/stuAttendance/addStudentAttendance")
     @ResponseBody
+    @RequiresPermissions("/work/stuAttendance")
     public ResultVO<Integer> addStudentAttendance(Attendence attendence,String attendanceDate){
         Date date=null;
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -151,8 +151,9 @@ public class WorkController {
         return resultVO;
     }
 
-    @PostMapping("/updateStudentAttendance")
+    @PostMapping("/stuAttendance/updateStudentAttendance")
     @ResponseBody
+    @RequiresPermissions("/work/stuAttendance")
     public ResultVO<Integer> updateStudentAttendance(Attendence attendence,String attendanceDate){
         Date date=null;
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -166,36 +167,28 @@ public class WorkController {
         return resultVO;
     }
 
-    @PostMapping("/delStudentAttendance")
+    @PostMapping("/stuAttendance/delStudentAttendance")
     @ResponseBody
+    @RequiresPermissions("/work/stuAttendance")
     public ResultVO<Integer> delStudentAttendance(@RequestParam("attendanceId") Integer attendanceId){
         return workClient.delStudentAttendance(attendanceId);
     }
 
     //根据学生和日期获取出勤记录
-    @PostMapping("/getAttendanceByStuIdAndDate")
+    @PostMapping("/stuAttendance/getAttendanceByStuIdAndDate")
     @ResponseBody
+    @RequiresPermissions("/work/stuAttendance")
     public ResultVO<List<Attendence>> getAttendanceByStuIdAndDate(Integer stuId,String attendanceDate){
         return workClient.getAttendanceByStuIdAndDate(stuId,attendanceDate);
     }
 
-    //班级出勤编辑页面请求
-    @RequestMapping("/toUpdateMemberWork")
-    public String toEditStudentAttendance(Integer schedulesId,Model model){
-            Schedules schedules1=workClient.getSchedulesById(schedulesId);
-            Users member=userClient.getUserById(schedules1.getMemberId());
-            model.addAttribute("member",member);
-            model.addAttribute("workTypeList",workClient.typeList());
-            model.addAttribute("classesList",workClient.getAllClasses());
-            model.addAttribute("schedules",schedules1);
 
-            return "work/updateWork";
-    }
 
 
 
     //安排工作页面
-    @RequestMapping("/toAssignWork")
+    @RequestMapping("/assignWork")
+    @RequiresPermissions("/work/assignWork")
     public String toAssignOneWork(@RequestParam(required = false) Integer memId, Model model){
         if(memId!=null){
             Users users= userClient.getUserById(memId);
@@ -213,7 +206,8 @@ public class WorkController {
     }
 
     //安排工作页面
-    @RequestMapping("/toAssignMoreWork")
+    @RequestMapping("/assignWork/toAssignMoreWork")
+    @RequiresPermissions("/work/assignWork")
     public String toAssignMoreWork(@RequestParam(required = false) Integer memId, Model model){
         if(memId!=null){
             Users users= userClient.getUserById(memId);
@@ -233,7 +227,8 @@ public class WorkController {
 
     //给指定成员安排工作请求
     @ResponseBody
-    @PostMapping("/assignOneWork")
+    @PostMapping("/assignWork/assignOneWork")
+    @RequiresPermissions("/work/assignWork")
     public ResultVO<Integer> assignOneWork(Schedules schedules,@RequestParam(value = "classIdArray[]",required = false) Integer[]classIdArray){
         ResultVO<Integer> mapResultVO = workClient.assignOneWork(schedules, classIdArray);
         return mapResultVO;
@@ -242,7 +237,8 @@ public class WorkController {
 
     //给指定成员安排工作请求
     @ResponseBody
-    @PostMapping("/assignMoreWork")
+    @PostMapping("/assignWork/assignMoreWork")
+    @RequiresPermissions("/work/assignWork")
     public ResultVO<Integer> assignMoreWork(Schedules schedules,
                                             @RequestParam(value = "memberIdArray[]") Integer[]memberIdArray,
                                             @RequestParam(value = "classIdArray[]",required = false) Integer[]classIdArray){
@@ -254,7 +250,8 @@ public class WorkController {
 
     //给指定成员安排工作请求
     @ResponseBody
-    @PostMapping("/updateOneWork")
+    @PostMapping("/memberWork/updateOneWork")
+    @RequiresPermissions("/work/memberWork")
     public ResultVO<Integer> updateOneWork(Schedules schedules,@RequestParam(value = "classIdArray[]",required = false) Integer[]classIdArray){
         ResultVO<Integer> mapResultVO = workClient.updateOneWork(schedules, classIdArray);
         return mapResultVO;
@@ -262,21 +259,35 @@ public class WorkController {
 
     //给指定成员安排工作请求
     @ResponseBody
-    @PostMapping("/deleteOneWork")
+    @PostMapping("/memberWork/deleteOneWork")
+    @RequiresPermissions("/work/memberWork")
     public ResultVO<Integer> deleteOneWork(@RequestParam("schedulesId") Integer schedulesId){
         ResultVO<Integer> mapResultVO = workClient.deleteOneWork(schedulesId);
         return mapResultVO;
     }
 
 
+    //班级出勤编辑页面请求
+    @RequestMapping("/memberWork/toUpdateMemberWork")
+    @RequiresPermissions("/work/memberWork")
+    public String toEditStudentAttendance(Integer schedulesId,Model model){
+        Schedules schedules1=workClient.getSchedulesById(schedulesId);
+        Users member=userClient.getUserById(schedules1.getMemberId());
+        model.addAttribute("member",member);
+        model.addAttribute("workTypeList",workClient.typeList());
+        model.addAttribute("classesList",workClient.getAllClasses());
+        model.addAttribute("schedules",schedules1);
 
+        return "work/updateWork";
+    }
 
 
 
 
 
     //学社工作页面请求
-    @RequestMapping("/toMemberWork")
+    @RequestMapping("/memberWork")
+    @RequiresPermissions("/work/memberWork")
     public String toMemberWork(@RequestParam(required = false) String workDate,Model model){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         if(workDate==null){
@@ -298,7 +309,8 @@ public class WorkController {
     }
 
     //学社工作页面请求
-    @RequestMapping("/toMemberWorkDetailInfo")
+    @RequestMapping("/memberWork/toMemberWorkDetailInfo")
+    @RequiresPermissions("/work/memberWork")
     public String getMemberWorkDetailInfo(Integer memberId,Model model){
 
         ResultVO<List<MemberWorkDetailInfoVO>> resultVO=workClient.getMemberWorkDetailInfo(memberId);

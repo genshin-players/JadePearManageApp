@@ -122,7 +122,7 @@
                                                             <svg width="24px" height="24px" viewbox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="/toUpdateMemberWork?schedulesId=${detail.schedules.id}">修改记录</a>
+                                                            <a class="dropdown-item" href="/work/memberWork/toUpdateMemberWork?schedulesId=${detail.schedules.id}">修改记录</a>
                                                             <a class="dropdown-item"  onclick="deleteOneWork(${detail.schedules.id})">删除记录</a>
                                                         </div>
                                                     </div>
@@ -185,25 +185,25 @@
     ***********************************-->
 <!-- Required vendors -->
 <script src="/js/global.min.js"></script>
-<script src="js/Chart.bundle.min.js"></script>
+<script src="/js/Chart.bundle.min.js"></script>
 <!-- Apex Chart -->
-<script src="js/apexchart.js"></script>
+<script src="/js/apexchart.js"></script>
 
 <!-- Datatable -->
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/datatables.init.js"></script>
+<script src="/js/jquery.dataTables.min.js"></script>
+<script src="/js/datatables.init.js"></script>
 
-<script src="js/jquery.nice-select.min.js"></script>
+<script src="/js/jquery.nice-select.min.js"></script>
 
-<script src="js/custom.min.js"></script>
-<script src="js/deznav-init.js"></script>
-<script src="js/demo.js"></script>
-<script src="js/styleSwitcher.js"></script>
+<script src="/js/custom.min.js"></script>
+<script src="/js/deznav-init.js"></script>
+<script src="/js/demo.js"></script>
+<script src="/js/styleSwitcher.js"></script>
 
 <script>
     function toAssignOneWork() {
         var memId=$("[name=memId]").val();
-        window.location.href="/toAssignWork?memId="+memId;
+        window.location.href="/work/assignWork?memId="+memId;
 
     }
 
@@ -212,7 +212,7 @@
         if(confirm("确认删除吗")){
             $.ajax({
                 type:"post",
-                url:"/deleteOneWork",
+                url:"/work/memberWork/deleteOneWork",
                 dataType:"json",
                 data:{schedulesId:schedulesId},
                 success:function(res){

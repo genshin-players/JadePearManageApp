@@ -697,7 +697,7 @@
                     <ul aria-expanded="false">
                         <li><a href="/toMemberWork">学社出勤</a></li>
                         <li><a href="/toStuAttendance">班级出勤</a></li>
-                        <li><a href="/toAssignMoreWork">学社工作安排</a></li>
+                        <li><a href="/assignWork/toAssignMoreWork">学社工作安排</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

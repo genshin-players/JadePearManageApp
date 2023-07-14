@@ -129,12 +129,12 @@
     Scripts
 ***********************************-->
 <!-- Required vendors -->
-<script src="js/global.min.js"></script>
-<script src="js/jquery.nice-select.min.js"></script>
-<script src="js/custom.min.js"></script>
-<script src="js/deznav-init.js"></script>
-<script src="js/demo.js"></script>
-<script src="js/styleSwitcher.js"></script>
+<script src="/js/global.min.js"></script>
+<script src="/js/jquery.nice-select.min.js"></script>
+<script src="/js/custom.min.js"></script>
+<script src="/js/deznav-init.js"></script>
+<script src="/js/demo.js"></script>
+<script src="/js/styleSwitcher.js"></script>
 
 <script>
     //custom select box
@@ -148,13 +148,13 @@
         var date=new Date($("#workTime").html());
 
 
-        window.location.href="/toMemberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()-1);
+        window.location.href="/work/memberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()-1);
     }
 
     function nextDay() {
         var date=new Date($("#workTime").html());
 
-        window.location.href="/toMemberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()+1);
+        window.location.href="/work/memberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()+1);
     }
 
 
@@ -164,7 +164,7 @@
         var memId=t.getAttribute("data_memberId");
 
 
-        window.location.href="/toMemberWorkDetailInfo?memberId="+memId;
+        window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+memId;
     }
 
 

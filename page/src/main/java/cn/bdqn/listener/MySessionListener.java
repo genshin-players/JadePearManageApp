@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class MySessionListener implements SessionListener {
     @Override
     public void onStart(Session session) {
-
+        System.out.println(session.toString());
     }
 
     @Override

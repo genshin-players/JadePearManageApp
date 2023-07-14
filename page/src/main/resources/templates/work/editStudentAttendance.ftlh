@@ -263,7 +263,7 @@
 
         $.ajax({
             type:"get",
-            url:"/getStudentByClass",
+            url:"/work/stuAttendance/getStudentByClass",
             data:{classId:0},
             dataType:"json",
             success:function (data) {
@@ -284,7 +284,7 @@
         if(classId!=0&&classId!=null){
             $.ajax({
                 type:"get",
-                url:"/getStudentByClass",
+                url:"/work/stuAttendance/getStudentByClass",
                 data:{classId:classId},
                 dataType:"json",
                 success:function (data) {
@@ -300,7 +300,7 @@
         }else {
             $.ajax({
                 type:"get",
-                url:"/getStudentByClass",
+                url:"/work/stuAttendance/getStudentByClass",
                 data:{classId:0},
                 dataType:"json",
                 success:function (data) {
@@ -322,7 +322,7 @@
 
         $.ajax({
             type:"get",
-            url:"/getStudentByClass",
+            url:"/work/stuAttendance/getStudentByClass",
             data:{classId:0},
             dataType:"json",
             success:function (data) {
@@ -373,7 +373,7 @@
         }else {
             $.ajax({
                 type:"post",
-                url:"/getAttendanceByStuIdAndDate",
+                url:"/work/stuAttendance/getAttendanceByStuIdAndDate",
                 data:{"stuId":studentId,"attendanceDate":$("[name=date]").val()},
                 dataType:"json",
                 success:function (data) {
@@ -385,7 +385,7 @@
                     }else {
                         $.ajax({
                             type:"post",
-                            url:"/addStudentAttendance",
+                            url:"/work/stuAttendance/addStudentAttendance",
                             data:{
                                 "classId":classId,
                                 "studentId":studentId,
@@ -397,7 +397,7 @@
                             success:function(data){
                                 console.log(data);
                                 alert("添加成功");
-                                window.location.href="/toStuAttendance?attendanceDate="+$("[name=date]").val();
+                                window.location.href="/work/stuAttendance?attendanceDate="+$("[name=date]").val();
                             },
                             error:function(data){
                                 alert("添加失败");

@@ -1,6 +1,6 @@
 package cn.bdqn.realm;
 
-import cn.bdqn.entity.Menu;
+import  cn.bdqn.entity.Menu;
 import cn.bdqn.entity.Users;
 import cn.bdqn.mapper.MenuMapper;
 import cn.bdqn.mapper.UsersMapper;
@@ -12,9 +12,11 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class MyRealm extends AuthorizingRealm {
     @Autowired
     UsersMapper usersMapper;
@@ -55,7 +57,7 @@ public class MyRealm extends AuthorizingRealm {
         List<Menu> menuList = menuMapper.getMenuByUserId(users.getId());
         //遍历菜单，将此用户菜单交给shiro管理
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        System.out.println(menuList);
+
         for(Menu menu:menuList){
             info.addStringPermission(menu.getPath());
         }
