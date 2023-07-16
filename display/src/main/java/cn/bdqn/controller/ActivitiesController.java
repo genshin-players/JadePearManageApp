@@ -3,8 +3,10 @@ package cn.bdqn.controller;
 
 import cn.bdqn.dto.ActivitiesDTO;
 import cn.bdqn.entity.Activities;
+import cn.bdqn.entity.ActivitiesType;
 import cn.bdqn.entity.Display;
 import cn.bdqn.service.IActivitiesService;
+import cn.bdqn.service.IActivitiesTypeService;
 import cn.bdqn.service.IDisplayService;
 import cn.bdqn.util.DateTimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -18,12 +20,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -52,26 +51,42 @@ public class ActivitiesController {
     private IActivitiesService activitiesService;
     @Autowired
     private IDisplayService displayService;
+    @Autowired
+    private IActivitiesTypeService activitiesTypeService;
 
     @RequestMapping("/activitiesList")
     @ResponseBody
-    public List<ActivitiesDTO> activitiesListByTitle(
+    public PageInfo<Activities> activitiesList(
             @RequestParam(value = "title",required = false) String title,
-            @RequestParam(required = false,defaultValue = "1") Integer pageNum){
-        PageHelper.startPage(pageNum, 2);
+            @RequestParam(required = false,defaultValue = "1") Integer pageNum,
+            @RequestParam(required = false,defaultValue = "0") Integer typeId)
+        {
+        PageHelper.startPage(pageNum, 8);
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         List<ActivitiesDTO> dtoList = new ArrayList<>();;
-        if (title==null||"".equals(title)){
+        if ((title==null||"".equals(title)) && (typeId==0)) {
             List<Activities> list = activitiesService.list();
-            for (Activities activities:list){
+            for (Activities activities : list) {
                 ActivitiesDTO activitiesDTO = new ActivitiesDTO();
                 BeanUtils.copyProperties(activities, activitiesDTO);
-                int displayId =activities.getDisplayId();
+                int displayId = activities.getDisplayId();
                 Display display = displayService.getById(displayId);
                 activitiesDTO.setDisplay(display);
                 dtoList.add(activitiesDTO);
             }
-        }else {
+        }else if (typeId != 0){
+            LambdaQueryWrapper<Activities> lambdaQueryWrapperActivities = new LambdaQueryWrapper();
+            lambdaQueryWrapperActivities.eq(Activities::getTypeId,typeId);
+            List<Activities> list = activitiesService.list(lambdaQueryWrapperActivities);
+            for (Activities activities : list) {
+                ActivitiesDTO activitiesDTO = new ActivitiesDTO();
+                BeanUtils.copyProperties(activities, activitiesDTO);
+                int displayId = activities.getDisplayId();
+                Display display = displayService.getById(displayId);
+                activitiesDTO.setDisplay(display);
+                dtoList.add(activitiesDTO);
+            }
+        } else {
             lambdaQueryWrapper.like(Display::getTitle, "%"+title+"%");
             lambdaQueryWrapper.eq(Display::getDisplayTypeId,1);
             List<Display> displayList = displayService.list(lambdaQueryWrapper);
@@ -87,8 +102,7 @@ public class ActivitiesController {
             }
         }
         PageInfo pageInfo = new PageInfo(dtoList);
-        System.out.println(pageInfo.getPageNum());
-        return pageInfo.getList();
+        return pageInfo;
     }
 
 
@@ -190,5 +204,17 @@ public class ActivitiesController {
         return map;
     }
 
+    @RequestMapping("getActivitiesTypes")
+    public List<ActivitiesType> getActivitiesTypes(){
+        return activitiesTypeService.list();
+    }
+
+    @PostMapping("/recommend")
+    public List<Activities> recommend(){
+        LambdaQueryWrapper<Activities> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.orderByDesc(Activities::getLikes);
+        lambdaQueryWrapper.last("limit 3");
+        return activitiesService.list(lambdaQueryWrapper);
+    }
 }
 

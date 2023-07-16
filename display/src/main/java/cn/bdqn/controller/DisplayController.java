@@ -52,7 +52,7 @@ public class DisplayController {
     public PageInfo<Display> getPushEveryFuckingDayList(
             @RequestParam(required = false,defaultValue = "") String title,
             @RequestParam(required = false,defaultValue = "1") Integer pageNum){
-        PageHelper.startPage(pageNum, 2);
+        PageHelper.startPage(pageNum, 8);
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,2);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
@@ -64,7 +64,7 @@ public class DisplayController {
     public PageInfo<Display> getExternalPerformanceList(
             @RequestParam(required = false,defaultValue = "") String title,
             @RequestParam(required = false,defaultValue = "1") Integer pageNum){
-        PageHelper.startPage(pageNum, 2);
+        PageHelper.startPage(pageNum, 8);
         LambdaQueryWrapper<Display> lambdaQueryWrapper = new LambdaQueryWrapper<Display>();
         lambdaQueryWrapper.eq(Display::getDisplayTypeId,3);
         lambdaQueryWrapper.like(Display::getTitle,"%"+title+"%");
@@ -190,5 +190,7 @@ public class DisplayController {
     public String upload(@RequestPart("file") MultipartFile file) {
         return String.valueOf(fileUploadService.fileUpload(file,"display").getData());
     }
+
+
 }
 

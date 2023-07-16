@@ -100,6 +100,34 @@
                 withCredentials: true
             }
         },*/
+
+        ckfinder: {
+            uploadUrl: '[[@{/upload}]]'
+        },
+        mediaEmbed: {
+            previewsInData: true,
+            providers: [
+                {
+                    name: 'myprovider',
+                    url: [
+                        /^.*/
+                    ],
+                    html: match => {
+                        //获取媒体url
+                        var shipinUrl = match['input'];
+                        console.log('获取媒体url===='+shipinUrl);
+                        return (
+                            '<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 70%;">' +
+                            '<video src="'+shipinUrl+'"' +
+                            'style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" ' +
+                            'frameborder="0" allowtransparency="true" allow="encrypted-media">' +
+                            '</video>' +
+                            '</div>'
+                        );
+                    }
+                }
+            ]
+        },
         // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
         toolbar: {
             items: [
