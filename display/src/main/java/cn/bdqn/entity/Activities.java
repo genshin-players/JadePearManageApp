@@ -1,14 +1,14 @@
 package cn.bdqn.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.Date;
-
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.*;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -16,7 +16,7 @@ import lombok.*;
  * </p>
  *
  * @author dddqmmx
- * @since 2023-06-09
+ * @since 2023-07-12
  */
 @Data
 @Builder
@@ -55,17 +55,19 @@ public class Activities extends Model<Activities> {
     /**
      * 创建日期
      */
-    private Date createTime;
+    private LocalDate createTime;
 
     /**
      * 更新日期
      */
-    private Date updateTime;
+    private LocalDate updateTime;
 
     /**
      * 1代表TRUE(生效),0代表FALSE（不生效）
      */
     private Boolean isActive;
+
+    private Integer typeId;
 
     @Override
     public Serializable pkVal() {
