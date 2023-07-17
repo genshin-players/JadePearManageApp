@@ -27,7 +27,7 @@ public class UserController {
     private UserClient userClient;
 
 
-    @RequestMapping("teacher")
+    @RequestMapping("/teacher")
     public String showTeacher(
             @RequestParam(value = "username",required = false) String username,
             @RequestParam(value = "pageNum",required = false,defaultValue = "1") Integer pageNum,

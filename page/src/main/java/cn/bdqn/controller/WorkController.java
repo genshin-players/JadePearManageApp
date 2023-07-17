@@ -24,7 +24,7 @@ import java.util.*;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/work")
+//@RequestMapping("/work")
 public class WorkController {
     @Autowired
     WorkClient workClient;

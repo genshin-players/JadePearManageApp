@@ -80,14 +80,12 @@ public class ShiroConfig {
 
 
         //鉴权过滤器
-        filterMap.put("/user/show_teacher","perms[/user/show_teacher]");
-        filterMap.put("/user/show_student","perms[/user/show_student]");
+        filterMap.put("/user/teacher/**","perms[/user/teacher]");
+        filterMap.put("/user/student/**","perms[/user/student]");
+
         filterMap.put("/display/daily_info","perms[/display/daily_info]");
         filterMap.put("/display/inner_activities","perms[/display/inner_activities]");
         filterMap.put("/display/external_performance","perms[/display/external_performance]");
-
-
-
 
         filterMap.put("/Name","perms[/Name]");
         filterMap.put("/Select","perms[/Select]");
@@ -95,6 +93,9 @@ public class ShiroConfig {
         filterMap.put("/Password","perms[/Password]");
         filterMap.put("/Images","perms[/Images]");
 
+        filterMap.put("/assignWork/**","perms[/assignWork,/memberWork]");
+        filterMap.put("/memberWork/**","perms[/memberWork,/assignWork]");
+        filterMap.put("/stuAttendance/**","perms[/stuAttendance]");
 
         filterMap.put("/css/**", "anon");
         filterMap.put("/js/**", "anon");
@@ -105,9 +106,9 @@ public class ShiroConfig {
 
 
 
-        /*filterMap.put("/work/assignWork/**","perms[/work/memberWork,/work/assignWork]");
-        filterMap.put("/work/memberWork/**","perms[/work/memberWork,/work/assignWork]");
-        filterMap.put("/work/stuAttendance/**","perms[/work/stuAttendance]");*/
+
+
+
 
         //其余资源都需要认证
         filterMap.put("/**", "user");
@@ -173,7 +174,7 @@ public class ShiroConfig {
 
 
     //开启Shiro的注解支持
-    @Bean
+   /* @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager defaultWebSecurityManager) {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(defaultWebSecurityManager);
@@ -186,7 +187,7 @@ public class ShiroConfig {
         DefaultAdvisorAutoProxyCreator defaultAPP = new DefaultAdvisorAutoProxyCreator();
         defaultAPP.setProxyTargetClass(true);
         return defaultAPP;
-    }
+    }*/
 
 
 }

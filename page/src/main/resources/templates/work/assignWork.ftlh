@@ -279,7 +279,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"/work/assignWork/assignOneWork",
+                    url:"/assignWork/assignOneWork",
                     dataType:"json",
                     data:{
                         memberId:member_id,
@@ -291,7 +291,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
+                            window.location.href="/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
                             alert("添加失败");
                         }
@@ -303,7 +303,7 @@
             }else {
                 $.ajax({
                     type:"post",
-                    url:"/work/assignWork/assignOneWork",
+                    url:"/assignWork/assignOneWork",
                     dataType:"json",
                     data:{
                         memberId:member_id,
@@ -314,7 +314,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
+                            window.location.href="/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
                             alert("添加失败");
                         }

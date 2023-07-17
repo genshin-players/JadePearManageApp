@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class NoPermissionException {
 
-    @ExceptionHandler(UnauthorizedException.class)
+    /*@ExceptionHandler(UnauthorizedException.class)
     public String handleShiroException(Exception ex) {
         return "index/error404";
     }
@@ -16,5 +16,5 @@ public class NoPermissionException {
     @ExceptionHandler(AuthorizationException.class)
     public String AuthorizationException(Exception ex) {
         return "index/error404";
-    }
+    }*/
 }

@@ -278,7 +278,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"/work/memberWork/updateOneWork",
+                    url:"/memberWork/updateOneWork",
                     dataType:"json",
                     data:{
                         id:schedulesId,
@@ -291,7 +291,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
+                            window.location.href="/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
                             alert("修改失败");
                         }
@@ -305,7 +305,7 @@
 
                 $.ajax({
                     type:"post",
-                    url:"/work/memberWork/updateOneWork",
+                    url:"/memberWork/updateOneWork",
                     dataType:"json",
                     data:{
                         id:schedulesId,
@@ -317,7 +317,7 @@
                     success:function(res) {
                         console.log(res);
                         if(res.data >0){
-                            window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
+                            window.location.href="/memberWork/toMemberWorkDetailInfo?memberId="+member_id;
                         }else {
                             alert("修改失败");
                         }

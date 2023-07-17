@@ -623,7 +623,7 @@
                 <div class="collapse navbar-collapse justify-content-between">
                     <div class="header-left">
                         <div class="dashboard_bar">
-                            天下第一管理系统
+                            学社管理系统
                         </div>
                     </div>
                     <ul class="navbar-nav header-right">

@@ -148,13 +148,13 @@
         var date=new Date($("#workTime").html());
 
 
-        window.location.href="/work/memberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()-1);
+        window.location.href="/memberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()-1);
     }
 
     function nextDay() {
         var date=new Date($("#workTime").html());
 
-        window.location.href="/work/memberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()+1);
+        window.location.href="/memberWork?workDate="+date.getFullYear()+"-"+(date.getUTCMonth()+1)+"-"+(date.getDate()+1);
     }
 
 
@@ -164,7 +164,7 @@
         var memId=t.getAttribute("data_memberId");
 
 
-        window.location.href="/work/memberWork/toMemberWorkDetailInfo?memberId="+memId;
+        window.location.href="/memberWork/toMemberWorkDetailInfo?memberId="+memId;
     }
 
 
